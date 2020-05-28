@@ -15,6 +15,7 @@ class CreateDescTable extends Migration
     {
         Schema::create('desc', function (Blueprint $table) {
             $table->id();
+            $table->integer("room_id");
             $table->integer("user_id");
             $table->text("json_desc");
             $table->timestamps();
