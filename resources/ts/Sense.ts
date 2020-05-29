@@ -1,6 +1,7 @@
 import { DeviceType, EventStatus } from "./types";
 import { Paper } from "./Paper";
 import { Datastore } from "./Datastore";
+const Swal = require("sweetalert2");
 
 export class Sense {
     private cnv: HTMLCanvasElement;
@@ -33,16 +34,19 @@ export class Sense {
         this.cnv.addEventListener("touchend", (e: TouchEvent) => this.touchhandler(e), false);
 
         const bt_save = document.querySelector(sel_save);
-        bt_save.addEventListener("click", (e: MouseEvent) => this.save(e));
+        bt_save.addEventListener("click", (e: MouseEvent) => this.save());
         const bt_load = document.querySelector(sel_load);
-        bt_load.addEventListener("click", (e: MouseEvent) => this.load(e));
+        bt_load.addEventListener("click", (e: MouseEvent) => this.load());
+        // setInterval(async () => {
+        //     this.load()
+        // }, 3 * 1000);
     }
 
     private proc(st: EventStatus, x: number, y: number) {
         if (st === "up" && this.nowstatus !== "up") {
             // up -> upの場合は何もしない
             this.datastore.endStroke();
-        } else if(st === "down") {
+        } else if (st === "down") {
             this.paper.stroke(x, y, this.datastore.lastPoint());
             this.datastore.pushPoint(x, y);
         }
@@ -129,11 +133,39 @@ export class Sense {
             }
         }
     }
-    private async save(e: MouseEvent): Promise<void> {
+    private async save(): Promise<void> {
+        Swal.fire({
+            text: "now saving...",
+            toast: true,
+            position: "bottom-start",
+            timer: 3 * 1000,
+            showConfirmButton: false
+        });
         await this.datastore.save();
+        Swal.fire({
+            text: "saved",
+            toast: true,
+            position: "bottom-start",
+            timer: 3 * 1000,
+            showConfirmButton: false
+        });
     }
-    private async load(e: MouseEvent): Promise<void> {
+    private async load(): Promise<void> {
+        Swal.fire({
+            text: "now loading...",
+            toast: true,
+            position: "bottom-end",
+            timer: 3 * 1000,
+            showConfirmButton: false
+        });
         await this.datastore.load();
-        this.paper.redraw(this.datastore.getDesc());
+        await this.paper.redraw(this.datastore.getDesc());
+        Swal.fire({
+            text: "loaded",
+            toast: true,
+            position: "bottom-end",
+            timer: 3 * 1000,
+            showConfirmButton: false
+        });
     }
 }

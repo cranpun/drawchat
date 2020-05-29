@@ -18,6 +18,7 @@
         "resolve-url-loader": "^3.1.0",
         "sass": "^1.15.2",
         "sass-loader": "^8.0.0",
+        "sweetalert2": "^9.13.2",
         "ts-loader": "^7.0.5",
         "typescript": "^3.9.3",
         "vue-template-compiler": "^2.6.11"
