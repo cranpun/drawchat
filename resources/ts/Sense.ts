@@ -7,8 +7,8 @@ export class Sense {
     private nowstatus: EventStatus;
     private paper: Paper;
 
-    public init(selector: string): void {
-        this.cnv = document.querySelector(selector);
+    public init(sel_canvas: string, sel_save: string): void {
+        this.cnv = document.querySelector(sel_canvas);
         this.paper = new Paper(this.cnv);
         this.nowdevice = null;
         this.nowstatus = "up"; // 初期は離した状態
@@ -28,6 +28,9 @@ export class Sense {
         this.cnv.addEventListener("touchleave", (e: TouchEvent) => this.touchhandler(e), false);
         this.cnv.addEventListener("touchmove", (e: TouchEvent) => this.touchhandler(e), false);
         this.cnv.addEventListener("touchend", (e: TouchEvent) => this.touchhandler(e), false);
+
+        const bt = document.querySelector(sel_save);
+        bt.addEventListener("click", (e: MouseEvent) => this.save(e));
     }
 
     private proc(st: EventStatus, x: number, y: number) {
@@ -119,5 +122,9 @@ export class Sense {
                 this.proc(this.nowstatus, x, y);
             }
         }
+    }
+
+    private save(e: MouseEvent): void {
+        
     }
 }

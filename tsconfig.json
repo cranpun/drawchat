@@ -9,5 +9,6 @@
         "noImplicitReturns": true,
         "noImplicitThis": true,
         "noImplicitUseStrict": true,
+        "allowSyntheticDefaultImports": true
     }
 }

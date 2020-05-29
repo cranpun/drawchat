@@ -1,4 +1,3 @@
-
 export type EventStatus = "up" | "down";
 export type DeviceType = "mouse" | "touch" | "pointer";
 

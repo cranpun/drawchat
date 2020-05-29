@@ -1,10 +1,13 @@
 import { Sense } from "./Sense";
 
-require('./bootstrap');
+require("./bootstrap");
 
-window.addEventListener("load", () => {
+window.addEventListener("load", async () => {
     console.log("loaded");
 
     const sense: Sense = new Sense();
-    sense.init("#drawcanvas");
+    sense.init("#drawcanvas", "#bt-save");
+    
+    const res = await window.axios.get("/api/desc/2");
+    console.log(res);
 });

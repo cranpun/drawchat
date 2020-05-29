@@ -84,11 +84,12 @@
                 <div class="title m-b-md">
                     room {{ $room_id }}
                 </div>
-                <canvas id="drawcanvas" width="600" height="600" style="background: #AAA;">
+                <canvas id="drawcanvas" width="600" height="600" style="background: #EEE;">
                 </canvas>
 
                 <div class="links">
                     <a href="/">戻る</a>
+                    <button id="bt-save">保存</button>
                 </div>
             </div>
         </div>
