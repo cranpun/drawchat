@@ -32,6 +32,8 @@ class RoomController extends Controller
             $data = new \App\Room();
             $data->save();
             $now_id = $data->id;
+            // ページを生成したのでリダイレクト
+            return redirect("/room/{$now_id}");
         }
 
         return view("room", ["room_id" => $now_id]);

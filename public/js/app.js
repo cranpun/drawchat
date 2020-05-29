@@ -530,8 +530,8 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/cranpun/Desktop/work/002_localdata/00_prjs/drawchat/webs/resources/ts/app.ts */"./resources/ts/app.ts");
-module.exports = __webpack_require__(/*! /Users/cranpun/Desktop/work/002_localdata/00_prjs/drawchat/webs/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /Users/cranpun/Desktop/work/002_localdata/00_prjs/drawchat/resources/ts/app.ts */"./resources/ts/app.ts");
+module.exports = __webpack_require__(/*! /Users/cranpun/Desktop/work/002_localdata/00_prjs/drawchat/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

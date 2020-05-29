@@ -1,0 +1,5 @@
+[mysqld]
+log_output=TABLE
+slow_query_log=ON
+general_log=ON
+

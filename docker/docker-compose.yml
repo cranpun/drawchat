@@ -1,0 +1,18 @@
+version: '3.3'
+
+
+services:
+  drawchat:
+    build: ./centos
+    image: drawchat
+    container_name: drawchat
+    volumes:
+      # for mac
+      - ..:/var/www/html
+    ports:
+      - '80:80'
+    privileged: true
+
+## for db permanent
+#volumes:
+#    db_data:
