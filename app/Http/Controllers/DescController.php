@@ -26,13 +26,18 @@ class DescController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function add(Request $request, $room_id)
     {
+        // 前回の記述を削除
         $data = new \App\Desc();
-        $data->user_id = $request->input("user_id", 1);
+        $data->user_id = $request->input("user_id", $this->userid($room_id));
+        $data->user_id = $data->user_id == null ? $this->userid($room_id) : $data->user_id;
         $data->json_desc = $request->input("json_desc", "");
-        $data->room_id = $request->input("json_desc", 0);
+        $data->room_id = $room_id;
         $data->save();
+        return response([
+            "user_id" => $data->user_id
+        ]);
     }
 
     /**
@@ -43,6 +48,6 @@ class DescController extends Controller
         $q = \App\Desc::where("room_id", "=", $room_id);
         $ret = $q->max("user_id");
         $ret++; // 次のユーザIDなので+1
-        return response($ret);
+        return $ret;
     }
 }

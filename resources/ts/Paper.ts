@@ -1,15 +1,12 @@
-import { Point } from "./types";
-import { Datastore } from "./Datastore";
+import { Point, Stroke, Desc } from "./types";
 
 export class Paper {
     private cnv: HTMLCanvasElement;
     private ctx: CanvasRenderingContext2D;
-    private datastore: Datastore;
 
     constructor(cnv: HTMLCanvasElement) {
         this.cnv = cnv;
         this.ctx = this.cnv.getContext("2d");
-        this.datastore = new Datastore();
     }
 
     // public redraw() {
@@ -17,11 +14,10 @@ export class Paper {
 
     // }
 
-    public stroke(x: number, y: number): void {
-        // strokeを記述
-        let pre: Point | null = this.datastore.lastPoint();
-        if (pre === null) {
-            // 最初の点なので支点も今回の部分
+    public stroke(x: number, y: number, prep: Point): void {
+        let pre: Point = prep;
+        if (prep == null) {
+            // 前回の点がなければ今回の点
             pre = new Point(x, y, 0);
         }
         this.ctx.save()
@@ -33,12 +29,17 @@ export class Paper {
         this.ctx.lineTo(x, y);
         this.ctx.stroke();
         this.ctx.restore()
-
-        // データを保存
-        this.datastore.pushPoint(x, y);
     }
 
-    public endStroke(): void {
-        this.datastore.endStroke();
+    public redraw(desc: Desc): void {
+        const strokes: Stroke[] = desc.getStrokes();
+        let prepoint = null;
+        for (const s of strokes) {
+            for (const p of s.getPoints()) {
+                this.stroke(p.x, p.y, prepoint);
+                prepoint = p;
+            }
+            prepoint = null;
+        }
     }
 }

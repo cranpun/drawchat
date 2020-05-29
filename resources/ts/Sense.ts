@@ -1,15 +1,18 @@
 import { DeviceType, EventStatus } from "./types";
 import { Paper } from "./Paper";
+import { Datastore } from "./Datastore";
 
 export class Sense {
     private cnv: HTMLCanvasElement;
     private nowdevice: DeviceType;
     private nowstatus: EventStatus;
     private paper: Paper;
+    private datastore: Datastore;
 
-    public init(sel_canvas: string, sel_save: string): void {
+    public init(sel_canvas: string, sel_save: string, sel_load: string): void {
         this.cnv = document.querySelector(sel_canvas);
         this.paper = new Paper(this.cnv);
+        this.datastore = new Datastore();
         this.nowdevice = null;
         this.nowstatus = "up"; // 初期は離した状態
 
@@ -29,25 +32,29 @@ export class Sense {
         this.cnv.addEventListener("touchmove", (e: TouchEvent) => this.touchhandler(e), false);
         this.cnv.addEventListener("touchend", (e: TouchEvent) => this.touchhandler(e), false);
 
-        const bt = document.querySelector(sel_save);
-        bt.addEventListener("click", (e: MouseEvent) => this.save(e));
+        const bt_save = document.querySelector(sel_save);
+        bt_save.addEventListener("click", (e: MouseEvent) => this.save(e));
+        const bt_load = document.querySelector(sel_load);
+        bt_load.addEventListener("click", (e: MouseEvent) => this.load(e));
     }
 
     private proc(st: EventStatus, x: number, y: number) {
-        // 現在の位置に従って描画
-        this.nowstatus = st;
-        if (this.nowstatus === "up") {
-            this.paper.endStroke();
-        } else {
-            this.paper.stroke(x, y);
+        if (st === "up" && this.nowstatus !== "up") {
+            // up -> upの場合は何もしない
+            this.datastore.endStroke();
+        } else if(st === "down") {
+            this.paper.stroke(x, y, this.datastore.lastPoint());
+            this.datastore.pushPoint(x, y);
         }
+        // 現在の状態を更新
+        this.nowstatus = st;
 
         // // 記述が途切れたのでキャンバスサイズを調整。
         // // 前回記述で、今回離した場合。
         // if (prepos == "down" && me.nowstatus == "up") {
         //     me.expandCanvas_(xy.y);
         // }
-        console.log(this.nowdevice, x, y, this.nowstatus);
+        // console.log(this.nowdevice, x, y, this.nowstatus);
 
     }
 
@@ -69,7 +76,7 @@ export class Sense {
             } else if (e.type === "mouseleave") {
                 // 設置したまま外に出た場合は離したとみなす。
                 this.proc("up", x, y);
-            } else if ( e.type === "pointermove") {
+            } else if (e.type === "pointermove") {
                 this.proc(this.nowstatus, x, y);
             }
 
@@ -95,7 +102,7 @@ export class Sense {
         } else if (e.type == "touchleave") {
             // 領域の外に出たら終了
             this.proc("up", x, y);
-        } else if ( e.type === "pointermove") {
+        } else if (e.type === "pointermove") {
             this.proc(this.nowstatus, x, y);
         }
     };
@@ -108,7 +115,6 @@ export class Sense {
             const x: number = e.offsetX;
             const y: number = e.offsetY;
             let prepos: EventStatus = this.nowstatus;
-            console.log(e.type);
 
             // 位置の更新
             if (e.type === "pointerup") {
@@ -118,13 +124,16 @@ export class Sense {
             } else if (e.type === "pointerleave") {
                 // 設置したまま外に出た場合は離したとみなす。
                 this.proc("up", x, y);
-            } else if ( e.type === "pointermove") {
+            } else if (e.type === "pointermove") {
                 this.proc(this.nowstatus, x, y);
             }
         }
     }
-
-    private save(e: MouseEvent): void {
-        
+    private async save(e: MouseEvent): Promise<void> {
+        await this.datastore.save();
+    }
+    private async load(e: MouseEvent): Promise<void> {
+        await this.datastore.load();
+        this.paper.redraw(this.datastore.getDesc());
     }
 }
