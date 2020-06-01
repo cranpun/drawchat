@@ -9,7 +9,7 @@
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
         <link rel="shortcut icon" href="https://tm.cranpun-tool.ml/wp-content/themes/themeorg/favicon.ico" />
-        
+
         <!-- Styles -->
         <style>
             html, body {
@@ -109,8 +109,8 @@
 
                 <div class="links">
                     <a href="/">戻る</a>
-                    <button id="bt-save" style="display: none">保存</button>
-                    <button id="bt-load">ロード</button>
+                    <button id="bt-save">保存</button>
+                    <button id="bt-load" style="display: none">ロード</button>
                 </div>
             </div>
         </div>
