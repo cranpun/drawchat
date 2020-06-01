@@ -1,7 +1,7 @@
 import { DeviceType, EventStatus } from "./types";
 import { Paper } from "./Paper";
 import { Datastore } from "./Datastore";
-const Swal = require("sweetalert2");
+import * as U from "./u";
 
 export class Sense {
     private room_id: number;
@@ -140,38 +140,14 @@ export class Sense {
         }
     }
     private async save(): Promise<void> {
-        Swal.fire({
-            text: "now saving...",
-            toast: true,
-            position: "bottom-start",
-            timer: 3 * 1000,
-            showConfirmButton: false
-        });
+        U.tt("now saving...");
         await this.mydata.datastore.save();
-        Swal.fire({
-            text: "saved",
-            toast: true,
-            position: "bottom-start",
-            timer: 3 * 1000,
-            showConfirmButton: false
-        });
+        U.tt("saved");
     }
     private async load(): Promise<void> {
-        Swal.fire({
-            text: "now loading...",
-            toast: true,
-            position: "bottom-end",
-            timer: 3 * 1000,
-            showConfirmButton: false
-        });
+        U.tt("now loading...");
         await this.otherdata.datastore.load();
         await this.otherdata.paper.redraw(this.otherdata.datastore.getDesc());
-        Swal.fire({
-            text: "loaded",
-            toast: true,
-            position: "bottom-end",
-            timer: 3 * 1000,
-            showConfirmButton: false
-        });
+        U.tt("loaded");
     }
 }
