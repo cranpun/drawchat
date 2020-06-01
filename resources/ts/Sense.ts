@@ -41,11 +41,9 @@ export class Sense {
         // 暫定：ボタンで強制
         const bt_save = document.querySelector("#bt-save");
         bt_save.addEventListener("click", (e: MouseEvent) => this.save());
-        const bt_load = document.querySelector("#bt-load");
-        bt_load.addEventListener("click", (e: MouseEvent) => this.load());
-        // setInterval(async () => {
-        //     this.load()
-        // }, 3 * 1000);
+        // const bt_load = document.querySelector("#bt-load");
+        // bt_load.addEventListener("click", (e: MouseEvent) => this.load());
+        this.comm()
     }
 
     private proc(st: EventStatus, x: number, y: number) {
@@ -139,15 +137,20 @@ export class Sense {
             }
         }
     }
+    private async comm(): Promise<void> {
+        await this.load();
+        // await this.save();
+        setTimeout(() => this.comm(), 1 * 1000);
+    }
     private async save(): Promise<void> {
-        U.tt("now saving...");
+        U.tt("now saving...", true);
         await this.mydata.datastore.save();
-        U.tt("saved");
+        U.tt("saved", true);
     }
     private async load(): Promise<void> {
-        U.tt("now loading...");
+        U.tt("now loading...", true);
         await this.otherdata.datastore.load();
         await this.otherdata.paper.redraw(this.otherdata.datastore.getDesc());
-        U.tt("loaded");
+        U.tt("loaded", true);
     }
 }

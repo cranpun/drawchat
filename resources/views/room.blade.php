@@ -108,7 +108,7 @@
 
                 <div class="links">
                     <a href="/">戻る</a>
-                    <button id="bt-save">保存</button>
+                    <button id="bt-save" style="display: none">保存</button>
                     <button id="bt-load">ロード</button>
                 </div>
             </div>

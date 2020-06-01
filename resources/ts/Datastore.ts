@@ -55,7 +55,7 @@ export class Datastore {
             if (this.user_id === null) {
                 this.user_id = res_save.data["user_id"].toString();
             }
-            console.log(res_save);
+            // console.log(res_save);
         } catch (error) {
             console.error(error);
         }
