@@ -21,4 +21,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::prefix("desc")->group(function() {
     Route::get("/{room_id}", "DescController@index");
     Route::post("/{room_id}", "DescController@add");
+    Route::get("/{room_id}/my/{user_id}", "DescController@my"); // 暫定？user_idはログインをセッションで持ってればいらないかも
+    Route::get("/{room_id}/other/{user_id}", "DescController@other"); // 暫定？user_idはログインをセッションで持ってればいらないかも
 });

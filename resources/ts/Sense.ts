@@ -4,38 +4,44 @@ import { Datastore } from "./Datastore";
 const Swal = require("sweetalert2");
 
 export class Sense {
-    private cnv: HTMLCanvasElement;
+    private room_id: number;
     private nowdevice: DeviceType;
     private nowstatus: EventStatus;
-    private paper: Paper;
-    private datastore: Datastore;
+    private mydata: {paper: Paper, datastore: Datastore};
+    private otherdata: {paper: Paper, datastore: Datastore};
 
-    public init(sel_canvas: string, sel_save: string, sel_load: string): void {
-        this.cnv = document.querySelector(sel_canvas);
-        this.paper = new Paper(this.cnv);
-        this.datastore = new Datastore();
+    public init(mycnv: HTMLCanvasElement, othercnv: HTMLCanvasElement): void {
+        this.mydata = {
+            paper: new Paper(mycnv),
+            datastore: new Datastore(),
+        }
+        this.otherdata = {
+            paper: new Paper(othercnv),
+            datastore: new Datastore(),
+        }
         this.nowdevice = null;
         this.nowstatus = "up"; // 初期は離した状態
 
         // this.cnv.addEventListener("
-        this.cnv.addEventListener("mouseup", (e: MouseEvent) => this.mousehandler(e), false);
-        this.cnv.addEventListener("mousedown", (e: MouseEvent) => this.mousehandler(e), false);
-        this.cnv.addEventListener("mousemove", (e: MouseEvent) => this.mousehandler(e), false);
-        this.cnv.addEventListener("mouseleave", (e: MouseEvent) => this.mousehandler(e), false);
+        mycnv.addEventListener("mouseup", (e: MouseEvent) => this.mousehandler(e), false);
+        mycnv.addEventListener("mousedown", (e: MouseEvent) => this.mousehandler(e), false);
+        mycnv.addEventListener("mousemove", (e: MouseEvent) => this.mousehandler(e), false);
+        mycnv.addEventListener("mouseleave", (e: MouseEvent) => this.mousehandler(e), false);
 
-        this.cnv.addEventListener("pointerup", (e: PointerEvent) => this.pointerhandler(e), false);
-        this.cnv.addEventListener("pointerdown", (e: PointerEvent) => this.pointerhandler(e), false);
-        this.cnv.addEventListener("pointermove", (e: PointerEvent) => this.pointerhandler(e), false);
-        this.cnv.addEventListener("pointerleave", (e: PointerEvent) => this.pointerhandler(e), false);
+        mycnv.addEventListener("pointerup", (e: PointerEvent) => this.pointerhandler(e), false);
+        mycnv.addEventListener("pointerdown", (e: PointerEvent) => this.pointerhandler(e), false);
+        mycnv.addEventListener("pointermove", (e: PointerEvent) => this.pointerhandler(e), false);
+        mycnv.addEventListener("pointerleave", (e: PointerEvent) => this.pointerhandler(e), false);
 
-        this.cnv.addEventListener("touchstart", (e: TouchEvent) => this.touchhandler(e), false);
-        this.cnv.addEventListener("touchleave", (e: TouchEvent) => this.touchhandler(e), false);
-        this.cnv.addEventListener("touchmove", (e: TouchEvent) => this.touchhandler(e), false);
-        this.cnv.addEventListener("touchend", (e: TouchEvent) => this.touchhandler(e), false);
+        mycnv.addEventListener("touchstart", (e: TouchEvent) => this.touchhandler(e), false);
+        mycnv.addEventListener("touchleave", (e: TouchEvent) => this.touchhandler(e), false);
+        mycnv.addEventListener("touchmove", (e: TouchEvent) => this.touchhandler(e), false);
+        mycnv.addEventListener("touchend", (e: TouchEvent) => this.touchhandler(e), false);
 
-        const bt_save = document.querySelector(sel_save);
+        // 暫定：ボタンで強制
+        const bt_save = document.querySelector("#bt-save");
         bt_save.addEventListener("click", (e: MouseEvent) => this.save());
-        const bt_load = document.querySelector(sel_load);
+        const bt_load = document.querySelector("#bt-load");
         bt_load.addEventListener("click", (e: MouseEvent) => this.load());
         // setInterval(async () => {
         //     this.load()
@@ -45,10 +51,10 @@ export class Sense {
     private proc(st: EventStatus, x: number, y: number) {
         if (st === "up" && this.nowstatus !== "up") {
             // up -> upの場合は何もしない
-            this.datastore.endStroke();
+            this.mydata.datastore.endStroke();
         } else if (st === "down") {
-            this.paper.stroke(x, y, this.datastore.lastPoint());
-            this.datastore.pushPoint(x, y);
+            this.mydata.paper.stroke(x, y, this.mydata.datastore.lastPoint());
+            this.mydata.datastore.pushPoint(x, y);
         }
         // 現在の状態を更新
         this.nowstatus = st;
@@ -141,7 +147,7 @@ export class Sense {
             timer: 3 * 1000,
             showConfirmButton: false
         });
-        await this.datastore.save();
+        await this.mydata.datastore.save();
         Swal.fire({
             text: "saved",
             toast: true,
@@ -158,8 +164,8 @@ export class Sense {
             timer: 3 * 1000,
             showConfirmButton: false
         });
-        await this.datastore.load();
-        await this.paper.redraw(this.datastore.getDesc());
+        await this.otherdata.datastore.load();
+        await this.otherdata.paper.redraw(this.otherdata.datastore.getDesc());
         Swal.fire({
             text: "loaded",
             toast: true,

@@ -84,8 +84,27 @@
                 <div class="title m-b-md">
                     room {{ $room_id }}
                 </div>
-                <canvas id="drawcanvas" width="600" height="600" style="background: #EEE;">
-                </canvas>
+                <style type="text/css">
+                    <?php $cw = 600; $ch = 600; ?>
+                    #drawcanvases {
+                        margin-bottom: 15px;
+                        border: 3px solid #aaa;
+                        border-radius: 5px;
+                    }
+                    #drawcanvases, #mycanvas, #othercanvas {
+                        width: <?= $cw ?>px;
+                        height: <?= $ch ?>px;
+                    }
+                    #mycanvas, #othercanvas {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                    }
+                </style>
+                <div id="drawcanvases" style="position: relative">
+                    <canvas id="othercanvas" width="<?= $cw ?>" height="<?= $ch ?>"></canvas>
+                    <canvas id="mycanvas" width="<?= $cw ?>" height="<?= $ch ?>"></canvas>
+                </div>
 
                 <div class="links">
                     <a href="/">戻る</a>

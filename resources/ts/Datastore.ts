@@ -6,12 +6,16 @@ export class Datastore {
     private nowstroke: Stroke;
     private time_prepush: number;
     private user_id: string;
+    private room_id: number;
 
     constructor() {
         this.d = new Desc();
         this.nowstroke = new Stroke();
         this.time_prepush = 0;
         this.user_id = null;
+        const urls: string[] = window.location.pathname.split("/");
+        const room_id: number = parseInt(urls[urls.length - 1]);
+        this.room_id = room_id;
     }
     public pushPoint(x: number, y: number): void {
         const now = Date.now();
@@ -58,9 +62,7 @@ export class Datastore {
     }
 
     public async load(): Promise<void> {
-        const urls: string[] = window.location.pathname.split("/");
-        const room_id: number = parseInt(urls[urls.length - 1]);
-        const api_load: MyAxiosApi = window.axios.get(`/api/desc/${room_id}`);
+        const api_load: MyAxiosApi = window.axios.get(`/api/desc/${this.room_id}/other/${this.user_id === null ? 0 : this.user_id}`);
 
         try {
             const [res_load] = await window.axios.all([api_load]);

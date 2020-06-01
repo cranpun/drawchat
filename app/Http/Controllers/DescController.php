@@ -7,11 +7,6 @@ use Illuminate\Http\Request;
 
 class DescController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index($room_id)
     {
         $q = \App\Desc::where("room_id", "=", $room_id);
@@ -20,6 +15,23 @@ class DescController extends Controller
         return response($ret);
     }
 
+    public function my($room_id, $user_id)
+    {
+        $q = \App\Desc::where("room_id", "=", $room_id);
+        $q->where("user_id", "=", $user_id);
+        $q->orderBy("created_at", "ASC");
+        $ret = $q->get();
+        return response($ret);
+    }
+
+    public function other($room_id, $user_id)
+    {
+        $q = \App\Desc::where("room_id", "=", $room_id);
+        $q->where("user_id", "!=", $user_id);
+        $q->orderBy("created_at", "ASC");
+        $ret = $q->get();
+        return response($ret);
+    }
     /**
      * Store a newly created resource in storage.
      *
