@@ -63,7 +63,6 @@
                 margin-bottom: 30px;
             }
         </style>
-        <script type="text/javascript" src="/js/app.js"></script>
         <script src="{{ asset('js/app.js') . '?v=' . filemtime(public_path() .'/js/app.js') }}" defer></script>
     </head>
     <body>
