@@ -148,7 +148,7 @@ export class Sense {
         U.tt("saved", true);
     }
     private async load(): Promise<void> {
-        U.tt("now loading...", true);
+        U.tt("now loading...", false);
         await this.otherdata.datastore.load();
         await this.otherdata.paper.redraw(this.otherdata.datastore.getDesc());
         U.tt("loaded", true);
