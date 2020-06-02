@@ -17,28 +17,7 @@
                 color: #636b6f;
                 font-family: 'Nunito', sans-serif;
                 font-weight: 200;
-                height: 100vh;
                 margin: 0;
-            }
-
-            .full-height {
-                height: 100vh;
-            }
-
-            .flex-center {
-                align-items: center;
-                display: flex;
-                justify-content: center;
-            }
-
-            .position-ref {
-                position: relative;
-            }
-
-            .top-right {
-                position: absolute;
-                right: 10px;
-                top: 18px;
             }
 
             .content {
@@ -66,7 +45,7 @@
         <script src="{{ asset('js/app.js') . '?v=' . filemtime(public_path() .'/js/app.js') }}" defer></script>
     </head>
     <body>
-        <div class="flex-center position-ref full-height">
+        <div class="">
             @if (Route::has('login'))
                 <div class="top-right links">
                     @auth
@@ -86,11 +65,12 @@
                     room {{ $room_id }}
                 </div>
                 <style type="text/css">
-                    <?php $cw = 600; $ch = 600; ?>
+                    <?php $cw = 2200; $ch = 1600; ?>
                     #drawcanvases {
                         margin-bottom: 15px;
                         border: 3px solid #aaa;
                         border-radius: 5px;
+                        display: inline-block;
                     }
                     #drawcanvases, #mycanvas, #othercanvas {
                         width: <?= $cw ?>px;
