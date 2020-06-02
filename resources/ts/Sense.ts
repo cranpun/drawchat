@@ -140,7 +140,7 @@ export class Sense {
     private async comm(): Promise<void> {
         await this.load();
         // await this.save();
-        setTimeout(() => this.comm(), 1 * 1000);
+        setTimeout(() => this.comm(), 7 * 1000);
     }
     private async save(): Promise<void> {
         U.tt("now saving...", true);
