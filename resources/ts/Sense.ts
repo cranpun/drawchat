@@ -1,16 +1,23 @@
-import { DeviceType, EventStatus } from "./types";
+import { DeviceType, EventStatus, Point, Tool } from "./types";
 import { Paper } from "./Paper";
 import { Datastore } from "./Datastore";
 import * as U from "./u";
 
 export class Sense {
     private room_id: number;
+    private wrapdiv: HTMLDivElement;
     private nowdevice: DeviceType;
     private nowstatus: EventStatus;
-    private mydata: {paper: Paper, datastore: Datastore};
-    private otherdata: {paper: Paper, datastore: Datastore};
+    private nowtool: Tool;
+    private mydata: { paper: Paper, datastore: Datastore };
+    private otherdata: { paper: Paper, datastore: Datastore };
+    private lastdata: { time: number, pos: Point, timeoutid: number, zoom: number };
 
-    public init(mycnv: HTMLCanvasElement, othercnv: HTMLCanvasElement): void {
+    private static readonly SEC_SCROLL: number = 1 * 1000;
+    private static readonly SEC_EXPAND: number = 2 * 1000;
+
+    public init(mycnv: HTMLCanvasElement, othercnv: HTMLCanvasElement, wrapdiv: HTMLDivElement): void {
+        this.wrapdiv = wrapdiv;
         this.mydata = {
             paper: new Paper(mycnv),
             datastore: new Datastore(),
@@ -21,6 +28,14 @@ export class Sense {
         }
         this.nowdevice = null;
         this.nowstatus = "up"; // 初期は離した状態
+        this.nowtool = null;
+        this.lastdata = {
+            time: 0,
+            pos: null,
+            timeoutid: null,
+            zoom: 1
+        };
+
 
         // this.cnv.addEventListener("
         mycnv.addEventListener("mouseup", (e: MouseEvent) => this.mousehandler(e), false);
@@ -46,24 +61,70 @@ export class Sense {
         this.comm()
     }
 
-    private proc(st: EventStatus, x: number, y: number) {
+    private proc(st: EventStatus, e: Event, x: number, y: number) {
+        console.log(e.type);
+
         if (st === "up" && this.nowstatus !== "up") {
-            // up -> upの場合は何もしない
+            // up -> upの場合は何もしない。down->upのときだけ（moveは設定しないはず）
             this.mydata.datastore.endStroke();
+            // 現在の状態を更新
+            this.nowstatus = "up";
+            this.lastdata.time = 0;
+            this.lastdata.pos = null;
+
+            // 長押しの諸々のキャンセル
+            window.clearTimeout(this.lastdata.timeoutid);
+            this.wrapdiv.style.backgroundColor = "#FFF";
+            this.nowtool = null;
         } else if (st === "down") {
-            this.mydata.paper.stroke(x, y, this.mydata.datastore.lastPoint());
-            this.mydata.datastore.pushPoint(x, y);
+            // 操作開始
+            this.nowstatus = "down";
+
+            // 長押し確認のために時間を保持
+            this.lastdata.time = Date.now();
+            this.lastdata.pos = new Point(x, y, 0);
+
+            // 色を変更
+            this.lastdata.timeoutid = window.setTimeout(() => {
+                // キャンバスの色を変更
+                this.wrapdiv.style.backgroundColor = "#CCC";
+                this.lastdata.timeoutid = window.setTimeout(() => {
+                    // キャンバスの色を変更
+                    this.wrapdiv.style.backgroundColor = "#AAA";
+                }, Sense.SEC_EXPAND);
+            }, Sense.SEC_SCROLL);
+        } else if (st === "move" && this.nowstatus === "down") {
+            // down時のmoveのときのみ操作
+            const now: number = Date.now();
+            const diff: number = now - this.lastdata.time;
+            // toolの判断
+            if (this.nowtool === null) {
+                if (diff < Sense.SEC_SCROLL) {
+                    // 単押し移動＝記述
+                    this.nowtool = "pen";
+                } else if (diff < Sense.SEC_EXPAND) {
+                    // 長押し移動＝画面スクロール
+                    this.nowtool = "scroll";
+                } else if (diff >= Sense.SEC_EXPAND) {
+                    // さらに長押し＝拡大縮小
+                    this.nowtool = "expand";
+                }
+                window.clearTimeout(this.lastdata.timeoutid);
+            }
+
+            // 現在のツールに応じて処理
+            if (this.nowtool === "pen") {
+                // 単押し移動＝記述
+                this.mydata.paper.stroke(x, y, this.mydata.datastore.lastPoint());
+                this.mydata.datastore.pushPoint(x, y);
+            } else if (this.nowtool === "scroll") {
+                // 長押し移動＝画面スクロール
+                this.scroll(x, y);
+            } else if (this.nowtool === "expand") {
+                // さらに長押し＝拡大縮小
+                this.expand(x, y);
+            }
         }
-        // 現在の状態を更新
-        this.nowstatus = st;
-
-        // // 記述が途切れたのでキャンバスサイズを調整。
-        // // 前回記述で、今回離した場合。
-        // if (prepos == "down" && me.nowstatus == "up") {
-        //     me.expandCanvas_(xy.y);
-        // }
-        // console.log(this.nowdevice, x, y, this.nowstatus);
-
     }
 
     private mousehandler(e: MouseEvent): void {
@@ -78,14 +139,14 @@ export class Sense {
 
             // 位置の更新
             if (e.type === "mouseup") {
-                this.proc("up", x, y);
+                this.proc("up", e, x, y);
             } else if (e.type === "mousedown") {
-                this.proc("down", x, y);
+                this.proc("down", e, x, y);
             } else if (e.type === "mouseleave") {
                 // 設置したまま外に出た場合は離したとみなす。
-                this.proc("up", x, y);
-            } else if (e.type === "pointermove") {
-                this.proc(this.nowstatus, x, y);
+                this.proc("up", e, x, y);
+            } else if (e.type === "mousemove") {
+                this.proc("move", e, x, y);
             }
 
         }
@@ -104,14 +165,14 @@ export class Sense {
         const y = ct.clientY - bc.top;
 
         if (e.type == "touchend") {
-            this.proc("up", x, y);
+            this.proc("up", e, x, y);
         } else if (e.type == "touchstart") {
-            this.proc("down", x, y);
+            this.proc("down", e, x, y);
         } else if (e.type == "touchleave") {
             // 領域の外に出たら終了
-            this.proc("up", x, y);
-        } else if (e.type === "pointermove") {
-            this.proc(this.nowstatus, x, y);
+            this.proc("up", e, x, y);
+        } else if (e.type === "touchmove") {
+            this.proc("move", e, x, y);
         }
     };
 
@@ -122,18 +183,17 @@ export class Sense {
             this.nowdevice = "pointer";
             const x: number = e.offsetX;
             const y: number = e.offsetY;
-            let prepos: EventStatus = this.nowstatus;
 
             // 位置の更新
             if (e.type === "pointerup") {
-                this.proc("up", x, y);
+                this.proc("up", e, x, y);
             } else if (e.type === "pointerdown") {
-                this.proc("down", x, y);
+                this.proc("down", e, x, y);
             } else if (e.type === "pointerleave") {
                 // 設置したまま外に出た場合は離したとみなす。
-                this.proc("up", x, y);
+                this.proc("up", e, x, y);
             } else if (e.type === "pointermove") {
-                this.proc(this.nowstatus, x, y);
+                this.proc("move", e, x, y);
             }
         }
     }
@@ -152,5 +212,26 @@ export class Sense {
         await this.otherdata.datastore.load();
         await this.otherdata.paper.redraw(this.otherdata.datastore.getDesc());
         U.tt("loaded", true);
+    }
+    private scroll(x: number, y: number) {
+        // 差分の計算
+        const dx = (x - this.lastdata.pos.x);
+        const dy = (y - this.lastdata.pos.y);
+        window.scrollBy(dx, dy);
+        console.log("scroll", dx, dy);
+        // ポイントの更新
+        this.lastdata.pos.x = x;
+        this.lastdata.pos.y = y;
+    }
+    private expand(x: number, y: number) {
+        const dy = y - this.lastdata.pos.y;
+        this.lastdata.zoom += dy * 0.001; // 移動差分をzoom比率に変換
+        this.lastdata.zoom = this.lastdata.zoom < 0.5 ? 0.5 : this.lastdata.zoom;
+        const html = document.querySelector("html");
+        html.style.transform = `scale(${this.lastdata.zoom})`;
+        // ポイントの更新
+        this.lastdata.pos.x = x;
+        this.lastdata.pos.y = y;
+        console.log("expand", dy, this.lastdata.zoom);
     }
 }

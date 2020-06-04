@@ -10,5 +10,5 @@ export function tt(mes: string, tt: boolean = false): void {
             showConfirmButton: false
         });
     }
-    console.log(mes);
+    // console.log(mes);
 }

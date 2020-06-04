@@ -1,5 +1,6 @@
-export type EventStatus = "up" | "down";
+export type EventStatus = "up" | "down" | "move";
 export type DeviceType = "mouse" | "touch" | "pointer";
+export type Tool = "pen" | "scroll" | "expand";
 
 export class Desc {
     private s: Stroke[];
