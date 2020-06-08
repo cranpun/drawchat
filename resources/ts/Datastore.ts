@@ -1,21 +1,21 @@
-import { Desc, Stroke, Point } from "./types";
+import { Draw, Stroke, Point } from "./types";
 import { MyAxiosApi } from "./myaxios";
 
 export class Datastore {
-    private d: Desc;
+    private d: Draw;
     private nowstroke: Stroke;
     private time_prepush: number;
     private user_id: string;
-    private room_id: number;
+    private paper_id: number;
 
     constructor() {
-        this.d = new Desc();
+        this.d = new Draw();
         this.nowstroke = new Stroke();
         this.time_prepush = 0;
         this.user_id = null;
         const urls: string[] = window.location.pathname.split("/");
-        const room_id: number = parseInt(urls[urls.length - 1]);
-        this.room_id = room_id;
+        const paper_id: number = parseInt(urls[urls.length - 1]);
+        this.paper_id = paper_id;
     }
     public pushPoint(x: number, y: number): void {
         const now = Date.now();
@@ -33,7 +33,7 @@ export class Datastore {
     }
 
     public endStroke(): void {
-        // Strokeが終わったのでdescにプッシュ
+        // Strokeが終わったのでdrawにプッシュ
         if (this.nowstroke.length() > 0) {
             this.d.push(this.nowstroke);
             // 次に備えてstrokeをクリア
@@ -43,12 +43,12 @@ export class Datastore {
 
     public async save(): Promise<void> {
         const urls: string[] = window.location.pathname.split("/");
-        const room_id: number = parseInt(urls[urls.length - 1]);
+        const paper_id: number = parseInt(urls[urls.length - 1]);
         let postdata = {
-            json_desc: this.d.json(),
+            json_draw: this.d.json(),
             user_id: this.user_id
         };
-        const api_save: MyAxiosApi = window.axios.post(`/api/desc/${room_id}`, postdata);
+        const api_save: MyAxiosApi = window.axios.post(`/api/draw/${paper_id}`, postdata);
 
         try {
             const [res_save] = await window.axios.all([api_save]);
@@ -62,14 +62,14 @@ export class Datastore {
     }
 
     public async load(): Promise<void> {
-        const api_load: MyAxiosApi = window.axios.get(`/api/desc/${this.room_id}/other/${this.user_id === null ? 0 : this.user_id}`);
+        const api_load: MyAxiosApi = window.axios.get(`/api/draw/${this.paper_id}/other/${this.user_id === null ? 0 : this.user_id}`);
 
         try {
             const [res_load] = await window.axios.all([api_load]);
             // 暫定処置。全部同じキャンバスに描画
             let strokes: any[] = [];
             for(const d of (<any[]>res_load.data)) {
-                const obj = JSON.parse(d.json_desc);
+                const obj = JSON.parse(d.json_draw);
                 strokes = strokes.concat(obj);
             }
             this.d.parse(strokes);
@@ -78,7 +78,7 @@ export class Datastore {
         }
     }
 
-    public getDesc(): Desc {
+    public getDraw(): Draw {
         return this.d;
     }
 }

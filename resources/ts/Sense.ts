@@ -9,7 +9,7 @@ import { SaveAction } from "./action/SaveAction";
 import { LoadAction } from "./action/LoadAction";
 
 export class Sense {
-    private room_id: number;
+    private paper_id: number;
     private wrapdiv: HTMLDivElement;
 
     private nowproc: boolean; // タッチ、ポインタ等、まとめて複数のイベントを検知した場合に備えて。

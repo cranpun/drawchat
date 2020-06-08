@@ -18,9 +18,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix("desc")->group(function() {
-    Route::get("/{room_id}", "DescController@index");
-    Route::post("/{room_id}", "DescController@add");
-    Route::get("/{room_id}/my/{user_id}", "DescController@my"); // 暫定？user_idはログインをセッションで持ってればいらないかも
-    Route::get("/{room_id}/other/{user_id}", "DescController@other"); // 暫定？user_idはログインをセッションで持ってればいらないかも
+Route::prefix("draw")->group(function() {
+    Route::get("/{paper_id}", "DrawController@index");
+    Route::post("/{paper_id}", "DrawController@add");
+    Route::get("/{paper_id}/my/{user_id}", "DrawController@my"); // 暫定？user_idはログインをセッションで持ってればいらないかも
+    Route::get("/{paper_id}/other/{user_id}", "DrawController@other"); // 暫定？user_idはログインをセッションで持ってればいらないかも
 });

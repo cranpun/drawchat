@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDescTable extends Migration
+class CreateDrawTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateDescTable extends Migration
      */
     public function up()
     {
-        Schema::create('desc', function (Blueprint $table) {
+        Schema::create('draw', function (Blueprint $table) {
             $table->id();
-            $table->integer("room_id");
+            $table->integer("paper_id");
             $table->integer("user_id");
-            $table->text("json_desc");
+            $table->text("json_draw");
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ class CreateDescTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('desc');
+        Schema::dropIfExists('draw');
     }
 }

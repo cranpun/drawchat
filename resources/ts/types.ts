@@ -1,7 +1,7 @@
 export type CursorEvent = "up" | "down" | "move";
 export type Tool = "pen" | "scroll" | "expand";
 
-export class Desc {
+export class Draw {
     private s: Stroke[];
     constructor() {
         this.s = [];

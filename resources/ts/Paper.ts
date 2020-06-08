@@ -1,4 +1,4 @@
-import { Point, Stroke, Desc } from "./types";
+import { Point, Stroke, Draw } from "./types";
 
 export class Paper {
     private cnv: HTMLCanvasElement;
@@ -31,8 +31,8 @@ export class Paper {
         this.ctx.restore()
     }
 
-    public redraw(desc: Desc): void {
-        const strokes: Stroke[] = desc.getStrokes();
+    public redraw(draw: Draw): void {
+        const strokes: Stroke[] = draw.getStrokes();
         let prepoint = null;
         for (const s of strokes) {
             for (const p of s.getPoints()) {

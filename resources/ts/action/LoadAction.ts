@@ -18,7 +18,7 @@ export class LoadAction {
     public async proc(): Promise<void> {
         U.tt("now loading...", true);
         await this.datastore.load();
-        await this.paper.redraw(this.datastore.getDesc());
+        await this.paper.redraw(this.datastore.getDraw());
         U.tt("loaded", true);
         setTimeout(() => this.proc(), 7 * 1000);
     }

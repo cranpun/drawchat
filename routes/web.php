@@ -13,13 +13,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', "RoomController@index");
+Route::get('/', "PaperController@index");
 // function () {
 //     return view('welcome');
 // });
 
 // nullなら新規作成
-Route::get('/room/{room_id?}', "RoomController@show");
-// function ($room_id = null) {
-//     return view('room', compact(["room_id"]));
+Route::get('/paper/{paper_id?}', "PaperController@show");
+// function ($paper_id = null) {
+//     return view('paper', compact(["paper_id"]));
 // });

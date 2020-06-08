@@ -62,7 +62,7 @@
 
             <div>
                 <div class="title m-b-md">
-                    room {{ $room_id }}
+                    paper {{ $paper_id }}
                 </div>
                 <style type="text/css">
                     <?php $cw = 2200; $ch = 1600; ?>

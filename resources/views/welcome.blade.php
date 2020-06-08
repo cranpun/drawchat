@@ -84,10 +84,10 @@
                 <div class="title m-b-md">
                     Drawchat
                 </div>
-                <div style="text-align: left"><a href="/room">new room</a></div>
+                <div style="text-align: left"><a href="/paper">new paper</a></div>
                 <ul class="links" style="text-align: left">
-                    @foreach ($rooms as $room)
-                        <li><a href="/room/{{ $room->id }}">Room : {{ $room->id }}</a></li>
+                    @foreach ($papers as $paper)
+                        <li><a href="/paper/{{ $paper->id }}">Paper : {{ $paper->id }}</a></li>
                     @endforeach
                 </ul>
             </div>
