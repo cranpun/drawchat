@@ -1,5 +1,4 @@
-export type EventStatus = "up" | "down" | "move";
-export type DeviceType = "mouse" | "touch" | "pointer";
+export type CursorEvent = "up" | "down" | "move";
 export type Tool = "pen" | "scroll" | "expand";
 
 export class Desc {

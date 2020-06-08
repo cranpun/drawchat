@@ -1,17 +1,29 @@
-import { DeviceType, EventStatus, Point, Tool } from "./types";
+import { CursorEvent, Point, Tool } from "./types";
 import { Paper } from "./Paper";
 import { Datastore } from "./Datastore";
 import * as U from "./u";
+import { MouseHandler } from "./device/MouseHandler";
+import { PointerHandler } from "./device/PointerHandler";
+import { TouchHandler } from "./device/TouchHandler";
+import { SaveAction } from "./action/SaveAction";
+import { LoadAction } from "./action/LoadAction";
 
 export class Sense {
     private room_id: number;
     private wrapdiv: HTMLDivElement;
-    private nowdevice: DeviceType;
-    private nowstatus: EventStatus;
-    private nowtool: Tool;
+
+    private nowproc: boolean; // タッチ、ポインタ等、まとめて複数のイベントを検知した場合に備えて。
+    private lastdata: {
+        time: number,
+        pos: Point,
+        timeoutids: number[],
+        zoom: number,
+        status: CursorEvent,
+        tool: Tool
+    };
+
     private mydata: { paper: Paper, datastore: Datastore };
     private otherdata: { paper: Paper, datastore: Datastore };
-    private lastdata: { time: number, pos: Point, timeoutid: number, zoom: number };
 
     private static readonly SEC_SCROLL: number = 0.5 * 1000;
     private static readonly SEC_EXPAND: number = 1.5 * 1000;
@@ -26,194 +38,98 @@ export class Sense {
             paper: new Paper(othercnv),
             datastore: new Datastore(),
         }
-        this.nowdevice = null;
-        this.nowstatus = "up"; // 初期は離した状態
-        this.nowtool = null;
+        this.nowproc = false;
         this.lastdata = {
             time: 0,
             pos: null,
-            timeoutid: null,
-            zoom: 1
+            timeoutids: [],
+            zoom: 1,
+            status: "up",
+            tool: null
         };
 
-
-        // this.cnv.addEventListener("
-        mycnv.addEventListener("mouseup", (e: MouseEvent) => this.mousehandler(e), false);
-        mycnv.addEventListener("mousedown", (e: MouseEvent) => this.mousehandler(e), false);
-        mycnv.addEventListener("mousemove", (e: MouseEvent) => this.mousehandler(e), false);
-        mycnv.addEventListener("mouseleave", (e: MouseEvent) => this.mousehandler(e), false);
-
-        mycnv.addEventListener("pointerup", (e: PointerEvent) => this.pointerhandler(e), false);
-        mycnv.addEventListener("pointerdown", (e: PointerEvent) => this.pointerhandler(e), false);
-        mycnv.addEventListener("pointermove", (e: PointerEvent) => this.pointerhandler(e), false);
-        mycnv.addEventListener("pointerleave", (e: PointerEvent) => this.pointerhandler(e), false);
-
-        mycnv.addEventListener("touchstart", (e: TouchEvent) => this.touchhandler(e), false);
-        mycnv.addEventListener("touchleave", (e: TouchEvent) => this.touchhandler(e), false);
-        mycnv.addEventListener("touchmove", (e: TouchEvent) => this.touchhandler(e), false);
-        mycnv.addEventListener("touchend", (e: TouchEvent) => this.touchhandler(e), false);
+        new MouseHandler(this).init(mycnv);
+        new PointerHandler(this).init(mycnv);
+        new TouchHandler(this).init(mycnv);
 
         // 暫定：ボタンで強制
-        const bt_save = document.querySelector("#bt-save");
-        bt_save.addEventListener("click", (e: MouseEvent) => this.save());
-        // const bt_load = document.querySelector("#bt-load");
-        // bt_load.addEventListener("click", (e: MouseEvent) => this.load());
-        this.comm()
+        new SaveAction(this.mydata.datastore).init();
+        new LoadAction(this.otherdata.datastore, this.otherdata.paper).init();
     }
 
-    private proc(st: EventStatus, e: Event, x: number, y: number) {
+    public proc(st: CursorEvent, e: Event, x: number, y: number) {
         console.log(e.type);
 
-        if (st === "up" && this.nowstatus !== "up") {
-            // up -> upの場合は何もしない。down->upのときだけ（moveは設定しないはず）
-            this.mydata.datastore.endStroke();
-            // 現在の状態を更新
-            this.nowstatus = "up";
-            this.lastdata.time = 0;
-            this.lastdata.pos = null;
+        if (!this.nowproc) {
+            this.nowproc = true;
+            if (st === "up" && this.lastdata.status !== "up") {
+                this.endStroke();
+            } else if (st === "down") {
+                this.startStroke(x, y);
+            } else if (st === "move" && this.lastdata.status === "down") {
+                this.setTool();
+                // 現在のツールに応じて処理
+                if (this.lastdata.tool === "pen") {
+                    // 単押し移動＝記述
+                    this.mydata.paper.stroke(x, y, this.mydata.datastore.lastPoint());
+                    this.mydata.datastore.pushPoint(x, y);
+                } else if (this.lastdata.tool === "scroll") {
+                    // 長押し移動＝画面スクロール
+                    this.scroll(x, y);
+                } else if (this.lastdata.tool === "expand") {
+                    // さらに長押し＝拡大縮小
+                    this.expand(x, y);
+                }
+            }
+            // 処理終了
+            this.nowproc = false;
+        }
+    }
 
-            // 長押しの諸々のキャンセル
-            window.clearTimeout(this.lastdata.timeoutid);
-            this.wrapdiv.style.backgroundColor = "#FFF";
-            this.nowtool = null;
-        } else if (st === "down") {
-            // 操作開始
-            this.nowstatus = "down";
+    private endStroke(): void {
+        // up -> upの場合は何もしない。down->upのときだけ（moveは設定しないはず）
+        this.mydata.datastore.endStroke();
+        // 現在の状態を更新
+        this.lastdata.status = "up";
+        this.lastdata.time = 0;
+        this.lastdata.pos = null;
 
-            // 長押し確認のために時間を保持
-            this.lastdata.time = Date.now();
-            this.lastdata.pos = new Point(x, y, 0);
+        // 長押しの諸々のキャンセル
+        this.clearTimer();
+        this.lastdata.tool = null;
+    }
 
-            // 色を変更
-            this.lastdata.timeoutid = window.setTimeout(() => {
-                // キャンバスの色を変更
-                this.wrapdiv.style.backgroundColor = "#C00";
-                this.lastdata.timeoutid = window.setTimeout(() => {
-                    // キャンバスの色を変更
-                    this.wrapdiv.style.backgroundColor = "#00C";
-                }, Sense.SEC_EXPAND);
-            }, Sense.SEC_SCROLL);
-        } else if (st === "move" && this.nowstatus === "down") {
+    private startStroke(x: number, y: number): void {
+        // 操作開始
+        this.lastdata.status = "down";
+        this.lastdata.tool = null;
+
+        // 長押し確認のために時間を保持
+        this.lastdata.pos = new Point(x, y, 0);
+        this.startTimer();
+    }
+
+    private setTool(): void {
+
+        // toolの判断
+        if (this.lastdata.tool === null) {
             // down時のmoveのときのみ操作
             const now: number = Date.now();
             const diff: number = now - this.lastdata.time;
-            // toolの判断
-            if (this.nowtool === null) {
-                if (diff < Sense.SEC_SCROLL) {
-                    // 単押し移動＝記述
-                    this.nowtool = "pen";
-                } else if (diff < Sense.SEC_EXPAND) {
-                    // 長押し移動＝画面スクロール
-                    this.nowtool = "scroll";
-                } else if (diff >= Sense.SEC_EXPAND) {
-                    // さらに長押し＝拡大縮小
-                    this.nowtool = "expand";
-                }
-                window.clearTimeout(this.lastdata.timeoutid);
-            }
-
-            // 現在のツールに応じて処理
-            if (this.nowtool === "pen") {
+            if (diff < Sense.SEC_SCROLL) {
                 // 単押し移動＝記述
-                this.mydata.paper.stroke(x, y, this.mydata.datastore.lastPoint());
-                this.mydata.datastore.pushPoint(x, y);
-            } else if (this.nowtool === "scroll") {
+                this.lastdata.tool = "pen";
+            } else if (diff < Sense.SEC_EXPAND) {
                 // 長押し移動＝画面スクロール
-                this.scroll(x, y);
-            } else if (this.nowtool === "expand") {
+                this.lastdata.tool = "scroll";
+            } else if (diff >= Sense.SEC_EXPAND) {
                 // さらに長押し＝拡大縮小
-                this.expand(x, y);
+                this.lastdata.tool = "expand";
             }
+            this.clearTimer();
         }
     }
-
-    private mousehandler(e: MouseEvent): void {
-        // タッチが先に検知されるので優先する。
-        if (["touch", "pointer"].indexOf(this.nowdevice) < 0) {
-            e.preventDefault();
-            this.nowdevice = "mouse";
-            const x: number = e.offsetX;
-            const y: number = e.offsetY;
-
-            let prepos: EventStatus = this.nowstatus;
-
-            // 位置の更新
-            if (e.type === "mouseup") {
-                this.proc("up", e, x, y);
-            } else if (e.type === "mousedown") {
-                this.proc("down", e, x, y);
-            } else if (e.type === "mouseleave") {
-                // 設置したまま外に出た場合は離したとみなす。
-                this.proc("up", e, x, y);
-            } else if (e.type === "mousemove") {
-                this.proc("move", e, x, y);
-            }
-
-        }
-        // 一通りのイベント検知が終わったのでdeviceをnullに。
-        // 次に、マウスイベントが拾えるように。
-        this.nowdevice = null;
-    };
-
-    private touchhandler(e: TouchEvent): void {
-        e.preventDefault();
-        this.nowdevice = "touch";
-        // x,yの取得
-        const ct = e.changedTouches[0]
-        const bc = (<HTMLCanvasElement>e.target).getBoundingClientRect();
-        const x = ct.clientX - bc.left;
-        const y = ct.clientY - bc.top;
-
-        if (e.type == "touchend") {
-            this.proc("up", e, x, y);
-        } else if (e.type == "touchstart") {
-            this.proc("down", e, x, y);
-        } else if (e.type == "touchleave") {
-            // 領域の外に出たら終了
-            this.proc("up", e, x, y);
-        } else if (e.type === "touchmove") {
-            this.proc("move", e, x, y);
-        }
-    };
-
-    private pointerhandler(e: PointerEvent): void {
-        // タッチが先に検知されるので優先する。
-        if (this.nowdevice !== "touch") {
-            e.preventDefault();
-            this.nowdevice = "pointer";
-            const x: number = e.offsetX;
-            const y: number = e.offsetY;
-
-            // 位置の更新
-            if (e.type === "pointerup") {
-                this.proc("up", e, x, y);
-            } else if (e.type === "pointerdown") {
-                this.proc("down", e, x, y);
-            } else if (e.type === "pointerleave") {
-                // 設置したまま外に出た場合は離したとみなす。
-                this.proc("up", e, x, y);
-            } else if (e.type === "pointermove") {
-                this.proc("move", e, x, y);
-            }
-        }
-    }
-    private async comm(): Promise<void> {
-        await this.load();
-        // await this.save();
-        setTimeout(() => this.comm(), 7 * 1000);
-    }
-    private async save(): Promise<void> {
-        U.tt("now saving...", true);
-        await this.mydata.datastore.save();
-        U.tt("saved", true);
-    }
-    private async load(): Promise<void> {
-        U.tt("now loading...", false);
-        await this.otherdata.datastore.load();
-        await this.otherdata.paper.redraw(this.otherdata.datastore.getDesc());
-        U.tt("loaded", true);
-    }
-    private scroll(x: number, y: number) {
+    private scroll(x: number, y: number): void {
         // 差分の計算
         const dx = (x - this.lastdata.pos.x);
         const dy = (y - this.lastdata.pos.y);
@@ -223,7 +139,7 @@ export class Sense {
         this.lastdata.pos.x = x;
         this.lastdata.pos.y = y;
     }
-    private expand(x: number, y: number) {
+    private expand(x: number, y: number): void {
         const dy = y - this.lastdata.pos.y;
         this.lastdata.zoom += dy * 0.001; // 移動差分をzoom比率に変換
         this.lastdata.zoom = this.lastdata.zoom < 0.5 ? 0.5 : this.lastdata.zoom;
@@ -233,5 +149,25 @@ export class Sense {
         this.lastdata.pos.x = x;
         this.lastdata.pos.y = y;
         console.log("expand", dy, this.lastdata.zoom);
+    }
+    private startTimer(): void {
+        // 色を変更
+        this.lastdata.time = Date.now();
+        this.lastdata.timeoutids.push(window.setTimeout(() => {
+            // キャンバスの色を変更
+            this.wrapdiv.style.backgroundColor = "#C00";
+            this.lastdata.timeoutids.push(window.setTimeout(() => {
+                // キャンバスの色を変更
+                this.wrapdiv.style.backgroundColor = "#00C";
+            }, Sense.SEC_EXPAND));
+        }, Sense.SEC_SCROLL));
+    }
+    private clearTimer(): void {
+        // ツールが決定したのでtimeout周りをクリア
+        let tid = null;
+        while (tid = this.lastdata.timeoutids.pop()) {
+            window.clearTimeout(tid);
+        }
+        this.wrapdiv.style.backgroundColor = "#FFF";
     }
 }
