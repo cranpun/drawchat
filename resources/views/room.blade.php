@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" style="transform-origin: top left;">
     <head>
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="initial-scale=1">
 
         <title>{{ config("app.name") }}</title>
 
@@ -60,7 +60,7 @@
                 </div>
             @endif
 
-            <div class="content">
+            <div>
                 <div class="title m-b-md">
                     room {{ $room_id }}
                 </div>
@@ -70,7 +70,6 @@
                         margin-bottom: 15px;
                         border: 3px solid #aaa;
                         border-radius: 5px;
-                        display: inline-block;
                     }
                     #drawcanvases, #mycanvas, #othercanvas {
                         width: <?= $cw ?>px;

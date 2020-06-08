@@ -13,8 +13,8 @@ export class Sense {
     private otherdata: { paper: Paper, datastore: Datastore };
     private lastdata: { time: number, pos: Point, timeoutid: number, zoom: number };
 
-    private static readonly SEC_SCROLL: number = 1 * 1000;
-    private static readonly SEC_EXPAND: number = 2 * 1000;
+    private static readonly SEC_SCROLL: number = 0.5 * 1000;
+    private static readonly SEC_EXPAND: number = 1.5 * 1000;
 
     public init(mycnv: HTMLCanvasElement, othercnv: HTMLCanvasElement, wrapdiv: HTMLDivElement): void {
         this.wrapdiv = wrapdiv;
@@ -87,10 +87,10 @@ export class Sense {
             // 色を変更
             this.lastdata.timeoutid = window.setTimeout(() => {
                 // キャンバスの色を変更
-                this.wrapdiv.style.backgroundColor = "#CCC";
+                this.wrapdiv.style.backgroundColor = "#C00";
                 this.lastdata.timeoutid = window.setTimeout(() => {
                     // キャンバスの色を変更
-                    this.wrapdiv.style.backgroundColor = "#AAA";
+                    this.wrapdiv.style.backgroundColor = "#00C";
                 }, Sense.SEC_EXPAND);
             }, Sense.SEC_SCROLL);
         } else if (st === "move" && this.nowstatus === "down") {
