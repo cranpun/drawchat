@@ -1,15 +1,15 @@
-import { Datastore } from "../Datastore";
-import * as U from "../u";
-import { Paper } from "../Paper";
+import { DrawData } from "../data/DrawData";
+import * as U from "../u/u";
+import { PaperElement } from "../element/PaperElement";
 import { RedrawAction } from "./RedrawAction";
 import { PenAction } from "./PenAction";
 
 export class LoadAction {
-    private paper: Paper;
-    private datastore: Datastore;
+    private paper: PaperElement;
+    private datastore: DrawData;
     private redraw: RedrawAction;
     private pen: PenAction;
-    public init(paper: Paper, datastore: Datastore, redraw: RedrawAction, pen: PenAction) {
+    public init(paper: PaperElement, datastore: DrawData, redraw: RedrawAction, pen: PenAction) {
         this.paper = paper;
         this.datastore = datastore;
         this.redraw = redraw;

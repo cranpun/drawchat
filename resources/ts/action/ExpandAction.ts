@@ -1,7 +1,7 @@
-import { Datastore } from "../Datastore";
-import * as U from "../u";
+import { DrawData } from "../data/DrawData";
+import * as U from "../u/u";
 import { WrapdivElement } from "../element/WrapdivElement";
-import { Point } from "../types";
+import { Point } from "../u/types";
 
 export class ExpandAction {
     private wrapdiv: WrapdivElement;

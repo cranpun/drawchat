@@ -1,4 +1,4 @@
-import { Point, DrawEvent, Tool } from "./types";
+import { Point, DrawEvent, Tool } from "../u/types";
 
 export class DrawStatus {
     private zoom: number;

@@ -1,7 +1,7 @@
-import { Point, Tool } from "./types";
-import { WrapdivElement } from "./element/WrapdivElement";
-import { ScrollAction } from "./action/ScrollAction";
-import { ExpandAction } from "./action/ExpandAction";
+import { Point, Tool } from "../u/types";
+import { WrapdivElement } from "../element/WrapdivElement";
+import { ScrollAction } from "../action/ScrollAction";
+import { ExpandAction } from "../action/ExpandAction";
 
 export class LongpressStatus {
     private time: number;

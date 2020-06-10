@@ -1,10 +1,10 @@
-import { Sense } from "../Sense";
-import { Paper } from "../Paper";
+import { DrawEventHandler } from "../DrawEventHandler";
+import { PaperElement } from "../element/PaperElement";
 
-export class PointerHandler {
-    private sense: Sense;
+export class PointerSensor {
+    private sense: DrawEventHandler;
 
-    public init(sense: Sense, paper: Paper): void {
+    public init(sense: DrawEventHandler, paper: PaperElement): void {
         this.sense = sense;
         paper.getCnv().addEventListener("pointerup", (e: PointerEvent) => this.handler(e), false);
         paper.getCnv().addEventListener("pointerdown", (e: PointerEvent) => this.handler(e), false);

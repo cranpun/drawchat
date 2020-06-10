@@ -1,7 +1,7 @@
-import { Draw, Stroke, Point } from "./types";
-import { MyAxiosApi } from "./myaxios";
+import { Draw, Stroke, Point } from "../u/types";
+import { MyAxiosApi } from "../u/myaxios";
 
-export class Datastore {
+export class DrawData {
     private d: Draw;
     private nowstroke: Stroke;
     private time_prepush: number;

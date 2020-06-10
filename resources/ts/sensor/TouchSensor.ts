@@ -1,9 +1,9 @@
-import { Sense } from "../Sense";
-import { Paper } from "../Paper";
-export class TouchHandler {
-    private sense: Sense;
+import { DrawEventHandler } from "../DrawEventHandler";
+import { PaperElement } from "../element/PaperElement";
+export class TouchSensor {
+    private sense: DrawEventHandler;
 
-    public init(sense: Sense, paper: Paper): void {
+    public init(sense: DrawEventHandler, paper: PaperElement): void {
         this.sense = sense;
         paper.getCnv().addEventListener("touchstart", (e: TouchEvent) => this.handler(e), false);
         paper.getCnv().addEventListener("touchleave", (e: TouchEvent) => this.handler(e), false);

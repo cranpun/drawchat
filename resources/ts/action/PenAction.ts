@@ -1,10 +1,10 @@
-import { Datastore } from "../Datastore";
-import * as U from "../u";
-import { Paper } from "../Paper";
-import { Point } from "../types";
+import { DrawData } from "../data/DrawData";
+import * as U from "../u/u";
+import { PaperElement } from "../element/PaperElement";
+import { Point } from "../u/types";
 
 export class PenAction {
-    public proc(x: number, y: number, prep: Point, paper: Paper): void {
+    public proc(x: number, y: number, prep: Point, paper: PaperElement): void {
         let pre = prep;
         if (pre == null) {
             // 前回の点がなければ今回の点

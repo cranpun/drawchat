@@ -1,21 +1,21 @@
-import { DrawEvent, Point, Tool } from "./types";
-import { Paper } from "./Paper";
-import { Datastore } from "./Datastore";
-import * as U from "./u";
-import { MouseHandler } from "./device/MouseHandler";
-import { PointerHandler } from "./device/PointerHandler";
-import { TouchHandler } from "./device/TouchHandler";
+import { DrawEvent, Point, Tool } from "./u/types";
+import { PaperElement } from "./element/PaperElement";
+import { DrawData } from "./data/DrawData";
+import * as U from "./u/u";
+import { MouseSensor } from "./sensor/MouseSensor";
+import { PointerSensor } from "./sensor/PointerSensor";
+import { TouchSensor } from "./sensor/TouchSensor";
 import { SaveAction } from "./action/SaveAction";
 import { LoadAction } from "./action/LoadAction";
 import { WrapdivElement } from "./element/WrapdivElement";
-import { DrawStatus } from "./DrawStatus";
-import { LongpressStatus } from "./LongpressStatus";
+import { DrawStatus } from "./data/DrawStatus";
+import { LongpressStatus } from "./data/LongpressStatus";
 import { PenAction } from "./action/PenAction";
 import { RedrawAction } from "./action/RedrawAction";
 import { ScrollAction } from "./action/ScrollAction";
 import { ExpandAction } from "./action/ExpandAction";
 
-export class Sense {
+export class DrawEventHandler {
     private paper_id: number;
     private nowproc: boolean; // タッチ、ポインタ等、まとめて複数のイベントを検知した場合に備えて。
     private status = {
@@ -35,17 +35,17 @@ export class Sense {
     };
 
     private mydata = {
-        paper: Paper.makeMine(),
-        datastore: new Datastore(),
+        paper: PaperElement.makeMine(),
+        datastore: new DrawData(),
     };
     private otherdata = {
-        paper: Paper.makeOther(),
-        datastore: new Datastore(),
+        paper: PaperElement.makeOther(),
+        datastore: new DrawData(),
     };
     private device = {
-        mouse: new MouseHandler(),
-        pointer: new PointerHandler(),
-        touch: new TouchHandler(),
+        mouse: new MouseSensor(),
+        pointer: new PointerSensor(),
+        touch: new TouchSensor(),
     }
 
     public init(): void {

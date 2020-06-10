@@ -1,4 +1,4 @@
-import { Sense } from "./Sense";
+import { DrawEventHandler } from "./DrawEventHandler";
 
 require("./bootstrap");
 
@@ -6,7 +6,7 @@ window.addEventListener("load", async () => {
     console.log("loaded");
 
     if (document.querySelector("#drawcanvases")) {
-        const sense: Sense = new Sense();
+        const sense: DrawEventHandler = new DrawEventHandler();
         sense.init();
     }
 });

@@ -1,14 +1,14 @@
-import { Datastore } from "./Datastore";
+import { DrawData } from "../data/DrawData";
 
-export class Paper {
+export class PaperElement {
     private cnv: HTMLCanvasElement;
     private ctx: CanvasRenderingContext2D;
 
-    public static makeMine(): Paper {
-        return new Paper("#mycanvas");
+    public static makeMine(): PaperElement {
+        return new PaperElement("#mycanvas");
     }
-    public static makeOther(): Paper {
-        return new Paper("#othercanvas");
+    public static makeOther(): PaperElement {
+        return new PaperElement("#othercanvas");
     }
     private constructor(selector: string) {
         this.cnv = document.querySelector(selector);

@@ -1,11 +1,11 @@
-import { Datastore } from "../Datastore";
-import * as U from "../u";
-import { Paper } from "../Paper";
-import { Draw, Stroke, Point } from "../types";
+import { DrawData } from "../data/DrawData";
+import * as U from "../u/u";
+import { PaperElement } from "../element/PaperElement";
+import { Draw, Stroke, Point } from "../u/types";
 import { PenAction } from "./PenAction";
 
 export class RedrawAction {
-    public proc(paper: Paper, datastore: Datastore, pen: PenAction): void {
+    public proc(paper: PaperElement, datastore: DrawData, pen: PenAction): void {
         const strokes: Stroke[] = datastore.getDraw().getStrokes();
         let prepoint: Point = null;
         for (const s of strokes) {

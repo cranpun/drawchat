@@ -1,6 +1,6 @@
-import { Datastore } from "../Datastore";
-import * as U from "../u";
-import { Point } from "../types";
+import { DrawData } from "../data/DrawData";
+import * as U from "../u/u";
+import { Point } from "../u/types";
 
 export class ScrollAction {
     private prep: Point;
