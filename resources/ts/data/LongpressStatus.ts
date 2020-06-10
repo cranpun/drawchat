@@ -1,7 +1,6 @@
 import { Point, Tool } from "../u/types";
 import { DrawcanvasesElement } from "../element/DrawcanvasesElement";
-import { ScrollAction } from "../action/ScrollAction";
-import { ZoomAction } from "../action/ZoomAction";
+import { ZoomScrollAction } from "../action/ZoomScrollAction";
 import * as U from "../u/u";
 
 export class LongpressStatus {
@@ -28,6 +27,10 @@ export class LongpressStatus {
     }
 
     public end(): Tool {
+        if(this.isStart() === false) {
+            // スタートしていないので何もしない
+            return null;
+        }
         U.tt("end press!!!");
 
         // モードの判定
@@ -49,10 +52,17 @@ export class LongpressStatus {
         }
     }
 
-    public start(wrapdiv: DrawcanvasesElement): void {
+    public start(wrapdiv: DrawcanvasesElement, x: number, y: number, zoomscroll: ZoomScrollAction): void {
+        if(this.isStart()) {
+            // 既に開始しているので何もしない
+            return;
+        }
         U.tt("start press...");
         // 長押しの位置確認
         this.time = Date.now();
+
+        this.pos = new Point(x, y, 0);
+        zoomscroll.setPoint(x, y);
 
         // 色を変更
         this.timeoutids.push(window.setTimeout(() => {
@@ -65,12 +75,6 @@ export class LongpressStatus {
         }, LongpressStatus.SEC_SCROLL));
     }
 
-    public setPoint(x: number, y: number, scroll: ScrollAction, expand: ZoomAction) {
-        this.pos = new Point(x, y, 0);
-        expand.setPoint(x, y);
-        scroll.setPoint(x, y);
-    }
-
     public isSamePoint(x: number, y: number) {
         if(this.pos === null) {
             // 前の点がないので同じではない
@@ -78,5 +82,9 @@ export class LongpressStatus {
         }
         const ret = this.pos.isSame(x, y);
         return ret;
+    }
+
+    public isStart() {
+        return this.timeoutids.length > 0;
     }
 }

@@ -1,6 +1,4 @@
 import { DrawEventHandler } from "./DrawEventHandler";
-import { ScrollAction } from "./action/ScrollAction";
-import { ZoomAction } from "./action/ZoomAction";
 
 require("./bootstrap");
 

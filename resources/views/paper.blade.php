@@ -7,7 +7,7 @@
     <script src="{{ asset('js/app.js') . '?v=' . filemtime(public_path() .'/js/app.js') }}" defer></script>
 </head>
 
-<body style="padding: 10px;">
+<body style="padding: 10px; display: inline-block;">
     <header style="position: fixed; z-index: 999;">
         <nav class="navbar is-light" role="navigation" aria-label="main navigation">
             <section class="navbar-brand">
@@ -58,6 +58,7 @@
                 border: 3px solid #aaa;
                 border-radius: 5px;
                 transform-origin: top left;
+                position: relative;
             }
 
             #drawcanvases,
@@ -74,11 +75,11 @@
                 left: 0;
             }
         </style>
-        <div id="drawcanvases" style="position: relative">
+        <div id="drawcanvases">
             <canvas id="othercanvas" width="<?=$cw?>" height="<?=$ch?>"></canvas>
             <canvas id="mycanvas" width="<?=$cw?>" height="<?=$ch?>"></canvas>
         </div>
-        <!-- <textarea id="prompt" style="width: 100%; height: 500px;"></textarea> -->
+        <textarea id="prompt" style="width: 100%; height: 500px;"></textarea>
     </main>
     <footer></footer>
 </body>
