@@ -1,17 +1,15 @@
 import { Sense } from "../Sense";
+import { Paper } from "../Paper";
 
 export class MouseHandler {
     private sense: Sense;
 
-    constructor(sense: Sense) {
+    public init(sense: Sense, paper: Paper): void {
         this.sense = sense;
-    }
-
-    public init(mycnv: HTMLCanvasElement): void {
-        mycnv.addEventListener("mouseup", (e: MouseEvent) => this.handler(e), false);
-        mycnv.addEventListener("mousedown", (e: MouseEvent) => this.handler(e), false);
-        mycnv.addEventListener("mousemove", (e: MouseEvent) => this.handler(e), false);
-        mycnv.addEventListener("mouseleave", (e: MouseEvent) => this.handler(e), false);
+        paper.getCnv().addEventListener("mouseup", (e: MouseEvent) => this.handler(e), false);
+        paper.getCnv().addEventListener("mousedown", (e: MouseEvent) => this.handler(e), false);
+        paper.getCnv().addEventListener("mousemove", (e: MouseEvent) => this.handler(e), false);
+        paper.getCnv().addEventListener("mouseleave", (e: MouseEvent) => this.handler(e), false);
     }
 
     private handler(e: MouseEvent): void {

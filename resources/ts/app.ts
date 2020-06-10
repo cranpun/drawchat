@@ -7,10 +7,6 @@ window.addEventListener("load", async () => {
 
     if (document.querySelector("#drawcanvases")) {
         const sense: Sense = new Sense();
-        sense.init(
-            <HTMLCanvasElement>document.querySelector("#mycanvas"),
-            <HTMLCanvasElement>document.querySelector("#othercanvas"),
-            <HTMLDivElement>document.querySelector("#drawcanvases")
-        );
+        sense.init();
     }
 });

@@ -1,17 +1,15 @@
 import { Sense } from "../Sense";
+import { Paper } from "../Paper";
 
 export class PointerHandler {
     private sense: Sense;
 
-    constructor(sense: Sense) {
+    public init(sense: Sense, paper: Paper): void {
         this.sense = sense;
-    }
-
-    public init(mycnv: HTMLCanvasElement): void {
-        mycnv.addEventListener("pointerup", (e: PointerEvent) => this.handler(e), false);
-        mycnv.addEventListener("pointerdown", (e: PointerEvent) => this.handler(e), false);
-        mycnv.addEventListener("pointermove", (e: PointerEvent) => this.handler(e), false);
-        mycnv.addEventListener("pointerleave", (e: PointerEvent) => this.handler(e), false);
+        paper.getCnv().addEventListener("pointerup", (e: PointerEvent) => this.handler(e), false);
+        paper.getCnv().addEventListener("pointerdown", (e: PointerEvent) => this.handler(e), false);
+        paper.getCnv().addEventListener("pointermove", (e: PointerEvent) => this.handler(e), false);
+        paper.getCnv().addEventListener("pointerleave", (e: PointerEvent) => this.handler(e), false);
     }
 
     private handler(e: PointerEvent): void {

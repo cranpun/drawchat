@@ -11,7 +11,7 @@
     <header style="position: fixed; z-index: 999;">
         <nav class="navbar is-light" role="navigation" aria-label="main navigation">
             <section class="navbar-brand">
-                <h2 class="navbar-item" data-testid="paper-{{ $paper_id }}">
+                <h2 class="navbar-item has-text-primary" data-testid="paper-{{ $paper_id }}">
                     paper {{ $paper_id }}
                 </h2>
                 <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
@@ -34,23 +34,17 @@
 
                     <div class="navbar-item has-dropdown is-hoverable">
                         <a class="navbar-link">
-                            More
+                            ツール
                         </a>
 
                         <div class="navbar-dropdown">
-                            <a class="navbar-item">
-                                About
-                            </a>
-                            <a class="navbar-item">
-                                Jobs
-                            </a>
-                            <a class="navbar-item">
-                                Contact
-                            </a>
+                            <span class="navbar-item">
+
+                            </span>
                             <hr class="navbar-divider">
-                            <a class="navbar-item">
+                            <span class="navbar-item">
                                 Report an issue
-                            </a>
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -59,10 +53,11 @@
     </header>
     <main style="padding-top: 55px;">
         <style type="text/css">
-            <?php $cw=2200; $ch=1600; ?>
+            <?php $cw = 2200; $ch = 1600;?>
             #drawcanvases {
                 border: 3px solid #aaa;
                 border-radius: 5px;
+                transform-origin: top left;
             }
 
             #drawcanvases,

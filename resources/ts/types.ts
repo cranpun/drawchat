@@ -1,4 +1,4 @@
-export type CursorEvent = "up" | "down" | "move";
+export type DrawEvent = "up" | "down" | "move";
 export type Tool = "pen" | "scroll" | "expand";
 
 export class Draw {

@@ -1,17 +1,14 @@
 import { Sense } from "../Sense";
-
+import { Paper } from "../Paper";
 export class TouchHandler {
     private sense: Sense;
 
-    constructor(sense: Sense) {
+    public init(sense: Sense, paper: Paper): void {
         this.sense = sense;
-    }
-
-    public init(mycnv: HTMLCanvasElement): void {
-        mycnv.addEventListener("touchstart", (e: TouchEvent) => this.handler(e), false);
-        mycnv.addEventListener("touchleave", (e: TouchEvent) => this.handler(e), false);
-        mycnv.addEventListener("touchmove", (e: TouchEvent) => this.handler(e), false);
-        mycnv.addEventListener("touchend", (e: TouchEvent) => this.handler(e), false);
+        paper.getCnv().addEventListener("touchstart", (e: TouchEvent) => this.handler(e), false);
+        paper.getCnv().addEventListener("touchleave", (e: TouchEvent) => this.handler(e), false);
+        paper.getCnv().addEventListener("touchmove", (e: TouchEvent) => this.handler(e), false);
+        paper.getCnv().addEventListener("touchend", (e: TouchEvent) => this.handler(e), false);
     }
 
 
