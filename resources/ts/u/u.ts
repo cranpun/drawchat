@@ -10,5 +10,8 @@ export function tt(mes: string, tt: boolean = false): void {
             showConfirmButton: false
         });
     }
-    // console.log(mes);
+    console.log(mes);
+    // const ta:HTMLTextAreaElement = document.querySelector("#prompt");
+    // const val = mes + "\n" + ta.value ;
+    // ta.value = val;
 }

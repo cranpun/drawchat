@@ -1,5 +1,6 @@
 export type DrawEvent = "up" | "down" | "move";
-export type Tool = "pen" | "scroll" | "expand";
+export type Tool = "pen" | "scroll" | "zoom";
+export type Device = "mouse" | "touch" | "pointer";
 
 export class Draw {
     private s: Stroke[];
@@ -13,7 +14,7 @@ export class Draw {
         return this.s;
     }
     public lastStrokes(): Stroke | null {
-        if(this.s.length === 0) {
+        if (this.s.length === 0) {
             return null
         } else {
             return this.s[this.s.length - 1];
@@ -87,5 +88,10 @@ export class Point {
     public json(): string {
         const ret = `[${this.x},${this.y},${this.t}]`;
         return ret;
+    }
+    public isSame(x: number, y: number): boolean {
+        const cond1: boolean = x === this.x;
+        const cond2: boolean = y === this.y;
+        return cond1 && cond2;
     }
 }

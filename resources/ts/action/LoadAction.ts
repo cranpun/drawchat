@@ -14,12 +14,13 @@ export class LoadAction {
         this.datastore = datastore;
         this.redraw = redraw;
         this.pen = pen;
+        this.proc();
     }
     public async proc(): Promise<void> {
-        U.tt("now loading...", true);
+        //U.tt("now loading...", true);
         await this.datastore.load();
         this.redraw.proc(this.paper, this.datastore, this.pen);
-        U.tt("loaded", true);
+        //U.tt("loaded", true);
         setTimeout(() => this.proc(), 7 * 1000);
     }
 }

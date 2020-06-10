@@ -1,14 +1,8 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <title>{{ config("name") }}</title>
-
-        <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
-        <link rel="shortcut icon" href="https://tm.cranpun-tool.ml/wp-content/themes/themeorg/favicon.ico" />
+        @include("element/head")
+        <title>{{ config("app.name") }}</title>
 
         <!-- Styles -->
         <style>

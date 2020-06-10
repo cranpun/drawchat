@@ -78,6 +78,7 @@
             <canvas id="othercanvas" width="<?=$cw?>" height="<?=$ch?>"></canvas>
             <canvas id="mycanvas" width="<?=$cw?>" height="<?=$ch?>"></canvas>
         </div>
+        <!-- <textarea id="prompt" style="width: 100%; height: 500px;"></textarea> -->
     </main>
     <footer></footer>
 </body>

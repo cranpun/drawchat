@@ -1,4 +1,4 @@
-import { DrawEvent, Point, Tool } from "./u/types";
+import { DrawEvent, Point, Tool, Device } from "./u/types";
 import { PaperElement } from "./element/PaperElement";
 import { DrawData } from "./data/DrawData";
 import * as U from "./u/u";
@@ -13,11 +13,11 @@ import { LongpressStatus } from "./data/LongpressStatus";
 import { PenAction } from "./action/PenAction";
 import { RedrawAction } from "./action/RedrawAction";
 import { ScrollAction } from "./action/ScrollAction";
-import { ExpandAction } from "./action/ExpandAction";
+import { ZoomAction } from "./action/ZoomAction";
 
 export class DrawEventHandler {
     private paper_id: number;
-    private nowproc: boolean; // タッチ、ポインタ等、まとめて複数のイベントを検知した場合に備えて。
+    private nowproc: Device; // タッチ、ポインタ等、まとめて複数のイベントを検知した場合に備えて。
     private status = {
         draw: new DrawStatus(),
         longpress: new LongpressStatus()
@@ -31,7 +31,7 @@ export class DrawEventHandler {
         "save": new SaveAction(),
         "redraw": new RedrawAction(),
         "scroll": new ScrollAction(),
-        "expand": new ExpandAction(),
+        "zoom": new ZoomAction(),
     };
 
     private mydata = {
@@ -50,7 +50,7 @@ export class DrawEventHandler {
 
     public init(): void {
 
-        this.nowproc = false;
+        this.nowproc = null;
 
         this.device.mouse.init(this, this.mydata.paper);
         this.device.pointer.init(this, this.mydata.paper);
@@ -58,47 +58,60 @@ export class DrawEventHandler {
 
         this.action.save.init(this.mydata.datastore);
         this.action.load.init(this.otherdata.paper, this.otherdata.datastore, this.action.redraw, this.action.pen);
-        this.action.expand.init(this.element.wrapdiv);
+        this.action.zoom.init(this.element.wrapdiv);
     }
 
-    public proc(st: DrawEvent, e: Event, x: number, y: number) {
-        console.log(e.type);
+    public proc(st: DrawEvent, dev: Device, e: Event, x: number, y: number) {
+        U.tt(`${dev}-${st}(${x},${y})=${this.nowproc}`);
+        // 同じ地点のイベントであれば移動していないので無視
+        // // upイベントは強制実行
+        if (this.status.draw.isEndStroke(st)) {
+            this.status.draw.endStroke();
+            this.mydata.datastore.endStroke();
+            this.element.wrapdiv.setNormal();
+            // 1ストローク終わったので終了
+            this.status.longpress.end(); // 長押しのまま離す場合もあり。
+            this.nowproc = null;
+            return;
+        }
 
-        if (!this.nowproc) {
-            this.nowproc = true;
-            if (this.status.draw.isEndStroke(st)) {
-                this.status.draw.endStroke();
-                this.mydata.datastore.endStroke();
-                this.element.wrapdiv.setNormal();
-            } else if (this.status.draw.isStartStroke(st)) {
-                this.status.draw.startStroke();
-                this.status.longpress.start(this.element.wrapdiv);
-                this.status.longpress.setPoint(x, y, this.action.scroll, this.action.expand); // 長押し開始地点
-            } else if (this.status.draw.isMove(st)) {
-                if (this.status.draw.isStartMove(st)) {
-                    // 長押し時間の判定
-                    const tool = this.status.longpress.end();
-                    this.status.draw.setTool(tool);
-                }
-                // 現在のツールに応じて処理
-                switch (this.status.draw.getTool()) {
-                    case "pen":
-                        // 単押し移動＝記述
-                        this.action.pen.proc(x, y, this.mydata.datastore.lastPoint(), this.mydata.paper);
-                        this.mydata.datastore.pushPoint(x, y);
-                        break;
-                    case "scroll":
-                        // 長押し移動＝画面スクロール
-                        this.action.scroll.proc(x, y);
-                        break;
-                    case "expand":
-                        // さらに長押し＝拡大縮小
-                        this.action.expand.proc(x, y);
-                        break;
-                }
+        if (this.nowproc !== null && this.nowproc !== dev) {
+            // 違うデバイスのイベントなので無視
+            return;
+        }
+
+        if (this.status.draw.isStartStroke(st)) {
+            this.nowproc = dev;
+            this.status.draw.startStroke();
+            this.status.longpress.start(this.element.wrapdiv);
+            this.status.longpress.setPoint(x, y, this.action.scroll, this.action.zoom); // 長押し開始地点
+        } else if (this.status.draw.isMove(st)) {
+
+            if (this.status.longpress.isSamePoint(x, y)) {
+                // do nothing
+                return;
             }
-            // 処理終了
-            this.nowproc = false;
+            if (this.status.draw.isStartMove(st)) {
+                // 長押し時間の判定
+                const tool = this.status.longpress.end();
+                this.status.draw.setTool(tool);
+            }
+            // 現在のツールに応じて処理
+            switch (this.status.draw.getTool()) {
+                case "pen":
+                    // 単押し移動＝記述
+                    this.action.pen.proc(x, y, this.mydata.datastore.lastPoint(), this.mydata.paper);
+                    this.mydata.datastore.pushPoint(x, y);
+                    break;
+                case "scroll":
+                    // 長押し移動＝画面スクロール
+                    this.action.scroll.proc(x, y);
+                    break;
+                case "zoom":
+                    // さらに長押し＝拡大縮小
+                    this.action.zoom.proc(x, y);
+                    break;
+            }
         }
     }
 }

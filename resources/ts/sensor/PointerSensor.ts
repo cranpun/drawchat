@@ -20,14 +20,14 @@ export class PointerSensor {
 
         // 位置の更新
         if (e.type === "pointerup") {
-            this.sense.proc("up", e, x, y);
+            this.sense.proc("up", "pointer", e, x, y);
         } else if (e.type === "pointerdown") {
-            this.sense.proc("down", e, x, y);
+            this.sense.proc("down", "pointer", e, x, y);
         } else if (e.type === "pointerleave") {
             // 設置したまま外に出た場合は離したとみなす。
-            this.sense.proc("up", e, x, y);
+            this.sense.proc("up", "pointer", e, x, y);
         } else if (e.type === "pointermove") {
-            this.sense.proc("move", e, x, y);
+            this.sense.proc("move", "pointer", e, x, y);
         }
     }
 }

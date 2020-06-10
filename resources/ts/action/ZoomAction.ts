@@ -3,7 +3,7 @@ import * as U from "../u/u";
 import { WrapdivElement } from "../element/WrapdivElement";
 import { Point } from "../u/types";
 
-export class ExpandAction {
+export class ZoomAction {
     private wrapdiv: WrapdivElement;
     private prep: Point = null;
     private zoom: number = 1;
@@ -16,9 +16,9 @@ export class ExpandAction {
     }
 
     public proc(x: number, y: number): void {
-        const dy = y - this.prep.y;
+        const dy = this.prep.y - y;
         // 移動差分をzoom比率に変換
-        this.zoom += dy * 0.001;
+        this.zoom += dy * 0.002;
         // 範囲補正
         this.zoom = Math.max(this.zoom, 0.5);
         const ele: HTMLDivElement = this.wrapdiv.element();

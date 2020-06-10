@@ -10,8 +10,8 @@ export class ScrollAction {
 
     public proc(x: number, y: number): void {
         // 差分の計算
-        const dx = (x - this.prep.x);
-        const dy = (y - this.prep.y);
+        const dx = (this.prep.x - x) / 1.3;
+        const dy = (this.prep.y - y) / 1.3;
         window.scrollBy(dx, dy);
         console.log("scroll", dx, dy);
         // ポイントの更新

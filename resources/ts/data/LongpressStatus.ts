@@ -1,15 +1,16 @@
 import { Point, Tool } from "../u/types";
 import { WrapdivElement } from "../element/WrapdivElement";
 import { ScrollAction } from "../action/ScrollAction";
-import { ExpandAction } from "../action/ExpandAction";
+import { ZoomAction } from "../action/ZoomAction";
+import * as U from "../u/u";
 
 export class LongpressStatus {
     private time: number;
     private timeoutids: number[] = []; // 配列だけは初期化
     private pos: Point;
 
-    private static readonly SEC_SCROLL: number = 0.5 * 1000;
-    private static readonly SEC_EXPAND: number = 1.5 * 1000;
+    private static readonly SEC_SCROLL: number = 0.3 * 1000;
+    private static readonly SEC_EXPAND: number = 1.0 * 1000;
 
     constructor() {
         this.clear();
@@ -27,6 +28,7 @@ export class LongpressStatus {
     }
 
     public end(): Tool {
+        U.tt("end press!!!");
 
         // モードの判定
         const now: number = Date.now();
@@ -40,7 +42,7 @@ export class LongpressStatus {
             return "scroll";
         } else if (diff >= LongpressStatus.SEC_EXPAND) {
             // さらに長押し＝拡大縮小
-            return "expand";
+            return "zoom";
         } else {
             // デフォルトはnull
             return null;
@@ -48,6 +50,7 @@ export class LongpressStatus {
     }
 
     public start(wrapdiv: WrapdivElement): void {
+        U.tt("start press...");
         // 長押しの位置確認
         this.time = Date.now();
 
@@ -62,9 +65,18 @@ export class LongpressStatus {
         }, LongpressStatus.SEC_SCROLL));
     }
 
-    public setPoint(x: number, y: number, scroll: ScrollAction, expand: ExpandAction) {
+    public setPoint(x: number, y: number, scroll: ScrollAction, expand: ZoomAction) {
         this.pos = new Point(x, y, 0);
         expand.setPoint(x, y);
         scroll.setPoint(x, y);
+    }
+
+    public isSamePoint(x: number, y: number) {
+        if(this.pos === null) {
+            // 前の点がないので同じではない
+            return false;
+        }
+        const ret = this.pos.isSame(x, y);
+        return ret;
     }
 }
