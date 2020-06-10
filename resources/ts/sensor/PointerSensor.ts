@@ -1,33 +1,25 @@
 import { DrawEventHandler } from "../DrawEventHandler";
 import { PaperElement } from "../element/PaperElement";
+import { Point } from "../u/types";
 
 export class PointerSensor {
     private sense: DrawEventHandler;
 
     public init(sense: DrawEventHandler, paper: PaperElement): void {
         this.sense = sense;
-        paper.getCnv().addEventListener("pointerup", (e: PointerEvent) => this.handler(e), false);
-        paper.getCnv().addEventListener("pointerdown", (e: PointerEvent) => this.handler(e), false);
-        paper.getCnv().addEventListener("pointermove", (e: PointerEvent) => this.handler(e), false);
-        paper.getCnv().addEventListener("pointerleave", (e: PointerEvent) => this.handler(e), false);
+        paper.getCnv().addEventListener("pointerup", (e: PointerEvent) => this.sense.up("pointer", e, this.p(e)), { passive: false });
+        paper.getCnv().addEventListener("pointerdown", (e: PointerEvent) => this.sense.down("pointer", e, this.p(e)), { passive: false });
+        paper.getCnv().addEventListener("pointermove", (e: PointerEvent) => this.sense.move("pointer", e, this.p(e)), { passive: false });
+        paper.getCnv().addEventListener("pointerleave", (e: PointerEvent) => this.sense.up("pointer", e, this.p(e)), { passive: false });
+
+        // // moveはscroll等にも使うのでbodyにも登録
+        // const body: HTMLBodyElement = document.querySelector("body");
+        // body.addEventListener("pointermove", (e: PointerEvent) => this.movebody("pointer", e, this.p(e)), false);
     }
 
-    private handler(e: PointerEvent): void {
-        // タッチが先に検知されるので優先する。
-        e.preventDefault();
+    private p(e): Point {
         const x: number = e.offsetX;
         const y: number = e.offsetY;
-
-        // 位置の更新
-        if (e.type === "pointerup") {
-            this.sense.proc("up", "pointer", e, x, y);
-        } else if (e.type === "pointerdown") {
-            this.sense.proc("down", "pointer", e, x, y);
-        } else if (e.type === "pointerleave") {
-            // 設置したまま外に出た場合は離したとみなす。
-            this.sense.proc("up", "pointer", e, x, y);
-        } else if (e.type === "pointermove") {
-            this.sense.proc("move", "pointer", e, x, y);
-        }
+        return new Point(x, y, 0);
     }
 }

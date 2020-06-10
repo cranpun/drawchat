@@ -1,14 +1,14 @@
 import { DrawData } from "../data/DrawData";
 import * as U from "../u/u";
-import { WrapdivElement } from "../element/WrapdivElement";
+import { DrawcanvasesElement } from "../element/DrawcanvasesElement";
 import { Point } from "../u/types";
 
 export class ZoomAction {
-    private wrapdiv: WrapdivElement;
+    private wrapdiv: DrawcanvasesElement;
     private prep: Point = null;
     private zoom: number = 1;
 
-    public init(wrapdiv: WrapdivElement) {
+    public init(wrapdiv: DrawcanvasesElement) {
         this.wrapdiv = wrapdiv;
     }
     public setPoint(x: number, y: number) {

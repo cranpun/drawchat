@@ -1,12 +1,10 @@
 import { Point, DrawEvent, Tool } from "../u/types";
 
 export class DrawStatus {
-    private zoom: number;
     private event: DrawEvent;
     private tool: Tool;
 
     constructor() {
-        this.zoom = 1;
         this.endStroke();
     }
 

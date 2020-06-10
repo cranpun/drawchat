@@ -1,5 +1,5 @@
 import { Point, Tool } from "../u/types";
-import { WrapdivElement } from "../element/WrapdivElement";
+import { DrawcanvasesElement } from "../element/DrawcanvasesElement";
 import { ScrollAction } from "../action/ScrollAction";
 import { ZoomAction } from "../action/ZoomAction";
 import * as U from "../u/u";
@@ -49,7 +49,7 @@ export class LongpressStatus {
         }
     }
 
-    public start(wrapdiv: WrapdivElement): void {
+    public start(wrapdiv: DrawcanvasesElement): void {
         U.tt("start press...");
         // 長押しの位置確認
         this.time = Date.now();

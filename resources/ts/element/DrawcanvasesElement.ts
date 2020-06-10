@@ -1,4 +1,4 @@
-export class WrapdivElement {
+export class DrawcanvasesElement {
     private wrapdiv: HTMLDivElement;
 
     constructor() {
