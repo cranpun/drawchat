@@ -12,6 +12,6 @@ window.addEventListener("load", async () => {
     const body: HTMLBodyElement = document.querySelector("body");
     body.addEventListener("touchstart", (e: TouchEvent) => {
         console.log(e);
-        e.preventDefault();
+        // e.preventDefault();
     }, { passive: false });
 });

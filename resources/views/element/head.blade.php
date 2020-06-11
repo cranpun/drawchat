@@ -4,4 +4,6 @@
 
 <!-- Fonts -->
 <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
+<link href="{{ asset('css/app.css') . '?v=' . filemtime(public_path() .'/css/app.css') }}" rel="stylesheet">
 <!-- <link rel="shortcut icon" href="https://tm.cranpun-tool.ml/wp-content/themes/themeorg/favicon.ico" /> -->
+

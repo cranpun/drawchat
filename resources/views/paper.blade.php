@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" style="transform-origin: top left; overflow-x: scroll;">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" style="transform-origin: top left; overflow-x: scroll;" class="has-navbar-fixed-bottom">
 
 <head>
     @include("element/head")
@@ -12,17 +12,9 @@
 $cw = 2200;
 $ch = 1600;
 ?>
-<body style="padding: 10px; display: inline-block; padding-bottom: 55px;">
+<body style="padding: 10px; display: inline-block;">
     <header id="toolbox">
-    <style type="text/css">
-        #toolbox {
-            position: fixed;
-            z-index: 999;
-            bottom: 0px;
-            left: 10px;
-        }
-        </style>
-        <nav class="navbar is-light" role="navigation" aria-label="main navigation">
+        <nav class="navbar is-light is-fixed-bottom" role="navigation" aria-label="main navigation">
             <section class="navbar-brand">
                 <h2 class="navbar-item has-text-primary" data-testid="paper-{{ $paper_id }}">
                     paper {{ $paper_id }}
@@ -36,21 +28,40 @@ $ch = 1600;
                 </a>
 
                 <span id="zoomscroll" class="navbar-item">
-                    <span id="zoom-label"></span>
+                    <span style="padding: 0px 5px;">
+                        
+                        <span id="zoom-label"></span>
+                    </span>
                     <span class="field has-addons buttons are-small">
                         <span class="control">
-                        <button id="zoom-minus" class="button">ー</button>
+                            <button id="zoom-minus" class="button">
+                            <i class="fas fa-search-minus"></i>
+                            </button>
                         </span>
                         <span class="control">
-                        <button id="zoom-plus" class="button">＋</button>
+                            <button id="zoom-plus" class="button">
+                            <i class="fas fa-search-plus"></i>
+                            </button>
                         </span>
                     </span>
                 </span>
-                <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
+                <a id="toolbox-burger" role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
                     data-target="navbarPaper">
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>
+                    <script type="text/javascript">
+                    window.addEventListener("load", function() {
+                        const burger = document.querySelector("#toolbox-burger");
+                        const active = function() {
+                            const menu = document.querySelector("#navbarPaper");
+                            menu.classList.toggle("is-active");
+                            burger.classList.toggle("is-active");
+                        }
+                        burger.addEventListener("click", active);
+                        //burger.addEventListener("touchstart", active);
+                    });
+                    </script>
                 </a>
             </section>
 
@@ -59,14 +70,14 @@ $ch = 1600;
                     dummy
                 </a>
                 <div class="navbar-start">
-                    <div class="navbar-item has-dropdown is-hoverable">
+                    <div class="navbar-item has-dropdown is-hoverable has-dropdown-up">
                         <a class="navbar-link">
                             ツール
                         </a>
 
                         <div class="navbar-dropdown">
                             <span class="navbar-item">
-
+                                submenu
                             </span>
                             <hr class="navbar-divider">
                             <span class="navbar-item">

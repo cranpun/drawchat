@@ -13,10 +13,10 @@ export class PointerSensor {
         paper.getCnv().addEventListener("pointerleave", (e: PointerEvent) => this.sense.up("pointer", e, this.p(e)), { passive: false });
 
         // moveはscroll等にも使うのでbodyにも登録
-        const body: HTMLBodyElement = document.querySelector("body");
-        body.addEventListener("pointerup", (e: PointerEvent) => this.sense.upbody("pointer", e, this.p(e)), { passive: false});
-        body.addEventListener("pointerdown", (e: PointerEvent) => this.sense.downbody("pointer", e, this.p(e)), { passive: false});
-        body.addEventListener("pointermove", (e: PointerEvent) => this.sense.movebody("pointer", e, this.p(e)), { passive: false});
+        // const body: HTMLBodyElement = document.querySelector("body");
+        // body.addEventListener("pointerup", (e: PointerEvent) => this.sense.upbody("pointer", e, this.p(e)), { passive: false});
+        // body.addEventListener("pointerdown", (e: PointerEvent) => this.sense.downbody("pointer", e, this.p(e)), { passive: false});
+        // body.addEventListener("pointermove", (e: PointerEvent) => this.sense.movebody("pointer", e, this.p(e)), { passive: false});
     }
 
     private p(e): Point {

@@ -30,11 +30,11 @@ export class TouchSensor {
         for (const [event, handler] of Object.entries(this.canvashandlers)) {
             this.paper.getCnv().addEventListener(event, handler, { passive: false });
         }
-        // moveはscroll等にも使うのでbodyにも登録
-        const body: HTMLBodyElement = document.querySelector("body");
-        for (const [event, handler] of Object.entries(this.bodyhandlers)) {
-            body.addEventListener(event, handler, { passive: false });
-        }
+        // // moveはscroll等にも使うのでbodyにも登録
+        // const body: HTMLBodyElement = document.querySelector("body");
+        // for (const [event, handler] of Object.entries(this.bodyhandlers)) {
+        //     body.addEventListener(event, handler, { passive: false });
+        // }
     }
 
     public removeDefaultListener() {
