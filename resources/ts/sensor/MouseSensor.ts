@@ -12,11 +12,11 @@ export class MouseSensor {
         paper.getCnv().addEventListener("mousemove", (e: MouseEvent) => this.sense.move("mouse", e, this.p(e)), { passive: false });
         paper.getCnv().addEventListener("mouseleave", (e: MouseEvent) => this.sense.up("mouse", e, this.p(e)), { passive: false });
 
-        // moveはscroll等にも使うのでbodyにも登録
-        const body:HTMLBodyElement = document.querySelector("body");
-        body.addEventListener("mouseup", (e: MouseEvent) => this.sense.upbody("mouse", e, this.p(e)), { passive: false });
-        body.addEventListener("mousedown", (e: MouseEvent) => this.sense.downbody("mouse", e, this.p(e)), { passive: false });
-        body.addEventListener("mousemove", (e: MouseEvent) => this.sense.movebody("mouse", e, this.p(e)), { passive: false });
+        // // moveはscroll等にも使うのでbodyにも登録
+        // const body:HTMLBodyElement = document.querySelector("body");
+        // body.addEventListener("mouseup", (e: MouseEvent) => this.sense.upbody("mouse", e, this.p(e)), { passive: false });
+        // body.addEventListener("mousedown", (e: MouseEvent) => this.sense.downbody("mouse", e, this.p(e)), { passive: false });
+        // body.addEventListener("mousemove", (e: MouseEvent) => this.sense.movebody("mouse", e, this.p(e)), { passive: false });
     }
 
     private p(e: MouseEvent): Point {

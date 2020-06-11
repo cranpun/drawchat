@@ -4,16 +4,38 @@
 <head>
     @include("element/head")
     <title>{{ config("app.name") }}</title>
+    <meta name="viewport" content="initial-scale=1 user-scalable=no">
     <script src="{{ asset('js/app.js') . '?v=' . filemtime(public_path() .'/js/app.js') }}" defer></script>
 </head>
 
+<?php
+$cw = 2200;
+$ch = 1600;
+?>
 <body style="padding: 10px; display: inline-block;">
-    <header style="position: fixed; z-index: 999;">
+    <header id="toolbox">
+    <style type="text/css">
+        #toolbox {
+            position: fixed;
+            z-index: 999;
+            bottom: 0px;
+            left: 10px;
+        }
+        </style>
         <nav class="navbar is-light" role="navigation" aria-label="main navigation">
             <section class="navbar-brand">
                 <h2 class="navbar-item has-text-primary" data-testid="paper-{{ $paper_id }}">
                     paper {{ $paper_id }}
                 </h2>
+                <a class="navbar-item" href="/">
+                    戻る
+                </a>
+
+                <a id="bt-save" class="navbar-item">
+                    保存
+                </a>
+
+                <span id="zoomscroll" class="navbar-item"></span>
                 <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
                     data-target="navbarPaper">
                     <span aria-hidden="true"></span>
@@ -23,15 +45,10 @@
             </section>
 
             <section id="navbarPaper" class="navbar-menu">
+                <a class="navbar-item" href="/">
+                    dummy
+                </a>
                 <div class="navbar-start">
-                    <a id="bt-save" class="navbar-item">
-                        保存
-                    </a>
-
-                    <a class="navbar-item" href="/">
-                        戻る
-                    </a>
-
                     <div class="navbar-item has-dropdown is-hoverable">
                         <a class="navbar-link">
                             ツール
@@ -51,12 +68,12 @@
             </section>
         </nav>
     </header>
-    <main style="padding-top: 55px;">
+    <!--  -->
+    <main style="display: inline-block; transform-origin: top left; width: {{ $cw }}px; height: {{ $ch }}px; ">
         <style type="text/css">
-            <?php $cw = 2200; $ch = 1600;?>
             #drawcanvases {
                 border: 3px solid #aaa;
-                border-radius: 5px;
+                border-radius: 5px;　
                 transform-origin: top left;
                 position: relative;
             }
@@ -79,9 +96,10 @@
             <canvas id="othercanvas" width="<?=$cw?>" height="<?=$ch?>"></canvas>
             <canvas id="mycanvas" width="<?=$cw?>" height="<?=$ch?>"></canvas>
         </div>
-        <textarea id="prompt" style="width: 100%; height: 500px;"></textarea>
+        <!-- <textarea id="prompt" style="width: 100%; height: 500px;"></textarea> -->
     </main>
-    <footer></footer>
+    <footer>
+    </footer>
 </body>
 
 </html>

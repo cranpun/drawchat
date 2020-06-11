@@ -8,7 +8,7 @@ export class LongpressStatus {
     private timeoutids: number[] = []; // 配列だけは初期化
     private pos: Point;
 
-    private static readonly SEC_SCROLL: number = 0.3 * 1000;
+    private static readonly SEC_SCROLL: number = 0.2 * 1000;
     private static readonly SEC_EXPAND: number = 1.0 * 1000;
 
     constructor() {

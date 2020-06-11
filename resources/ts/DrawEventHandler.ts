@@ -13,16 +13,18 @@ import { LongpressStatus } from "./data/LongpressStatus";
 import { PenAction } from "./action/PenAction";
 import { RedrawAction } from "./action/RedrawAction";
 import { ZoomScrollAction } from "./action/ZoomScrollAction";
+import { ZoomElement } from "./element/ZoomElement";
 
 export class DrawEventHandler {
     private paper_id: number;
-    private nowproc: Device; // タッチ、ポインタ等、まとめて複数のイベントを検知した場合に備えて。
+    private nowsensor: Device; // タッチ、ポインタ等、まとめて複数のイベントを検知した場合に備えて。
     private status = {
         draw: new DrawStatus(),
         longpress: new LongpressStatus()
     };
     private element = {
-        wrapdiv: new DrawcanvasesElement()
+        wrapdiv: new DrawcanvasesElement(),
+        zoomscroll: new ZoomElement(),
     };
     private action = {
         "pen": new PenAction(),
@@ -48,7 +50,9 @@ export class DrawEventHandler {
 
     public init(): void {
 
-        this.nowproc = null;
+        this.nowsensor = null;
+
+        this.element.zoomscroll.init();
 
         this.device.mouse.init(this, this.mydata.paper);
         this.device.pointer.init(this, this.mydata.paper);
@@ -56,7 +60,7 @@ export class DrawEventHandler {
 
         this.action.save.init(this.mydata.datastore);
         this.action.load.init(this.otherdata.paper, this.otherdata.datastore, this.action.redraw, this.action.pen);
-        this.action.zoomscroll.init(this.element.wrapdiv);
+        this.action.zoomscroll.init(this.element.wrapdiv, this.element.zoomscroll);
     }
 
     public down(dev: Device, e: Event, p: Point): void {
@@ -64,9 +68,9 @@ export class DrawEventHandler {
         e.stopPropagation();
         const x: number = p.x;
         const y: number = p.y;
-        U.tt(`${dev}-down(${x},${y})=${this.nowproc}`);
+        U.tt(`${dev}-down(${x},${y})=${this.nowsensor}`);
 
-        this.nowproc = dev;
+        this.nowsensor = dev;
         this.status.draw.startStroke();
         this.status.longpress.start(this.element.wrapdiv, x, y, this.action.zoomscroll); // 長押し開始地点
     }
@@ -75,11 +79,11 @@ export class DrawEventHandler {
         e.preventDefault();
         const x: number = p.x;
         const y: number = p.y;
-        U.tt(`${dev}-move(${x},${y})=${this.nowproc}`);
+        U.tt(`${dev}-move(${x},${y})=${this.nowsensor}`);
 
         // 無視する条件
-        if (this.nowproc === null // デバイス未決定なので何もしない
-            || this.nowproc !== dev // 違うデバイスのイベントなので無視
+        if (this.nowsensor === null // デバイス未決定なので何もしない
+            || this.nowsensor !== dev // 違うデバイスのイベントなので無視
             || this.status.longpress.isSamePoint(x, y) // 動いていないので何もしない
         ) {
             // do nothing
@@ -112,13 +116,13 @@ export class DrawEventHandler {
         const y: number = p.y;
         e.preventDefault();
         e.stopPropagation();
-        U.tt(`${dev}-up(${x},${y})=${this.nowproc}`);
+        U.tt(`${dev}-up(${x},${y})=${this.nowsensor}`);
         this.status.draw.endStroke();
         this.mydata.datastore.endStroke();
         this.element.wrapdiv.setNormal();
         // 1ストローク終わったので終了
         this.status.longpress.end(); // 長押しのまま離す場合もあり。
-        this.nowproc = null;
+        this.nowsensor = null;
     }
 
     public downbody(dev: Device, e: Event, p: Point) {
@@ -126,9 +130,9 @@ export class DrawEventHandler {
         e.stopPropagation();
         const x: number = p.x;
         const y: number = p.y;
-        U.tt(`${dev}-downdown(${x},${y})=${this.nowproc}`);
+        U.tt(`${dev}-downdown(${x},${y})=${this.nowsensor}`);
 
-        this.nowproc = dev;
+        this.nowsensor = dev;
         this.status.longpress.start(this.element.wrapdiv, x, y, this.action.zoomscroll); // 長押し開始地点
     }
 
@@ -137,11 +141,11 @@ export class DrawEventHandler {
         const y: number = p.y;
         e.preventDefault();
         e.stopPropagation();
-        U.tt(`${dev}-movebody(${x},${y})=${this.nowproc}`);
+        U.tt(`${dev}-movebody(${x},${y})=${this.nowsensor}`);
 
         // 無視する条件
-        if (this.nowproc === null // デバイス未決定なので何もしない
-            || this.nowproc !== dev // 違うデバイスのイベントなので無視
+        if (this.nowsensor === null // デバイス未決定なので何もしない
+            || this.nowsensor !== dev // 違うデバイスのイベントなので無視
             || this.status.longpress.isSamePoint(x, y) // 動いていないので何もしない
         ) {
             // do nothing
@@ -172,11 +176,11 @@ export class DrawEventHandler {
         const y: number = p.y;
         e.preventDefault();
         e.stopPropagation();
-        U.tt(`${dev}-bodyup(${x},${y})=${this.nowproc}`);
+        U.tt(`${dev}-bodyup(${x},${y})=${this.nowsensor}`);
         this.status.draw.endStroke();
         this.element.wrapdiv.setNormal();
         // 1ストローク終わったので終了
         this.status.longpress.end(); // 長押しのまま離す場合もあり。
-        this.nowproc = null;
+        this.nowsensor = null;
     }
 }
