@@ -12,7 +12,7 @@
 $cw = 2200;
 $ch = 1600;
 ?>
-<body style="padding: 10px; display: inline-block;">
+<body style="padding: 10px; display: inline-block; padding-bottom: 55px;">
     <header id="toolbox">
     <style type="text/css">
         #toolbox {
@@ -35,7 +35,17 @@ $ch = 1600;
                     保存
                 </a>
 
-                <span id="zoomscroll" class="navbar-item"></span>
+                <span id="zoomscroll" class="navbar-item">
+                    <span id="zoom-label"></span>
+                    <span class="field has-addons buttons are-small">
+                        <span class="control">
+                        <button id="zoom-minus" class="button">ー</button>
+                        </span>
+                        <span class="control">
+                        <button id="zoom-plus" class="button">＋</button>
+                        </span>
+                    </span>
+                </span>
                 <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
                     data-target="navbarPaper">
                     <span aria-hidden="true"></span>

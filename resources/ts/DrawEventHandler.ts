@@ -52,7 +52,7 @@ export class DrawEventHandler {
 
         this.nowsensor = null;
 
-        this.element.zoomscroll.init();
+        this.element.zoomscroll.init(this.action.zoomscroll);
 
         this.device.mouse.init(this, this.mydata.paper);
         this.device.pointer.init(this, this.mydata.paper);
@@ -166,7 +166,7 @@ export class DrawEventHandler {
                 break;
             case "zoom":
                 // さらに長押し＝拡大縮小
-                this.action.zoomscroll.zoom(x, y);
+                this.action.zoomscroll.zoomdrag(x, y);
                 break;
         }
     }

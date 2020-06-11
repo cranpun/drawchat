@@ -1,14 +1,27 @@
 import { TouchSensor } from "../sensor/TouchSensor";
+import { ZoomScrollAction } from "../action/ZoomScrollAction";
 
 export class ZoomElement {
-    private ele: HTMLSpanElement;
-    public init(): void {
-        this.ele = document.querySelector("#zoomscroll");
+    private lbl: HTMLSpanElement;
+    private btp: HTMLButtonElement;
+    private btm: HTMLButtonElement;
+    private zoomscroll: ZoomScrollAction;
+
+    public init(zoomscroll: ZoomScrollAction): void {
+        this.zoomscroll = zoomscroll;
+        this.lbl = document.querySelector("#zoom-label");
+        this.btp = document.querySelector("#zoom-plus");
+        this.btm = document.querySelector("#zoom-minus");
+
+        this.btp.addEventListener("click", () => this.zoomscroll.zoomproc(0.1));
+        this.btp.addEventListener("touchstart", () => this.zoomscroll.zoomproc(0.1));
+        this.btm.addEventListener("click", () => this.zoomscroll.zoomproc(-0.1));
+        this.btm.addEventListener("touchstart", () => this.zoomscroll.zoomproc(-0.1));
     }
-    public elemenet(): HTMLSpanElement {
-        return this.ele;
+    public label(): HTMLSpanElement {
+        return this.lbl;
     }
     public show(nowzoom: number): void {
-        this.ele.innerHTML = `${Math.round(nowzoom * 100).toString()}%`;
+        this.lbl.innerHTML = `${Math.round(nowzoom * 100).toString()}%`;
     }
 }
