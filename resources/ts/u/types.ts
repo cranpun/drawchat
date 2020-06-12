@@ -37,6 +37,7 @@ export class Draw {
     }
 }
 export class Stroke {
+    public color: string; // 消しゴムの場合はeのみ
     private p: Point[];
     constructor() {
         this.p = [];
@@ -70,7 +71,7 @@ export class Stroke {
     public parse(arr: any[]): void {
         this.p = [];
         for (const a of arr) {
-            const tmp = new Point(parseInt(a[0]), parseInt(a[1]), parseInt(a[2]));
+            const tmp = new Point(parseInt(a[0]), parseInt(a[1]));
             this.p.push(tmp);
         }
     }
@@ -79,14 +80,12 @@ export class Stroke {
 export class Point {
     public x: number;
     public y: number;
-    public t: number;
-    constructor(x: number, y: number, t: number) {
+    constructor(x: number, y: number) {
         this.x = x;
         this.y = y;
-        this.t = t;
     }
     public json(): string {
-        const ret = `[${this.x},${this.y},${this.t}]`;
+        const ret = `[${this.x},${this.y}]`;
         return ret;
     }
     public isSame(x: number, y: number): boolean {

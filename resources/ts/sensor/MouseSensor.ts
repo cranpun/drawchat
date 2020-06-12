@@ -31,6 +31,6 @@ export class MouseSensor {
     private p(e: MouseEvent): Point {
         const x: number = e.offsetX;
         const y: number = e.offsetY;
-        return new Point(x, y, 0);
+        return new Point(x, y);
     }
 }

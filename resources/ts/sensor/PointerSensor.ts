@@ -32,6 +32,6 @@ export class PointerSensor {
     private p(e): Point {
         const x: number = e.offsetX;
         const y: number = e.offsetY;
-        return new Point(x, y, 0);
+        return new Point(x, y);
     }
 }

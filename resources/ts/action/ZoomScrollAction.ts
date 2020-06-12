@@ -25,7 +25,7 @@ export class ZoomScrollAction {
         this.orgh = parseInt(ele.style.height.replace("px",""));
     }
     public setPoint(x: number, y: number) {
-        this.prep = new Point(x, y, 0);
+        this.prep = new Point(x, y);
     }
     public scroll(x: number, y: number): void {
         if(this.ignore()) {

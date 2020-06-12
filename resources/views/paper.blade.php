@@ -24,13 +24,19 @@ $ch = 1600;
                 <h2 class="navbar-item has-text-primary" data-testid="paper-{{ $paper_id }}">
                     paper {{ $paper_id }}
                 </h2>
-                <a class="navbar-item" href="/">
+                <a id="act-back" class="navbar-item" href="/">
                     戻る
                 </a>
 
-                <a id="bt-save" class="navbar-item">
+                <a id="act-save" class="navbar-item">
                     保存
                 </a>
+
+                <span class="navbar-item">
+                    <button id="act-eraser" class="button is-small is-light">
+                    <i class="fas fa-eraser"></i>
+                    </button>
+                </span>
 
                 <span id="zoomscroll" class="navbar-item">
                     <span style="padding: 0px 5px;">

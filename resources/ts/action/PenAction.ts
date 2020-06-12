@@ -8,7 +8,7 @@ export class PenAction {
         let pre = prep;
         if (pre == null) {
             // 前回の点がなければ今回の点
-            pre = new Point(x, y, 0);
+            pre = new Point(x, y);
         }
         const ctx = paper.getCtx();
         ctx.save()

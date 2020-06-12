@@ -61,7 +61,7 @@ export class LongpressStatus {
         // 長押しの位置確認
         this.time = Date.now();
 
-        this.pos = new Point(x, y, 0);
+        this.pos = new Point(x, y);
         zoomscroll.setPoint(x, y);
 
         // 色を変更

@@ -5,7 +5,7 @@ import * as U from "./u/u";
 import { MouseSensor } from "./sensor/MouseSensor";
 import { PointerSensor } from "./sensor/PointerSensor";
 import { TouchSensor } from "./sensor/TouchSensor";
-import { SaveAction } from "./action/SaveAction";
+import { SaveElement } from "./element/SaveElement";
 import { LoadAction } from "./action/LoadAction";
 import { DrawcanvasesElement } from "./element/DrawcanvasesElement";
 import { DrawStatus } from "./data/DrawStatus";
@@ -25,11 +25,11 @@ export class DrawEventHandler {
     private element = {
         wrapdiv: new DrawcanvasesElement(),
         zoomscroll: new ZoomElement(),
+        save: new SaveElement(),
     };
     private action = {
         "pen": new PenAction(),
         "load": new LoadAction(),
-        "save": new SaveAction(),
         "redraw": new RedrawAction(),
         "zoomscroll": new ZoomScrollAction(),
     };
@@ -53,12 +53,12 @@ export class DrawEventHandler {
         this.nowsensor = null;
 
         this.element.zoomscroll.init(this.action.zoomscroll);
+        this.element.save.init(this.mydata.datastore);
 
         this.device.mouse.init(this, this.mydata.paper);
         this.device.pointer.init(this, this.mydata.paper);
         this.device.touch.init(this, this.mydata.paper, this.action.zoomscroll);
 
-        this.action.save.init(this.mydata.datastore);
         this.action.load.init(this.otherdata.paper, this.otherdata.datastore, this.action.redraw, this.action.pen);
         this.action.zoomscroll.init(this.element.wrapdiv, this.element.zoomscroll);
     }

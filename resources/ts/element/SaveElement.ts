@@ -1,14 +1,15 @@
 import { DrawData } from "../data/DrawData";
 import * as U from "../u/u";
 
-export class SaveAction {
+export class SaveElement {
+    private ele: HTMLElement;
     private datastore: DrawData;
 
     public init(datastore: DrawData) {
-        // const bt_load = document.querySelector("#bt-load");
-        // bt_load.addEventListener("click", (e: MouseEvent) => this.load());
-        document.querySelector("#bt-save").addEventListener("click", (e: MouseEvent) => this.proc());
         this.datastore = datastore;
+        this.ele = document.querySelector("#act-save");
+        this.ele.addEventListener("click", (e: MouseEvent) => this.proc());
+        this.ele.addEventListener("touchend", (e: TouchEvent) => this.proc());
     }
 
     public async proc(): Promise<void> {

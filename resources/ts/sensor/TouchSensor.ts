@@ -37,6 +37,6 @@ export class TouchSensor {
         const bc = (<HTMLCanvasElement>e.target).getBoundingClientRect();
         const x = ct.clientX - bc.left;
         const y = ct.clientY - bc.top;
-        return new Point(x / this.zoomscroll.getZoom(), y / this.zoomscroll.getZoom(), 0);
+        return new Point(x / this.zoomscroll.getZoom(), y / this.zoomscroll.getZoom());
     }
 }

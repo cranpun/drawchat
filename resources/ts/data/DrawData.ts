@@ -23,7 +23,7 @@ export class DrawData {
             // 初回は現在時間で初期化
             this.time_prepush = now;
         }
-        const p = new Point(x, y, now - this.time_prepush);
+        const p = new Point(x, y);
         this.time_prepush = now;
         this.nowstroke.push(p);
     }
