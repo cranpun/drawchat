@@ -4,19 +4,29 @@ import { Point } from "../u/types";
 
 export class PointerSensor {
     private sense: DrawEventHandler;
+    private paper: PaperElement;
+    private canvashandlers: ((e: TouchEvent) => void)[] = [];
 
     public init(sense: DrawEventHandler, paper: PaperElement): void {
         this.sense = sense;
-        paper.getCnv().addEventListener("pointerup", (e: PointerEvent) => this.sense.up("pointer", e, this.p(e)), { passive: false });
-        paper.getCnv().addEventListener("pointerdown", (e: PointerEvent) => this.sense.down("pointer", e, this.p(e)), { passive: false });
-        paper.getCnv().addEventListener("pointermove", (e: PointerEvent) => this.sense.move("pointer", e, this.p(e)), { passive: false });
-        paper.getCnv().addEventListener("pointerleave", (e: PointerEvent) => this.sense.up("pointer", e, this.p(e)), { passive: false });
+        this.paper = paper;
+        this.canvashandlers["pointerup"] = (e: PointerEvent) => this.sense.up("pointer", e, this.p(e));
+        this.canvashandlers["pointerdown"] = (e: PointerEvent) => this.sense.down("pointer", e, this.p(e));
+        this.canvashandlers["pointermove"] = (e: PointerEvent) => this.sense.move("pointer", e, this.p(e));
+        this.canvashandlers["pointerleave"] = (e: PointerEvent) => this.sense.up("pointer", e, this.p(e));
+        this.addDefaultListener();
+    }
 
-        // moveはscroll等にも使うのでbodyにも登録
-        // const body: HTMLBodyElement = document.querySelector("body");
-        // body.addEventListener("pointerup", (e: PointerEvent) => this.sense.upbody("pointer", e, this.p(e)), { passive: false});
-        // body.addEventListener("pointerdown", (e: PointerEvent) => this.sense.downbody("pointer", e, this.p(e)), { passive: false});
-        // body.addEventListener("pointermove", (e: PointerEvent) => this.sense.movebody("pointer", e, this.p(e)), { passive: false});
+    public addDefaultListener() {
+        for (const [event, handler] of Object.entries(this.canvashandlers)) {
+            this.paper.getCnv().addEventListener(event, handler, { passive: false });
+        }
+    }
+
+    public removeDefaultListener() {
+        for (const [event, handler] of Object.entries(this.canvashandlers)) {
+            this.paper.getCnv().removeEventListener(event, handler);
+        }
     }
 
     private p(e): Point {

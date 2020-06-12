@@ -34,7 +34,6 @@ $ch = 1600;
 
                 <span id="zoomscroll" class="navbar-item">
                     <span style="padding: 0px 5px;">
-                        
                         <span id="zoom-label"></span>
                     </span>
                     <span class="field has-addons buttons are-small">

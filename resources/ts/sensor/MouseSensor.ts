@@ -4,21 +4,30 @@ import { Point } from "../u/types";
 
 export class MouseSensor {
     private sense: DrawEventHandler;
+    private paper: PaperElement;
+    private canvashandlers: ((e: TouchEvent) => void)[] = [];
 
     public init(sense: DrawEventHandler, paper: PaperElement): void {
         this.sense = sense;
-        paper.getCnv().addEventListener("mouseup", (e: MouseEvent) => this.sense.up("mouse", e, this.p(e)), { passive: false });
-        paper.getCnv().addEventListener("mousedown", (e: MouseEvent) => this.sense.down("mouse", e, this.p(e)), { passive: false });
-        paper.getCnv().addEventListener("mousemove", (e: MouseEvent) => this.sense.move("mouse", e, this.p(e)), { passive: false });
-        paper.getCnv().addEventListener("mouseleave", (e: MouseEvent) => this.sense.up("mouse", e, this.p(e)), { passive: false });
-
-        // // moveはscroll等にも使うのでbodyにも登録
-        // const body:HTMLBodyElement = document.querySelector("body");
-        // body.addEventListener("mouseup", (e: MouseEvent) => this.sense.upbody("mouse", e, this.p(e)), { passive: false });
-        // body.addEventListener("mousedown", (e: MouseEvent) => this.sense.downbody("mouse", e, this.p(e)), { passive: false });
-        // body.addEventListener("mousemove", (e: MouseEvent) => this.sense.movebody("mouse", e, this.p(e)), { passive: false });
+        this.paper = paper;
+        this.canvashandlers["mouseup"] = (e: MouseEvent) => this.sense.up("mouse", e, this.p(e));
+        this.canvashandlers["mousedown"] = (e: MouseEvent) => this.sense.down("mouse", e, this.p(e));
+        this.canvashandlers["mousemove"] = (e: MouseEvent) => this.sense.move("mouse", e, this.p(e));
+        this.canvashandlers["mouseleave"] = (e: MouseEvent) => this.sense.up("mouse", e, this.p(e));
+        this.addDefaultListener();
     }
 
+    public addDefaultListener() {
+        for (const [event, handler] of Object.entries(this.canvashandlers)) {
+            this.paper.getCnv().addEventListener(event, handler, { passive: false });
+        }
+    }
+
+    public removeDefaultListener() {
+        for (const [event, handler] of Object.entries(this.canvashandlers)) {
+            this.paper.getCnv().removeEventListener(event, handler);
+        }
+    }
     private p(e: MouseEvent): Point {
         const x: number = e.offsetX;
         const y: number = e.offsetY;

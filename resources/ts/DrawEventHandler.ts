@@ -43,8 +43,8 @@ export class DrawEventHandler {
         datastore: new DrawData(),
     };
     private device = {
-        // mouse: new MouseSensor(),
-        // pointer: new PointerSensor(),
+        mouse: new MouseSensor(),
+        pointer: new PointerSensor(),
         touch: new TouchSensor(),
     }
 
@@ -54,8 +54,8 @@ export class DrawEventHandler {
 
         this.element.zoomscroll.init(this.action.zoomscroll);
 
-        // this.device.mouse.init(this, this.mydata.paper);
-        // this.device.pointer.init(this, this.mydata.paper);
+        this.device.mouse.init(this, this.mydata.paper);
+        this.device.pointer.init(this, this.mydata.paper);
         this.device.touch.init(this, this.mydata.paper, this.action.zoomscroll);
 
         this.action.save.init(this.mydata.datastore);
@@ -102,11 +102,10 @@ export class DrawEventHandler {
                 // 単押し移動＝記述
                 this.action.pen.proc(x, y, this.mydata.datastore.lastPoint(), this.mydata.paper);
                 this.mydata.datastore.pushPoint(x, y);
-                // ここでおしまい。bodyには伝えない。
-                e.stopPropagation();
                 break;
-            default:
-                // scroll, zoomはこのハンドラでは処理しない
+            case "zoom":
+                // さらに長押し＝拡大縮小
+                this.action.zoomscroll.zoomdrag(x, y);
                 break;
         }
     }
@@ -117,23 +116,21 @@ export class DrawEventHandler {
 
         e.preventDefault();
         U.tt(`${dev}-up(${x},${y})=${this.nowsensor}`);
-        // this.status.draw.endStroke();
-        // this.mydata.datastore.endStroke();
-        // this.element.wrapdiv.setNormal();
-        // // 1ストローク終わったので終了
-        // this.status.longpress.end(); // 長押しのまま離す場合もあり。
-        // this.nowsensor = null;
-    }
 
-    public downbody(dev: Device, e: Event, p: Point) {
-        e.preventDefault();
-        e.stopPropagation();
-        const x: number = p.x;
-        const y: number = p.y;
-        U.tt(`${dev}-downdown(${x},${y})=${this.nowsensor}`);
+        // 現在のツールに応じて処理
+        switch (this.status.draw.getTool()) {
+            case "scroll":
+                // 長押し移動＝画面スクロール
+                this.action.zoomscroll.scroll(x, y);
+                break;
+        }
 
-        this.nowsensor = dev;
-        this.status.longpress.start(this.element.wrapdiv, x, y, this.action.zoomscroll); // 長押し開始地点
+        // 1ストローク終わったので終了
+        this.status.draw.endStroke();
+        this.mydata.datastore.endStroke();
+        this.element.wrapdiv.setNormal();
+        this.status.longpress.end(); // 長押しのまま離す場合もあり。
+        this.nowsensor = null;
     }
 
     public movebody(dev: Device, e: Event, p: Point) {
@@ -158,13 +155,6 @@ export class DrawEventHandler {
             const tool = this.status.longpress.end();
             this.status.draw.setTool(tool);
         }
-        // 現在のツールに応じて処理
-        switch (this.status.draw.getTool()) {
-            case "zoom":
-                // さらに長押し＝拡大縮小
-                this.action.zoomscroll.zoomdrag(x, y);
-                break;
-        }
     }
 
     public upbody(dev: Device, e: Event, p: Point) {
@@ -173,14 +163,6 @@ export class DrawEventHandler {
         e.preventDefault();
         e.stopPropagation();
         U.tt(`${dev}-bodyup(${x},${y})=${this.nowsensor} - ${this.status.draw.getTool()}`);
-
-        // 現在のツールに応じて処理
-        switch (this.status.draw.getTool()) {
-            case "scroll":
-                // 長押し移動＝画面スクロール
-                this.action.zoomscroll.scroll(x, y);
-                break;
-        }
 
         // 1ストローク終わったので終了
         this.status.draw.endStroke();
