@@ -14,6 +14,7 @@ import { PenAction } from "./action/PenAction";
 import { RedrawAction } from "./action/RedrawAction";
 import { ZoomScrollAction } from "./action/ZoomScrollAction";
 import { ZoomElement } from "./element/ZoomElement";
+import { EraserElement } from "./element/EraserElement";
 
 export class DrawEventHandler {
     private paper_id: number;
@@ -26,6 +27,7 @@ export class DrawEventHandler {
         wrapdiv: new DrawcanvasesElement(),
         zoomscroll: new ZoomElement(),
         save: new SaveElement(),
+        eraser: new EraserElement(),
     };
     private action = {
         "pen": new PenAction(),
@@ -61,6 +63,7 @@ export class DrawEventHandler {
 
         this.action.load.init(this.otherdata.paper, this.otherdata.datastore, this.action.redraw, this.action.pen);
         this.action.zoomscroll.init(this.element.wrapdiv, this.element.zoomscroll);
+        this.action.pen.init(this.element.eraser);
     }
 
     public down(dev: Device, e: Event, p: Point): void {
@@ -128,44 +131,6 @@ export class DrawEventHandler {
         // 1ストローク終わったので終了
         this.status.draw.endStroke();
         this.mydata.datastore.endStroke();
-        this.element.wrapdiv.setNormal();
-        this.status.longpress.end(); // 長押しのまま離す場合もあり。
-        this.nowsensor = null;
-    }
-
-    public movebody(dev: Device, e: Event, p: Point) {
-        const x: number = p.x;
-        const y: number = p.y;
-        e.preventDefault();
-        e.stopPropagation();
-        U.tt(`${dev}-movebody(${x},${y})=${this.nowsensor}`);
-
-        // 無視する条件
-        if (this.nowsensor === null // デバイス未決定なので何もしない
-            || this.nowsensor !== dev // 違うデバイスのイベントなので無視
-            || this.status.longpress.isSamePoint(x, y) // 動いていないので何もしない
-        ) {
-            // do nothing
-            return;
-        }
-
-        // 正しく動いたのでツール確認
-        if (this.status.longpress.isStart()) {
-            // 長押しから動いたので秒数を計測して判定
-            const tool = this.status.longpress.end();
-            this.status.draw.setTool(tool);
-        }
-    }
-
-    public upbody(dev: Device, e: Event, p: Point) {
-        const x: number = p.x;
-        const y: number = p.y;
-        e.preventDefault();
-        e.stopPropagation();
-        U.tt(`${dev}-bodyup(${x},${y})=${this.nowsensor} - ${this.status.draw.getTool()}`);
-
-        // 1ストローク終わったので終了
-        this.status.draw.endStroke();
         this.element.wrapdiv.setNormal();
         this.status.longpress.end(); // 長押しのまま離す場合もあり。
         this.nowsensor = null;

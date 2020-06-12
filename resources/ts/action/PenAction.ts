@@ -2,8 +2,15 @@ import { DrawData } from "../data/DrawData";
 import * as U from "../u/u";
 import { PaperElement } from "../element/PaperElement";
 import { Point } from "../u/types";
+import { EraserElement } from "../element/EraserElement";
 
 export class PenAction {
+    eraser: EraserElement;
+
+    public init(eraser: EraserElement) {
+        this.eraser = eraser;
+    }
+
     public proc(x: number, y: number, prep: Point, paper: PaperElement): void {
         let pre = prep;
         if (pre == null) {
@@ -11,6 +18,14 @@ export class PenAction {
             pre = new Point(x, y);
         }
         const ctx = paper.getCtx();
+
+        if(this.eraser.enable) {
+            this.erase(x, y, pre, ctx)
+        } else {
+            this.pen(x, y, pre, ctx);
+        }
+    }
+    private pen(x: number, y: number, pre: Point, ctx: CanvasRenderingContext2D):void {
         ctx.save()
         ctx.beginPath();
         ctx.lineCap = "round";
@@ -20,5 +35,18 @@ export class PenAction {
         ctx.lineTo(x, y);
         ctx.stroke();
         ctx.restore();
+    }
+    private erase(x: number, y: number, pre: Point, ctx: CanvasRenderingContext2D):void {
+        // ctx.save();
+        // ctx.globalCompositeOperation = "destination-out";
+        // ctx.beginPath();
+        // ctx.lineCap = "round";
+        // ctx.lineWidth = 2;
+        // ctx.strokeStyle = "#000";
+        // ctx.moveTo(pre.x, pre.y);
+        // ctx.lineTo(x, y);
+        // ctx.stroke();
+        // ctx.globalCompositeOperation = "source-over";
+        // ctx.restore();
     }
 }

@@ -1,5 +1,6 @@
 import { Draw, Stroke, Point } from "../u/types";
 import { MyAxiosApi } from "../u/myaxios";
+import "../window"
 
 export class DrawData {
     private d: Draw;
@@ -80,5 +81,8 @@ export class DrawData {
 
     public getDraw(): Draw {
         return this.d;
+    }
+    public getNowStroke(): Stroke {
+        return this.nowstroke;
     }
 }
