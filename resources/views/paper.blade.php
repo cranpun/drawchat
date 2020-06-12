@@ -63,7 +63,7 @@ $ch = 1600;
                             burger.classList.toggle("is-active");
                         }
                         burger.addEventListener("click", active);
-                        //burger.addEventListener("touchstart", active);
+                        burger.addEventListener("touchend", active);
                     });
                     </script>
                 </a>

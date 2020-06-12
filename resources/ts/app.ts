@@ -12,8 +12,9 @@ window.addEventListener("load", async () => {
         sense.init();
     }
     const body: HTMLBodyElement = document.querySelector("body");
+    // iosのときのピンチやダブルクリックによる拡大を無効化
     body.addEventListener("touchstart", (e: TouchEvent) => {
         console.log(e);
-        // e.preventDefault();
+        e.preventDefault();
     }, { passive: false });
 });
