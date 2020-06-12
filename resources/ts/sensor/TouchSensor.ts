@@ -30,11 +30,11 @@ export class TouchSensor {
         for (const [event, handler] of Object.entries(this.canvashandlers)) {
             this.paper.getCnv().addEventListener(event, handler, { passive: false });
         }
-        // // moveはscroll等にも使うのでbodyにも登録
-        // const body: HTMLBodyElement = document.querySelector("body");
-        // for (const [event, handler] of Object.entries(this.bodyhandlers)) {
-        //     body.addEventListener(event, handler, { passive: false });
-        // }
+        // moveはscroll等にも使うのでbodyにも登録
+        const body: HTMLBodyElement = document.querySelector("body");
+        for (const [event, handler] of Object.entries(this.bodyhandlers)) {
+            body.addEventListener(event, handler, { passive: false });
+        }
     }
 
     public removeDefaultListener() {
@@ -52,7 +52,6 @@ export class TouchSensor {
         const bc = (<HTMLCanvasElement>e.target).getBoundingClientRect();
         const x = ct.clientX - bc.left;
         const y = ct.clientY - bc.top;
-        U.tt((<any>e).scale);
         return new Point(x / this.zoomscroll.getZoom(), y / this.zoomscroll.getZoom(), 0);
     }
 }

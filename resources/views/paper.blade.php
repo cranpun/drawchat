@@ -1,6 +1,11 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" style="transform-origin: top left; overflow-x: scroll;" class="has-navbar-fixed-bottom">
-
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="has-navbar-fixed-bottom">
+<style type="text/css">
+html {
+    transform-origin: top left;
+    overflow-x: scroll;
+}
+</style>
 <head>
     @include("element/head")
     <title>{{ config("app.name") }}</title>

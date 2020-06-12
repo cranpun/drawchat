@@ -17,10 +17,8 @@ export class LoadAction {
         this.proc();
     }
     public async proc(): Promise<void> {
-        //U.tt("now loading...", true);
         await this.datastore.load();
         this.redraw.proc(this.paper, this.datastore, this.pen);
-        //U.tt("loaded", true);
         setTimeout(() => this.proc(), 7 * 1000);
     }
 }

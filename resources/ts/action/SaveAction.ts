@@ -12,8 +12,6 @@ export class SaveAction {
     }
 
     public async proc(): Promise<void> {
-        U.tt("now saving...", true);
         await this.datastore.save();
-        U.tt("saved", true);
     }
 }

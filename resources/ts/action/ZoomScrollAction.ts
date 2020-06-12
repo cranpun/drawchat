@@ -32,10 +32,18 @@ export class ZoomScrollAction {
             return;
         }
         // 差分の計算
-        const dx = (this.prep.x - x) * this.nowzoom;
-        const dy = (this.prep.y - y) * this.nowzoom;
+        const dx =  (this.prep.x - x) * this.nowzoom * 7;
+        const dy = (this.prep.y - y) * this.nowzoom * 7;
 
-        window.scrollBy(dx, dy);
+        // スクロール実行
+        const nx = window.pageXOffset;
+        const ny = window.pageYOffset;
+        window.scroll({
+            left: nx + dx,
+            top: ny + dy,
+            behavior: "smooth"
+        });
+
         console.log("scroll", `${this.prep.x}-${x}=${dx}, ${this.prep.y}-${y}=${dy}`);
 
         // ポイントの更新

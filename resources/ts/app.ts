@@ -1,4 +1,6 @@
 import { DrawEventHandler } from "./DrawEventHandler";
+import smoothscroll from "smoothscroll-polyfill";
+smoothscroll.polyfill();
 
 require("./bootstrap");
 

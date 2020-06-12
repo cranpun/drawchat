@@ -19,6 +19,7 @@
         "resolve-url-loader": "^3.1.1",
         "sass": "^1.26.7",
         "sass-loader": "^8.0.2",
+        "smoothscroll-polyfill": "^0.4.4",
         "sweetalert2": "^9.14.0",
         "ts-loader": "^7.0.5",
         "typescript": "^3.9.3",
