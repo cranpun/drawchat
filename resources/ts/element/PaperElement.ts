@@ -21,4 +21,9 @@ export class PaperElement {
     public getCnv(): HTMLCanvasElement {
         return this.cnv;
     }
+    public clear(): void {
+        const w: number = this.cnv.width;
+        const h: number = this.cnv.height;
+        this.ctx.clearRect(0, 0, w, h);
+    }
 }

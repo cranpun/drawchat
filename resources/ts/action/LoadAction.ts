@@ -18,7 +18,8 @@ export class LoadAction {
     }
     public async proc(): Promise<void> {
         await this.datastore.load();
-        this.redraw.proc(this.paper, this.datastore, this.pen);
+        await this.redraw.proc(this.paper, this.datastore, this.pen);
+        console.log("loaded!!");
         setTimeout(() => this.proc(), 7 * 1000);
     }
 }
