@@ -1,6 +1,6 @@
 import { DrawEventHandler } from "../DrawEventHandler";
 import { PaperElement } from "../element/PaperElement";
-import { Point } from "../u/types";
+import { Point, Coord } from "../u/types";
 
 export class PointerSensor {
     private sense: DrawEventHandler;
@@ -29,9 +29,9 @@ export class PointerSensor {
         }
     }
 
-    private p(e): Point {
+    private p(e): Coord {
         const x: number = e.offsetX;
         const y: number = e.offsetY;
-        return new Point(x, y);
+        return new Coord(x, y);
     }
 }

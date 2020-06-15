@@ -71,7 +71,7 @@ export class Stroke {
     public parse(arr: any[]): void {
         this.p = [];
         for (const a of arr) {
-            const tmp = new Point(parseInt(a[0]), parseInt(a[1]));
+            const tmp = new Point(parseInt(a[0]), parseInt(a[1]), a[2].toString());
             this.p.push(tmp);
         }
     }
@@ -80,17 +80,34 @@ export class Stroke {
 export class Point {
     public x: number;
     public y: number;
+    public c: string;
+    constructor(x: number, y: number, c: string) {
+        this.x = x;
+        this.y = y;
+        this.c = c;
+    }
+    public json(): string {
+        const ret = `[${this.x},${this.y},${this.c}]`;
+        return ret;
+    }
+    public toCoord(): Coord {
+        return new Coord(this.x, this.y);
+    }
+}
+
+export class Coord {
+    public y: number;
+    public x: number;
     constructor(x: number, y: number) {
         this.x = x;
         this.y = y;
-    }
-    public json(): string {
-        const ret = `[${this.x},${this.y}]`;
-        return ret;
     }
     public isSame(x: number, y: number): boolean {
         const cond1: boolean = x === this.x;
         const cond2: boolean = y === this.y;
         return cond1 && cond2;
+    }
+    public toPoint(color: string): Point {
+        return new Point(this.x, this.y, color);
     }
 }

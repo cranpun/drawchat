@@ -1,6 +1,6 @@
 import { DrawEventHandler } from "../DrawEventHandler";
 import { PaperElement } from "../element/PaperElement";
-import { Point } from "../u/types";
+import { Point, Coord } from "../u/types";
 
 export class MouseSensor {
     private sense: DrawEventHandler;
@@ -28,9 +28,9 @@ export class MouseSensor {
             this.paper.getCnv().removeEventListener(event, handler);
         }
     }
-    private p(e: MouseEvent): Point {
+    private p(e: MouseEvent): Coord {
         const x: number = e.offsetX;
         const y: number = e.offsetY;
-        return new Point(x, y);
+        return new Coord(x, y);
     }
 }

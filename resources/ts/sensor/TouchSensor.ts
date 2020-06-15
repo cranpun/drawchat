@@ -1,6 +1,6 @@
 import { DrawEventHandler } from "../DrawEventHandler";
 import { PaperElement } from "../element/PaperElement";
-import { Point } from "../u/types";
+import { Point, Coord } from "../u/types";
 import * as U from "../u/u";
 import { ZoomScrollAction } from "../action/ZoomScrollAction";
 export class TouchSensor {
@@ -32,11 +32,11 @@ export class TouchSensor {
         }
     }
     
-    private p(e: TouchEvent): Point {
+    private p(e: TouchEvent): Coord {
         const ct = e.changedTouches[0]
         const bc = (<HTMLCanvasElement>e.target).getBoundingClientRect();
         const x = ct.clientX - bc.left;
         const y = ct.clientY - bc.top;
-        return new Point(x / this.zoomscroll.getZoom(), y / this.zoomscroll.getZoom());
+        return new Coord(x / this.zoomscroll.getZoom(), y / this.zoomscroll.getZoom());
     }
 }

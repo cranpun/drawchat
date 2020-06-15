@@ -1,13 +1,13 @@
 import { DrawData } from "../data/DrawData";
 import * as U from "../u/u";
-import { Point } from "../u/types";
+import { Point, Coord } from "../u/types";
 import { DrawcanvasesElement } from "../element/DrawcanvasesElement";
 import { ZoomElement } from "../element/ZoomElement";
 
 export class ZoomScrollAction {
     private wrapdiv: DrawcanvasesElement;
     private zoomscroll: ZoomElement;
-    private prep: Point = null;
+    private prep: Coord = null;
     private nowzoom: number = 1;
     private orgw: number = 0;
     private orgh: number = 0;
@@ -25,7 +25,7 @@ export class ZoomScrollAction {
         this.orgh = parseInt(ele.style.height.replace("px",""));
     }
     public setPoint(x: number, y: number) {
-        this.prep = new Point(x, y);
+        this.prep = new Coord(x, y);
     }
     public scroll(x: number, y: number): void {
         if(this.ignore()) {

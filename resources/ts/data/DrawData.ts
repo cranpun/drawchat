@@ -3,6 +3,9 @@ import { MyAxiosApi } from "../u/myaxios";
 import "../window"
 
 export class DrawData {
+
+    public static readonly TK_ERASER = "e";
+
     private d: Draw;
     private nowstroke: Stroke;
     private time_prepush: number;
@@ -18,13 +21,13 @@ export class DrawData {
         const paper_id: number = parseInt(urls[urls.length - 1]);
         this.paper_id = paper_id;
     }
-    public pushPoint(x: number, y: number): void {
+    public pushPoint(x: number, y: number, color: string): void {
         const now = Date.now();
         if (this.d.getStrokes().length === 0) {
             // 初回は現在時間で初期化
             this.time_prepush = now;
         }
-        const p = new Point(x, y);
+        const p = new Point(x, y, color);
         this.time_prepush = now;
         this.nowstroke.push(p);
     }

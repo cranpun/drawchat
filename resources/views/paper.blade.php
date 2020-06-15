@@ -18,6 +18,10 @@ $cw = 2200;
 $ch = 1600;
 ?>
 <body style="padding: 10px; display: inline-block;">
+    <section id="serverdata" style="display: none;">
+        <!-- MYTODO serverからのデータ -->
+        <div id="sd-color">#00F</div>
+    </section>
     <header id="toolbox">
         <nav class="navbar is-light is-fixed-bottom" role="navigation" aria-label="main navigation">
             <section class="navbar-brand">
@@ -76,9 +80,6 @@ $ch = 1600;
             </section>
 
             <section id="navbarPaper" class="navbar-menu">
-                <a class="navbar-item" href="/">
-                    dummy
-                </a>
                 <div class="navbar-start">
                     <div class="navbar-item has-dropdown is-hoverable has-dropdown-up">
                         <a class="navbar-link">
@@ -86,6 +87,24 @@ $ch = 1600;
                         </a>
 
                         <div class="navbar-dropdown">
+                            <span class="navbar-item">
+                                <div
+                                    id="pen-color"
+                                    class="picker"
+                                    acp-palette="black|red|green|pink|skyblue"
+                                    acp-palette-editable
+                                    acp-show-rgb="no"
+                                    acp-show-hsl="no"
+                                    acp-show-hex="no"
+                                ></div>
+                                <style type="text/css">
+                                .picker {
+                                    display: inline-block;
+                                    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(3, 1, 1, 0.08);
+                                    width: 100%;
+                                }
+                                </style>
+                            </span>
                             <span class="navbar-item">
                                 submenu
                             </span>
