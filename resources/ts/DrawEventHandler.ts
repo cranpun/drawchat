@@ -1,4 +1,4 @@
-import { DrawEvent, Point, Tool, Device, Coord } from "./u/types";
+import { DrawEvent, Point, Tool, Device } from "./u/types";
 import { PaperElement } from "./element/PaperElement";
 import { DrawData } from "./data/DrawData";
 import * as U from "./u/u";
@@ -32,7 +32,6 @@ export class DrawEventHandler {
         color: new ColorElement(),
     };
     private action = {
-        "pen": new PenAction(),
         "load": new LoadAction(),
         "redraw": new RedrawAction(),
         "zoomscroll": new ZoomScrollAction(),
@@ -41,10 +40,12 @@ export class DrawEventHandler {
     private mydata = {
         paper: PaperElement.makeMine(),
         datastore: new DrawData(),
+        pen: new PenAction(),
     };
     private otherdata = {
         paper: PaperElement.makeOther(),
         datastore: new DrawData(),
+        pen: new PenAction(),
     };
     private device = {
         mouse: new MouseSensor(),
@@ -60,19 +61,21 @@ export class DrawEventHandler {
 
         this.element.zoomscroll.init(this.action.zoomscroll);
         this.element.save.init(this.mydata.datastore);
-        this.element.color.init(this.action.pen, color);
-        this.element.eraser.init(this.action.pen);
+        this.element.color.init(this.mydata.pen, color);
+        this.element.eraser.init(this.mydata.pen);
 
         this.device.mouse.init(this, this.mydata.paper);
         this.device.pointer.init(this, this.mydata.paper);
         this.device.touch.init(this, this.mydata.paper, this.action.zoomscroll);
 
-        this.action.load.init(this.otherdata.paper, this.otherdata.datastore, this.action.redraw, this.action.pen);
+        this.action.load.init(this.otherdata.paper, this.otherdata.datastore, this.action.redraw, this.otherdata.pen);
         this.action.zoomscroll.init(this.element.wrapdiv, this.element.zoomscroll);
-        this.action.pen.init(color);
+        this.mydata.pen.init(color);
+
+        this.mydata.datastore.init(this.mydata.pen);
     }
 
-    public down(dev: Device, e: Event, p: Coord): void {
+    public down(dev: Device, e: Event, p: Point): void {
         e.preventDefault();
         e.stopPropagation();
         const x: number = p.x;
@@ -84,7 +87,7 @@ export class DrawEventHandler {
         this.status.longpress.start(this.element.wrapdiv, x, y, this.action.zoomscroll); // 長押し開始地点
     }
 
-    public move(dev: Device, e: Event, p: Coord): void {
+    public move(dev: Device, e: Event, p: Point): void {
         e.preventDefault();
         const x: number = p.x;
         const y: number = p.y;
@@ -110,9 +113,9 @@ export class DrawEventHandler {
             case "pen":
                 // 単押し移動＝記述
                 const p = this.mydata.datastore.lastPoint();
-                this.action.pen.proc(x, y, p === null ? null : p.toCoord(), this.mydata.paper);
-                const c = this.action.pen.color;
-                this.mydata.datastore.pushPoint(x, y, c);
+                this.mydata.pen.proc(x, y, p, this.mydata.paper);
+                const c = this.mydata.pen.color;
+                this.mydata.datastore.pushPoint(x, y);
                 break;
             case "zoom":
                 // さらに長押し＝拡大縮小
@@ -121,7 +124,7 @@ export class DrawEventHandler {
         }
     }
 
-    public up(dev: Device, e: Event, p: Coord) {
+    public up(dev: Device, e: Event, p: Point) {
         const x: number = p.x;
         const y: number = p.y;
 

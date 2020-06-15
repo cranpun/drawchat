@@ -1,5 +1,6 @@
 import * as AColorPicker from "a-color-picker";
 import { PenAction } from "../action/PenAction";
+import * as U from "../u/u";
 
 export class ColorElement {
     private ele: HTMLElement;
@@ -15,7 +16,7 @@ export class ColorElement {
         .on("change", (picker: any, color: string) => this.changed(picker, color));
     }
     public changed(picker: any, color: string) {
-        this.pen.color = color;
+        this.pen.color = U.toRgbHex(color);
     }
 
     public static defcolor(): string {

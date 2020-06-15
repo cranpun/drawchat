@@ -5,7 +5,7 @@ import { PenAction } from "../action/PenAction";
 
 export class EraserElement {
     private ele: HTMLElement;
-    pen: PenAction;
+    private pen: PenAction;
 
     constructor() {
         this.ele = document.querySelector("#act-eraser");

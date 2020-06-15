@@ -1,6 +1,6 @@
 import { DrawEventHandler } from "../DrawEventHandler";
 import { PaperElement } from "../element/PaperElement";
-import { Point, Coord } from "../u/types";
+import { Point } from "../u/types";
 
 export class PointerSensor {
     private sense: DrawEventHandler;
@@ -17,21 +17,21 @@ export class PointerSensor {
         this.addDefaultListener();
     }
 
-    public addDefaultListener() {
+    public addDefaultListener(): void {
         for (const [event, handler] of Object.entries(this.canvashandlers)) {
             this.paper.getCnv().addEventListener(event, handler, { passive: false });
         }
     }
 
-    public removeDefaultListener() {
+    public removeDefaultListener(): void {
         for (const [event, handler] of Object.entries(this.canvashandlers)) {
             this.paper.getCnv().removeEventListener(event, handler);
         }
     }
 
-    private p(e): Coord {
+    private p(e): Point {
         const x: number = e.offsetX;
         const y: number = e.offsetY;
-        return new Coord(x, y);
+        return new Point(x, y);
     }
 }

@@ -31,12 +31,14 @@ export class Draw {
         this.s = [];
         for (const s of strokes) {
             const tmp = new Stroke();
-            tmp.parse(s);
+            tmp.parse(s[0], s[1]);
             this.s.push(tmp);
         }
     }
 }
 export class Stroke {
+    public static readonly TK_ERASER = "e";
+
     public color: string; // 消しゴムの場合はeのみ
     private p: Point[];
     constructor() {
@@ -66,48 +68,40 @@ export class Stroke {
         for (const p of this.p) {
             ret.push(p.json());
         }
-        return `[${ret.join(",")}]`;
+        return `["${this.color}",[${ret.join(",")}]]`;
     }
-    public parse(arr: any[]): void {
+    public parse(color: string, arr: any[]): void {
+        this.color = color;
         this.p = [];
         for (const a of arr) {
-            const tmp = new Point(parseInt(a[0]), parseInt(a[1]), a[2].toString());
+
+            const tmp = new Point(parseInt(a[0]), parseInt(a[1]));
             this.p.push(tmp);
         }
+    }
+    public isEraser() {
+        const ret = this.color === Stroke.TK_ERASER;
+        return ret;
+    }
+    public isPen() {
+        return !this.isEraser();
     }
 }
 
 export class Point {
     public x: number;
     public y: number;
-    public c: string;
-    constructor(x: number, y: number, c: string) {
-        this.x = x;
-        this.y = y;
-        this.c = c;
-    }
-    public json(): string {
-        const ret = `[${this.x},${this.y},${this.c}]`;
-        return ret;
-    }
-    public toCoord(): Coord {
-        return new Coord(this.x, this.y);
-    }
-}
-
-export class Coord {
-    public y: number;
-    public x: number;
     constructor(x: number, y: number) {
         this.x = x;
         this.y = y;
+    }
+    public json(): string {
+        const ret = `[${this.x},${this.y}]`;
+        return ret;
     }
     public isSame(x: number, y: number): boolean {
         const cond1: boolean = x === this.x;
         const cond2: boolean = y === this.y;
         return cond1 && cond2;
-    }
-    public toPoint(color: string): Point {
-        return new Point(this.x, this.y, color);
     }
 }

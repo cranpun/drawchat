@@ -1,34 +1,35 @@
 import { Draw, Stroke, Point } from "../u/types";
 import { MyAxiosApi } from "../u/myaxios";
+import { PenAction } from "../action/PenAction";
 import "../window"
 
 export class DrawData {
-
-    public static readonly TK_ERASER = "e";
-
     private d: Draw;
     private nowstroke: Stroke;
-    private time_prepush: number;
     private user_id: string;
     private paper_id: number;
+    pen: PenAction;
 
     constructor() {
         this.d = new Draw();
         this.nowstroke = new Stroke();
-        this.time_prepush = 0;
         this.user_id = null;
         const urls: string[] = window.location.pathname.split("/");
         const paper_id: number = parseInt(urls[urls.length - 1]);
         this.paper_id = paper_id;
     }
-    public pushPoint(x: number, y: number, color: string): void {
+
+    public init(pen: PenAction) {
+        this.pen = pen;
+    }
+
+    public pushPoint(x: number, y: number): void {
         const now = Date.now();
-        if (this.d.getStrokes().length === 0) {
-            // 初回は現在時間で初期化
-            this.time_prepush = now;
+        if (this.nowstroke.length() === 0) {
+            // 最初の点ならcolorの設定
+            this.nowstroke.color = this.pen.eraser ? Stroke.TK_ERASER : this.pen.color;
         }
-        const p = new Point(x, y, color);
-        this.time_prepush = now;
+        const p = new Point(x, y);
         this.nowstroke.push(p);
     }
 
@@ -70,7 +71,6 @@ export class DrawData {
 
         try {
             const [res_load] = await window.axios.all([api_load]);
-            // 暫定処置。全部同じキャンバスに描画
             let strokes: any[] = [];
             for(const d of (<any[]>res_load.data)) {
                 const obj = JSON.parse(d.json_draw);

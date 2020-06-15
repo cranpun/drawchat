@@ -15,3 +15,6 @@ export function tt(mes: string, tt: boolean = false): void {
     // const val = mes + "\n" + ta.value ;
     // ta.value = val;
 }
+export function toRgbHex(col: string): string {
+    return "#" + col.match(/\d+/g).map(function(a){return ("0" + parseInt(a).toString(16)).slice(-2)}).join("");
+}

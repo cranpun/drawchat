@@ -1,4 +1,4 @@
-import { Point, Tool, Coord } from "../u/types";
+import { Point, Tool } from "../u/types";
 import { DrawcanvasesElement } from "../element/DrawcanvasesElement";
 import { ZoomScrollAction } from "../action/ZoomScrollAction";
 import * as U from "../u/u";
@@ -6,7 +6,7 @@ import * as U from "../u/u";
 export class LongpressStatus {
     private time: number;
     private timeoutids: number[] = []; // 配列だけは初期化
-    private pos: Coord;
+    private pos: Point;
 
     private static readonly SEC_SCROLL: number = 0.2 * 1000;
     private static readonly SEC_EXPAND: number = 1.0 * 1000;
@@ -61,7 +61,7 @@ export class LongpressStatus {
         // 長押しの位置確認
         this.time = Date.now();
 
-        this.pos = new Coord(x, y);
+        this.pos = new Point(x, y);
         zoomscroll.setPoint(x, y);
 
         // 色を変更
