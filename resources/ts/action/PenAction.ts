@@ -30,23 +30,17 @@ export class PenAction {
         ctx.beginPath();
         ctx.lineCap = "round";
         ctx.lineWidth = 2;
-        ctx.strokeStyle = "#000";
+        ctx.strokeStyle = this.eraser.enable ? "#F00" : "#0F0";
         ctx.moveTo(pre.x, pre.y);
         ctx.lineTo(x, y);
         ctx.stroke();
         ctx.restore();
     }
     private erase(x: number, y: number, pre: Point, ctx: CanvasRenderingContext2D):void {
-        // ctx.save();
-        // ctx.globalCompositeOperation = "destination-out";
-        // ctx.beginPath();
-        // ctx.lineCap = "round";
-        // ctx.lineWidth = 2;
-        // ctx.strokeStyle = "#000";
-        // ctx.moveTo(pre.x, pre.y);
-        // ctx.lineTo(x, y);
-        // ctx.stroke();
-        // ctx.globalCompositeOperation = "source-over";
-        // ctx.restore();
+        ctx.save();
+        // 移動距離で消す範囲を調整
+        const d = Math.abs(x - pre.x) + Math.abs(y - pre.y);
+        ctx.clearRect(x -d, y - d, d * 2, d * 2);
+        ctx.restore();
     }
 }

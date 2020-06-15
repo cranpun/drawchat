@@ -10,5 +10,8 @@
         "noImplicitThis": true,
         "noImplicitUseStrict": true,
         "allowSyntheticDefaultImports": true
-    }
+    },
+    "exclude": [
+        "node_modules"
+    ]
 }
