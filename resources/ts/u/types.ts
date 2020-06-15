@@ -3,6 +3,7 @@ export type Tool = "pen" | "scroll" | "zoom";
 export type Device = "mouse" | "touch" | "pointer";
 
 export class Draw {
+    private user_id: number;
     private s: Stroke[];
     constructor() {
         this.s = [];

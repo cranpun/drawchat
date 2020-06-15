@@ -68,7 +68,7 @@ export class DrawEventHandler {
         this.device.pointer.init(this, this.mydata.paper);
         this.device.touch.init(this, this.mydata.paper, this.action.zoomscroll);
 
-        this.action.load.init(this.otherdata.paper, this.otherdata.datastore, this.action.redraw, this.otherdata.pen);
+        this.action.load.init(this.otherdata.paper, this.otherdata.datastore, this.otherdata.pen);
         this.action.zoomscroll.init(this.element.wrapdiv, this.element.zoomscroll);
         this.mydata.pen.init(color);
 
