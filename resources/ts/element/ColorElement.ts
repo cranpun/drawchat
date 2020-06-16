@@ -16,6 +16,6 @@ export class ColorElement {
         .on("change", (picker: any, color: string) => this.changed(picker, color));
     }
     public changed(picker: any, color: string) {
-        this.pen.color = U.toRgbHex(color);
+        this.pen.opt.color = U.toRgbHex(color);
     }
 }

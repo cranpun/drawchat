@@ -33,32 +33,26 @@ $ch = 1600;
                 </a>
 
                 <a id="act-save" class="navbar-item">
-                    保存
+                    <i class="fas fa-save"></i>
+                </a>
+
+                <a id="act-undo" class="navbar-item">
+                    <i class="fas fa-undo"></i>
+                </a>
+
+                <a id="act-eraser" class="navbar-item has-background-light">
+                    <i class="fas fa-eraser"></i>
                 </a>
 
                 <span class="navbar-item">
-                    <button id="act-eraser" class="button is-small is-light">
-                    <i class="fas fa-eraser"></i>
-                    </button>
+                    <span id="zoom-label"></span>
                 </span>
-
-                <span id="zoomscroll" class="navbar-item">
-                    <span style="padding: 0px 5px;">
-                        <span id="zoom-label"></span>
-                    </span>
-                    <span class="field has-addons buttons are-small">
-                        <span class="control">
-                            <button id="zoom-minus" class="button">
-                            <i class="fas fa-search-minus"></i>
-                            </button>
-                        </span>
-                        <span class="control">
-                            <button id="zoom-plus" class="button">
-                            <i class="fas fa-search-plus"></i>
-                            </button>
-                        </span>
-                    </span>
-                </span>
+                <a id="zoom-minus" class="navbar-item">
+                    <i class="fas fa-search-minus"></i>
+                </a>
+                <a id="zoom-plus" class="navbar-item">
+                    <i class="fas fa-search-plus"></i>
+                <a>
                 <a id="toolbox-burger" role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
                     data-target="navbarPaper">
                     <span aria-hidden="true"></span>

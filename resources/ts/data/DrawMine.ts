@@ -27,7 +27,7 @@ export class DrawMine {
         const now = Date.now();
         if (this.nowstroke.length() === 0) {
             // 最初の点ならcolorの設定
-            this.nowstroke.color = this.pen.eraser ? Stroke.TK_ERASER : this.pen.color;
+            this.nowstroke.color = this.pen.opt.eraser ? Stroke.TK_ERASER : this.pen.opt.color;
         }
         const p = new Point(x, y);
         this.nowstroke.push(p);

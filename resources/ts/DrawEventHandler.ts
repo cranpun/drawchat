@@ -13,7 +13,7 @@ import { DrawcanvasesElement } from "./element/DrawcanvasesElement";
 import { DrawStatus } from "./data/DrawStatus";
 import { LongpressStatus } from "./data/LongpressStatus";
 import { PenAction } from "./action/PenAction";
-import { RedrawAction } from "./action/RedrawAction";
+import { UndoElement } from "./element/UndoElement";
 import { ZoomScrollAction } from "./action/ZoomScrollAction";
 import { ZoomElement } from "./element/ZoomElement";
 import { EraserElement } from "./element/EraserElement";
@@ -32,11 +32,11 @@ export class DrawEventHandler {
         save: new SaveElement(),
         eraser: new EraserElement(),
         color: new ColorElement(),
+        undo: new UndoElement(),
     };
     private action = {
-        "load": new LoadAction(),
-        "redraw": new RedrawAction(),
-        "zoomscroll": new ZoomScrollAction(),
+        load: new LoadAction(),
+        zoomscroll: new ZoomScrollAction(),
     };
 
     private mine = {
@@ -66,6 +66,7 @@ export class DrawEventHandler {
         this.element.save.init(this.mine.draw);
         this.element.color.init(this.mine.pen, color);
         this.element.eraser.init(this.mine.pen);
+        this.element.undo.init(this.mine.paper, this.mine.draw, this.mine.pen);
 
         this.device.mouse.init(this, this.mine.paper);
         this.device.pointer.init(this, this.mine.paper);
@@ -93,7 +94,7 @@ export class DrawEventHandler {
         e.stopPropagation();
         const x: number = p.x;
         const y: number = p.y;
-        U.dp(`${dev}-down(${x},${y})=${this.nowsensor}`);
+        U.pd(`${dev}-down(${x},${y})=${this.nowsensor}`);
 
         this.nowsensor = dev;
         this.status.draw.startStroke();
@@ -104,7 +105,7 @@ export class DrawEventHandler {
         e.preventDefault();
         const x: number = p.x;
         const y: number = p.y;
-        U.dp(`${dev}-move(${x},${y})=${this.nowsensor}`);
+        U.pd(`${dev}-move(${x},${y})=${this.nowsensor}`);
 
         // 無視する条件
         if (this.nowsensor === null // デバイス未決定なので何もしない
@@ -127,7 +128,7 @@ export class DrawEventHandler {
                 // 単押し移動＝記述
                 const p = this.mine.draw.lastPoint();
                 this.mine.pen.proc(x, y, p, this.mine.paper);
-                const c = this.mine.pen.color;
+                const c = this.mine.pen.opt.color;
                 this.mine.draw.pushPoint(x, y);
                 break;
             case "zoom":
@@ -142,7 +143,7 @@ export class DrawEventHandler {
         const y: number = p.y;
 
         e.preventDefault();
-        U.dp(`${dev}-up(${x},${y})=${this.nowsensor}`);
+        U.pd(`${dev}-up(${x},${y})=${this.nowsensor}`);
 
         // 現在のツールに応じて処理
         switch (this.status.draw.getTool()) {

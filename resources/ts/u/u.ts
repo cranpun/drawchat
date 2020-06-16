@@ -1,6 +1,6 @@
 const Swal = require("sweetalert2");
 
-export function dp(...mes: any): void {
+export function pd(...mes: any): void {
     console.log(mes);
 }
 export function tt(mes: string) {

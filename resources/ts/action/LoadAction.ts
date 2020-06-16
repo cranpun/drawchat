@@ -15,9 +15,10 @@ export class LoadAction {
         this.proc();
     }
     public async proc(): Promise<void> {
+        U.tt("now loading...");
         await this.datastore.load();
         await this.redraw(this.paper, this.datastore, this.pen);
-        U.dp("loaded!!");
+        U.pd("loaded!!");
         setTimeout(() => this.proc(), 7 * 1000);
     }
 
@@ -41,11 +42,11 @@ export class LoadAction {
             for (const s of strokes) {
 
                 if (s.isEraser()) {
-                    pen.color = s.color; // 色情報は使わないが念の為設定
-                    pen.eraser = true;
+                    pen.opt.color = s.color; // 色情報は使わないが念の為設定
+                    pen.opt.eraser = true;
                 } else {
-                    pen.color = s.color;
-                    pen.eraser = false;
+                    pen.opt.color = s.color;
+                    pen.opt.eraser = false;
                 }
                 for (const p of s.getPoints()) {
                     pen.proc(p.x, p.y, prepoint, paper);

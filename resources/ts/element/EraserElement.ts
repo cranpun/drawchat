@@ -15,12 +15,14 @@ export class EraserElement {
     }
 
     public proc() {
-        this.pen.eraser = !this.pen.eraser;
+        this.pen.opt.eraser = !this.pen.opt.eraser;
+        const enable = "has-background-primary";
+        const disable = "has-background-light";
         // 表示を更新
-        if (this.pen.eraser) {
-            this.ele.classList.replace("is-light", "is-primary");
+        if (this.pen.opt.eraser) {
+            this.ele.classList.replace(disable, enable);
         } else {
-            this.ele.classList.replace("is-primary", "is-light");
+            this.ele.classList.replace(enable, disable);
         }
     }
 }

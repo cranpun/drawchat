@@ -43,7 +43,7 @@ export class ZoomScrollAction {
             behavior: "smooth"
         });
 
-        U.dp(`scroll : ${this.prep.x}-${x}=${dx}, ${this.prep.y}-${y}=${dy}`);
+        U.pd(`scroll : ${this.prep.x}-${x}=${dx}, ${this.prep.y}-${y}=${dy}`);
 
         // ポイントの更新
         this.prep.x = x;

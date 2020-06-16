@@ -7,6 +7,10 @@ export class Draw {
     public push(p: Stroke): void {
         this.s.push(p);
     }
+    public pop(): Stroke {
+        const ret: Stroke = this.s.pop();
+        return ret;
+    }
     public getStrokes(): Stroke[] {
         return this.s;
     }
