@@ -12,10 +12,10 @@ export class LoadAction {
         this.paper = paper;
         this.datastore = datastore;
         this.pen = pen;
+        U.toast.normal("now loading...");
         this.proc();
     }
     public async proc(): Promise<void> {
-        U.tt("now loading...");
         await this.datastore.load();
         await this.redraw(this.paper, this.datastore, this.pen);
         U.pd("loaded!!");

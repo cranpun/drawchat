@@ -18,6 +18,7 @@ import { ZoomScrollAction } from "./action/ZoomScrollAction";
 import { ZoomElement } from "./element/ZoomElement";
 import { EraserElement } from "./element/EraserElement";
 import { ColorElement } from "./element/ColorElement";
+import { BackElement } from "./element/BackElement";
 
 export class DrawEventHandler {
     private paper_id: number;
@@ -33,6 +34,7 @@ export class DrawEventHandler {
         eraser: new EraserElement(),
         color: new ColorElement(),
         undo: new UndoElement(),
+        back: new BackElement(),
     };
     private action = {
         load: new LoadAction(),
@@ -67,6 +69,7 @@ export class DrawEventHandler {
         this.element.color.init(this.mine.pen, color);
         this.element.eraser.init(this.mine.pen);
         this.element.undo.init(this.mine.paper, this.mine.draw, this.mine.pen);
+        this.element.back.init(this.mine.draw);
 
         this.device.mouse.init(this, this.mine.paper);
         this.device.pointer.init(this, this.mine.paper);

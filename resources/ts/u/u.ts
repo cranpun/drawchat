@@ -3,7 +3,8 @@ const Swal = require("sweetalert2");
 export function pd(...mes: any): void {
     console.log(mes);
 }
-export function tt(mes: string) {
+
+function normal(mes: string) {
     Swal.fire({
         text: mes,
         toast: true,
@@ -11,6 +12,23 @@ export function tt(mes: string) {
         timer: 3 * 1000,
         showConfirmButton: false
     });
+}
+async function confirm(mes: string, ok: string, cancel: string): Promise<boolean> {
+    const res = await Swal.fire({
+        text: mes,
+        toast: false,
+        allowOutsideClick: false,
+        showConfirmButton: true,
+        confirmButtonText: ok,
+        showCancelButton: true,
+        cancelButtonText: cancel,
+    });
+    const ret:boolean = res.value;
+    return ret;
+}
+export var toast = {
+    normal: normal,
+    confirm: confirm
 }
 export function toRgbHex(col: string): string {
     return "#" + col.match(/\d+/g).map(function(a){return ("0" + parseInt(a).toString(16)).slice(-2)}).join("");

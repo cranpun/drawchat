@@ -28,7 +28,7 @@ $ch = 1600;
                 <h2 class="navbar-item has-text-primary" data-testid="paper-{{ $paper_id }}">
                     paper {{ $paper_id }}
                 </h2>
-                <a id="act-back" class="navbar-item" href="/">
+                <a id="act-back" class="navbar-item">
                     戻る
                 </a>
 

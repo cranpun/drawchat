@@ -4,19 +4,21 @@ import { PenAction } from "../action/PenAction";
 import "../window"
 
 export class DrawMine {
-    private d: Draw;
+    private draw: Draw;
     private nowstroke: Stroke;
     private user_id: string;
     private paper_id: number;
     private pen: PenAction;
+    private savedStroke: Stroke; // 保存したときのstroke
 
     constructor() {
-        this.d = new Draw();
+        this.draw = new Draw();
         this.nowstroke = new Stroke();
         this.user_id = null;
         const urls: string[] = window.location.pathname.split("/");
         const paper_id: number = parseInt(urls[urls.length - 1]);
         this.paper_id = paper_id;
+        this.savedStroke = null;
     }
 
     public init(pen: PenAction) {
@@ -40,7 +42,7 @@ export class DrawMine {
     public endStroke(): void {
         // Strokeが終わったのでdrawにプッシュ
         if (this.nowstroke.length() > 0) {
-            this.d.push(this.nowstroke);
+            this.draw.push(this.nowstroke);
             // 次に備えてstrokeをクリア
             this.nowstroke = new Stroke();
         }
@@ -50,7 +52,7 @@ export class DrawMine {
         const urls: string[] = window.location.pathname.split("/");
         const paper_id: number = parseInt(urls[urls.length - 1]);
         let postdata = {
-            json_draw: this.d.json(),
+            json_draw: this.draw.json(),
             user_id: this.user_id
         };
         const api_save: MyAxiosApi = window.axios.post(`/api/draw/${paper_id}`, postdata);
@@ -60,6 +62,7 @@ export class DrawMine {
             if (this.user_id === null) {
                 this.user_id = res_save.data["user_id"].toString();
             }
+            this.savedStroke = this.draw.peek();
         } catch (error) {
             console.error(error);
         }
@@ -75,16 +78,27 @@ export class DrawMine {
                 const obj = JSON.parse(d.json_draw);
                 strokes = strokes.concat(obj);
             }
-            this.d.parse(strokes);
+            this.draw.parse(strokes);
         } catch (error) {
             console.error(error);
         }
     }
 
-    public getDraw(): Draw {
-        return this.d;
+    public undo(): Stroke[] {
+        this.draw.getStrokes().pop();
+        const ret = this.draw.getStrokes();
+        return ret;
     }
+
     public getNowStroke(): Stroke {
         return this.nowstroke;
+    }
+
+    /**
+     * 保存したストローク数が正しければ保存済み。増えるばかりではなく、undoで減る場合もあり。
+     */
+    public isSaved(): boolean {
+        const ret:boolean = this.savedStroke === this.draw.peek();
+        return ret;
     }
 }

@@ -18,10 +18,8 @@ export class UndoElement {
         this.ele.addEventListener("click", () => this.proc());
     }
     private proc(): void {
-        // 最新のstrokeを破棄
-        this.draw.getDraw().pop();
-
-        const strokes: Stroke[] = this.draw.getDraw().getStrokes();
+        // 最新のstrokeを破棄して、その内容を取得
+        const strokes: Stroke[] = this.draw.undo();
         // 現在の記述をクリア、設定を保存
         this.paper.clear();
         this.pen.saveOpt();

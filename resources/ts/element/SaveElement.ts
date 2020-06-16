@@ -14,6 +14,6 @@ export class SaveElement {
 
     public async proc(): Promise<void> {
         await this.datastore.save();
-        U.tt("saved");
+        U.toast.normal("saved");
     }
 }

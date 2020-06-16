@@ -7,8 +7,12 @@ export class Draw {
     public push(p: Stroke): void {
         this.s.push(p);
     }
-    public pop(): Stroke {
+    public pop(): Stroke | null {
         const ret: Stroke = this.s.pop();
+        return ret;
+    }
+    public peek(): Stroke | null {
+        const ret: Stroke = this.s.length > 0 ? this.s[this.s.length - 1] : null;
         return ret;
     }
     public getStrokes(): Stroke[] {
@@ -35,6 +39,9 @@ export class Draw {
             tmp.parse(s[0], s[1]);
             this.s.push(tmp);
         }
+    }
+    public length(): number {
+        return this.s.length;
     }
 }
 export class Stroke {
