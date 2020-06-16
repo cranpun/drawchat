@@ -1,14 +1,14 @@
-import { DrawData } from "../data/DrawData";
+import { DrawOther } from "../data/DrawOther";
 import * as U from "../u/u";
 import { PaperElement } from "../element/PaperElement";
 import { PenAction } from "./PenAction";
-import { Stroke, Point } from "../data/Draw";
+import { Stroke, Point, Draw } from "../data/Draw";
 
 export class LoadAction {
     private paper: PaperElement;
-    private datastore: DrawData;
+    private datastore: DrawOther;
     private pen: PenAction;
-    public init(paper: PaperElement, datastore: DrawData, pen: PenAction) {
+    public init(paper: PaperElement, datastore: DrawOther, pen: PenAction) {
         this.paper = paper;
         this.datastore = datastore;
         this.pen = pen;
@@ -17,44 +17,47 @@ export class LoadAction {
     public async proc(): Promise<void> {
         await this.datastore.load();
         await this.redraw(this.paper, this.datastore, this.pen);
-        console.log("loaded!!");
+        U.dp("loaded!!");
         setTimeout(() => this.proc(), 7 * 1000);
     }
 
     private first: boolean = true; // 初回フラグ。ロード時にバタつくため。
-    private async redraw(paper: PaperElement, datastore: DrawData, pen: PenAction): Promise<void> {
-        const strokes: Stroke[] = datastore.getDraw().getStrokes();
+    private async redraw(paper: PaperElement, datastore: DrawOther, pen: PenAction): Promise<void> {
+        const draws: Draw[] = datastore.getDraws();
 
         let prepoint: Point = null;
         if (this.first) {
-            console.log("hidden");
             paper.getCnv().style.visibility = "hidden";
         }
-        for (const s of strokes) {
+        for (const draw of draws) {
             // 現在のcanvasの状態をクローン
             const bkimg: HTMLImageElement = await this.toImage(paper.getCnv());
 
             // クリアして今回の記述を書き込み
             paper.clear();
 
-            if (s.isEraser()) {
-                pen.color = s.color; // 色情報は使わないが念の為設定
-                pen.eraser = true;
-            } else {
-                pen.color = s.color;
-                pen.eraser = false;
+            // 今回の記述を生成
+            const strokes = draw.getStrokes();
+            for (const s of strokes) {
+
+                if (s.isEraser()) {
+                    pen.color = s.color; // 色情報は使わないが念の為設定
+                    pen.eraser = true;
+                } else {
+                    pen.color = s.color;
+                    pen.eraser = false;
+                }
+                for (const p of s.getPoints()) {
+                    pen.proc(p.x, p.y, prepoint, paper);
+                    prepoint = p;
+                }
+                prepoint = null;
             }
-            for (const p of s.getPoints()) {
-                pen.proc(p.x, p.y, prepoint, paper);
-                prepoint = p;
-            }
-            prepoint = null;
 
             // 取っておいたcanvasと重ね合わせ
             paper.getCtx().drawImage(bkimg, 0, 0, bkimg.width, bkimg.height);
         }
         if (this.first) {
-            console.log("visible");
             paper.getCnv().style.visibility = "visible";
             this.first = false;
         }

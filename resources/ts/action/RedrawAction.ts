@@ -1,13 +1,11 @@
-import { DrawData } from "../data/DrawData";
-import * as U from "../u/u";
+import { Point, Stroke } from "../data/Draw";
+import { DrawMine } from "../data/DrawMine";
 import { PaperElement } from "../element/PaperElement";
-import { Draw, Stroke, Point } from "../data/Draw";
-import { PenAction } from "./PenAction";
-import { ColorElement } from "../element/ColorElement";
 import "../window";
+import { PenAction } from "./PenAction";
 
 export class RedrawAction {
-    public async proc(paper: PaperElement, datastore: DrawData, pen: PenAction): Promise<void> {
+    public async proc(paper: PaperElement, datastore: DrawMine, pen: PenAction): Promise<void> {
         const strokes: Stroke[] = datastore.getDraw().getStrokes();
 
         let prepoint: Point = null;

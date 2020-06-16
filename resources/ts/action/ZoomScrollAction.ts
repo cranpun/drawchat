@@ -1,8 +1,7 @@
-import { DrawData } from "../data/DrawData";
-import * as U from "../u/u";
 import { Point } from "../data/Draw";
 import { DrawcanvasesElement } from "../element/DrawcanvasesElement";
 import { ZoomElement } from "../element/ZoomElement";
+import * as U from "../u/u";
 
 export class ZoomScrollAction {
     private wrapdiv: DrawcanvasesElement;
@@ -44,7 +43,7 @@ export class ZoomScrollAction {
             behavior: "smooth"
         });
 
-        console.log("scroll", `${this.prep.x}-${x}=${dx}, ${this.prep.y}-${y}=${dy}`);
+        U.dp(`scroll : ${this.prep.x}-${x}=${dx}, ${this.prep.y}-${y}=${dy}`);
 
         // ポイントの更新
         this.prep.x = x;

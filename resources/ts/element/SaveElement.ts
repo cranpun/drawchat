@@ -1,11 +1,11 @@
-import { DrawData } from "../data/DrawData";
+import { DrawMine } from "../data/DrawMine";
 import * as U from "../u/u";
 
 export class SaveElement {
     private ele: HTMLElement;
-    private datastore: DrawData;
+    private datastore: DrawMine;
 
-    public init(datastore: DrawData) {
+    public init(datastore: DrawMine) {
         this.datastore = datastore;
         this.ele = document.querySelector("#act-save");
         this.ele.addEventListener("click", (e: MouseEvent) => this.proc());
@@ -14,5 +14,6 @@ export class SaveElement {
 
     public async proc(): Promise<void> {
         await this.datastore.save();
+        U.tt("saved");
     }
 }

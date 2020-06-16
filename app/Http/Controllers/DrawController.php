@@ -15,7 +15,7 @@ class DrawController extends Controller
         return response($ret);
     }
 
-    public function my($paper_id, $user_id)
+    public function mine($paper_id, $user_id)
     {
         $q = \App\Draw::where("paper_id", "=", $paper_id);
         $q->where("user_id", "=", $user_id);

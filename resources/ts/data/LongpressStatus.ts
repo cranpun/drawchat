@@ -32,7 +32,7 @@ export class LongpressStatus {
             // スタートしていないので何もしない
             return null;
         }
-        U.tt("end press!!!");
+        U.dp("end press!!!");
 
         // モードの判定
         const now: number = Date.now();
@@ -58,7 +58,7 @@ export class LongpressStatus {
             // 既に開始しているので何もしない
             return;
         }
-        U.tt("start press...");
+        U.dp("start press...");
         // 長押しの位置確認
         this.time = Date.now();
 

@@ -3,12 +3,12 @@ import { MyAxiosApi } from "../u/myaxios";
 import { PenAction } from "../action/PenAction";
 import "../window"
 
-export class DrawData {
+export class DrawMine {
     private d: Draw;
     private nowstroke: Stroke;
     private user_id: string;
     private paper_id: number;
-    pen: PenAction;
+    private pen: PenAction;
 
     constructor() {
         this.d = new Draw();
@@ -60,14 +60,13 @@ export class DrawData {
             if (this.user_id === null) {
                 this.user_id = res_save.data["user_id"].toString();
             }
-            // console.log(res_save);
         } catch (error) {
             console.error(error);
         }
     }
 
     public async load(): Promise<void> {
-        const api_load: MyAxiosApi = window.axios.get(`/api/draw/${this.paper_id}/other/${this.user_id === null ? 0 : this.user_id}`);
+        const api_load: MyAxiosApi = window.axios.get(`/api/draw/${this.paper_id}/mine/${this.user_id === null ? 0 : this.user_id}`);
 
         try {
             const [res_load] = await window.axios.all([api_load]);

@@ -1,8 +1,5 @@
-import { DrawData } from "../data/DrawData";
-import * as U from "../u/u";
-import { PaperElement } from "../element/PaperElement";
 import { Point } from "../data/Draw";
-import { EraserElement } from "../element/EraserElement";
+import { PaperElement } from "../element/PaperElement";
 
 export class PenAction {
     public color: string;

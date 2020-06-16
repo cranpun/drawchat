@@ -1,7 +1,8 @@
 import { Point} from "./data/Draw";
 import { Device } from "./u/types";
 import { PaperElement } from "./element/PaperElement";
-import { DrawData } from "./data/DrawData";
+import { DrawMine } from "./data/DrawMine";
+import { DrawOther } from "./data/DrawOther";
 import * as U from "./u/u";
 import { MouseSensor } from "./sensor/MouseSensor";
 import { PointerSensor } from "./sensor/PointerSensor";
@@ -38,14 +39,14 @@ export class DrawEventHandler {
         "zoomscroll": new ZoomScrollAction(),
     };
 
-    private mydata = {
+    private mine = {
         paper: PaperElement.makeMine(),
-        datastore: new DrawData(),
+        draw: new DrawMine(),
         pen: new PenAction(),
     };
-    private otherdata = {
+    private other = {
         paper: PaperElement.makeOther(),
-        datastore: new DrawData(),
+        draw: new DrawOther(),
         pen: new PenAction(),
     };
     private device = {
@@ -58,22 +59,33 @@ export class DrawEventHandler {
 
         this.nowsensor = null;
 
-        const color = ColorElement.defcolor();
+        const sd = this.loadServerData();
+        const color = sd["#sd-color"];
 
         this.element.zoomscroll.init(this.action.zoomscroll);
-        this.element.save.init(this.mydata.datastore);
-        this.element.color.init(this.mydata.pen, color);
-        this.element.eraser.init(this.mydata.pen);
+        this.element.save.init(this.mine.draw);
+        this.element.color.init(this.mine.pen, color);
+        this.element.eraser.init(this.mine.pen);
 
-        this.device.mouse.init(this, this.mydata.paper);
-        this.device.pointer.init(this, this.mydata.paper);
-        this.device.touch.init(this, this.mydata.paper, this.action.zoomscroll);
+        this.device.mouse.init(this, this.mine.paper);
+        this.device.pointer.init(this, this.mine.paper);
+        this.device.touch.init(this, this.mine.paper, this.action.zoomscroll);
 
-        this.action.load.init(this.otherdata.paper, this.otherdata.datastore, this.otherdata.pen);
+        this.action.load.init(this.other.paper, this.other.draw, this.other.pen);
         this.action.zoomscroll.init(this.element.wrapdiv, this.element.zoomscroll);
-        this.mydata.pen.init(color);
+        this.mine.pen.init(color);
 
-        this.mydata.datastore.init(this.mydata.pen);
+        this.mine.draw.init(this.mine.pen);
+    }
+    private loadServerData(): any[] {
+        const ids: string[] = [
+            "#sd-color"
+        ];
+        const ret = [];
+        for(const id of ids) {
+            ret[id] = document.querySelector(id).innerHTML;
+        }
+        return ret;
     }
 
     public down(dev: Device, e: Event, p: Point): void {
@@ -81,7 +93,7 @@ export class DrawEventHandler {
         e.stopPropagation();
         const x: number = p.x;
         const y: number = p.y;
-        U.tt(`${dev}-down(${x},${y})=${this.nowsensor}`);
+        U.dp(`${dev}-down(${x},${y})=${this.nowsensor}`);
 
         this.nowsensor = dev;
         this.status.draw.startStroke();
@@ -92,7 +104,7 @@ export class DrawEventHandler {
         e.preventDefault();
         const x: number = p.x;
         const y: number = p.y;
-        U.tt(`${dev}-move(${x},${y})=${this.nowsensor}`);
+        U.dp(`${dev}-move(${x},${y})=${this.nowsensor}`);
 
         // 無視する条件
         if (this.nowsensor === null // デバイス未決定なので何もしない
@@ -113,10 +125,10 @@ export class DrawEventHandler {
         switch (this.status.draw.getTool()) {
             case "pen":
                 // 単押し移動＝記述
-                const p = this.mydata.datastore.lastPoint();
-                this.mydata.pen.proc(x, y, p, this.mydata.paper);
-                const c = this.mydata.pen.color;
-                this.mydata.datastore.pushPoint(x, y);
+                const p = this.mine.draw.lastPoint();
+                this.mine.pen.proc(x, y, p, this.mine.paper);
+                const c = this.mine.pen.color;
+                this.mine.draw.pushPoint(x, y);
                 break;
             case "zoom":
                 // さらに長押し＝拡大縮小
@@ -130,7 +142,7 @@ export class DrawEventHandler {
         const y: number = p.y;
 
         e.preventDefault();
-        U.tt(`${dev}-up(${x},${y})=${this.nowsensor}`);
+        U.dp(`${dev}-up(${x},${y})=${this.nowsensor}`);
 
         // 現在のツールに応じて処理
         switch (this.status.draw.getTool()) {
@@ -142,7 +154,7 @@ export class DrawEventHandler {
 
         // 1ストローク終わったので終了
         this.status.draw.endStroke();
-        this.mydata.datastore.endStroke();
+        this.mine.draw.endStroke();
         this.element.wrapdiv.setNormal();
         this.status.longpress.end(); // 長押しのまま離す場合もあり。
         this.nowsensor = null;

@@ -18,9 +18,4 @@ export class ColorElement {
     public changed(picker: any, color: string) {
         this.pen.color = U.toRgbHex(color);
     }
-
-    public static defcolor(): string {
-        const ret = document.querySelector("#sd-color").innerHTML;
-        return ret;
-    }
 }

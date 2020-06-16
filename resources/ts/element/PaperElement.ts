@@ -1,4 +1,3 @@
-import { DrawData } from "../data/DrawData";
 
 export class PaperElement {
     private cnv: HTMLCanvasElement;
