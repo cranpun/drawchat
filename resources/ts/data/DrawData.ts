@@ -1,4 +1,4 @@
-import { Draw, Stroke, Point } from "../u/types";
+import { Draw, Stroke, Point } from "../data/Draw";
 import { MyAxiosApi } from "../u/myaxios";
 import { PenAction } from "../action/PenAction";
 import "../window"

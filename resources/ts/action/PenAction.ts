@@ -1,7 +1,7 @@
 import { DrawData } from "../data/DrawData";
 import * as U from "../u/u";
 import { PaperElement } from "../element/PaperElement";
-import { Point } from "../u/types";
+import { Point } from "../data/Draw";
 import { EraserElement } from "../element/EraserElement";
 
 export class PenAction {

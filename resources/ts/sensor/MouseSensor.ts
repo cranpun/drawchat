@@ -1,6 +1,6 @@
 import { DrawEventHandler } from "../DrawEventHandler";
 import { PaperElement } from "../element/PaperElement";
-import { Point } from "../u/types";
+import { Point } from "../data/Draw";
 
 export class MouseSensor {
     private sense: DrawEventHandler;

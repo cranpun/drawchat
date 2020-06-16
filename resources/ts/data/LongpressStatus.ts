@@ -1,4 +1,5 @@
-import { Point, Tool } from "../u/types";
+import { Point } from "../data/Draw";
+import { Tool } from "../u/types";
 import { DrawcanvasesElement } from "../element/DrawcanvasesElement";
 import { ZoomScrollAction } from "../action/ZoomScrollAction";
 import * as U from "../u/u";

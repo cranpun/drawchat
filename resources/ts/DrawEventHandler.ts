@@ -1,4 +1,5 @@
-import { DrawEvent, Point, Tool, Device } from "./u/types";
+import { Point} from "./data/Draw";
+import { Device } from "./u/types";
 import { PaperElement } from "./element/PaperElement";
 import { DrawData } from "./data/DrawData";
 import * as U from "./u/u";

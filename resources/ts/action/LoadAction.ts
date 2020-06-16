@@ -2,7 +2,7 @@ import { DrawData } from "../data/DrawData";
 import * as U from "../u/u";
 import { PaperElement } from "../element/PaperElement";
 import { PenAction } from "./PenAction";
-import { Stroke, Point } from "../u/types";
+import { Stroke, Point } from "../data/Draw";
 
 export class LoadAction {
     private paper: PaperElement;

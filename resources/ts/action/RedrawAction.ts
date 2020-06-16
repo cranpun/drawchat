@@ -1,7 +1,7 @@
 import { DrawData } from "../data/DrawData";
 import * as U from "../u/u";
 import { PaperElement } from "../element/PaperElement";
-import { Draw, Stroke, Point } from "../u/types";
+import { Draw, Stroke, Point } from "../data/Draw";
 import { PenAction } from "./PenAction";
 import { ColorElement } from "../element/ColorElement";
 import "../window";

@@ -1,6 +1,6 @@
 import { DrawData } from "../data/DrawData";
 import * as U from "../u/u";
-import { Point } from "../u/types";
+import { Point } from "../data/Draw";
 import { DrawcanvasesElement } from "../element/DrawcanvasesElement";
 import { ZoomElement } from "../element/ZoomElement";
 

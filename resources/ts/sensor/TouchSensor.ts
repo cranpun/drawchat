@@ -1,6 +1,6 @@
 import { DrawEventHandler } from "../DrawEventHandler";
 import { PaperElement } from "../element/PaperElement";
-import { Point } from "../u/types";
+import { Point } from "../data/Draw";
 import * as U from "../u/u";
 import { ZoomScrollAction } from "../action/ZoomScrollAction";
 export class TouchSensor {

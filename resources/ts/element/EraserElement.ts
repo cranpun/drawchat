@@ -1,6 +1,3 @@
-import { DrawData } from "../data/DrawData";
-import { Stroke } from "../u/types";
-import * as U from "../u/u";
 import { PenAction } from "../action/PenAction";
 
 export class EraserElement {
