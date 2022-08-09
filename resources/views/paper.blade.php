@@ -28,53 +28,52 @@ $ch = 1600;
                 <h2 class="navbar-item has-text-primary" data-testid="paper-{{ $paper_id }}">
                     paper {{ $paper_id }}
                 </h2>
-                <a id="act-back" class="navbar-item">
-                    戻る
-                </a>
-
-                <a id="act-save" class="navbar-item">
-                    <i class="fas fa-save"></i>
-                </a>
-
-                <a id="act-undo" class="navbar-item">
-                    <i class="fas fa-undo"></i>
-                </a>
-
-                <a id="act-eraser" class="navbar-item has-background-light">
-                    <i class="fas fa-eraser"></i>
-                </a>
-
-                <span class="navbar-item">
-                    <span id="zoom-label"></span>
-                </span>
-                <a id="zoom-minus" class="navbar-item">
-                    <i class="fas fa-search-minus"></i>
-                </a>
-                <a id="zoom-plus" class="navbar-item">
-                    <i class="fas fa-search-plus"></i>
-                <a>
-                <a id="toolbox-burger" role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
-                    data-target="navbarPaper">
+                <a id="toolbox-burger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="toolbox">
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>
-                    <script type="text/javascript">
-                    window.addEventListener("load", function() {
-                        const burger = document.querySelector("#toolbox-burger");
-                        const active = function() {
-                            const menu = document.querySelector("#navbarPaper");
-                            menu.classList.toggle("is-active");
-                            burger.classList.toggle("is-active");
-                        }
-                        burger.addEventListener("click", active);
-                        burger.addEventListener("touchend", active);
-                    });
-                    </script>
                 </a>
+                <script type="text/javascript">
+                window.addEventListener("load", function() {
+                    const burger = document.querySelector("#toolbox-burger");
+                    const active = function() {
+                        const menu = document.querySelector("#toolbox-menu");
+                        menu.classList.toggle("is-active");
+                        burger.classList.toggle("is-active");
+                    }
+                    burger.addEventListener("click", active);
+                    burger.addEventListener("touchend", active);
+                });
+                </script>
             </section>
 
-            <section id="navbarPaper" class="navbar-menu">
-                <div class="navbar-start">
+            <section id="toolbox-menu" class="navbar-menu">
+                <section class="navbar-start">
+                    <a id="act-back" class="navbar-item">
+                        戻る
+                    </a>
+
+                    <a id="act-save" class="navbar-item">
+                        <i class="fas fa-save"></i>
+                    </a>
+
+                    <a id="act-undo" class="navbar-item">
+                        <i class="fas fa-undo"></i>
+                    </a>
+
+                    <a id="act-eraser" class="navbar-item has-background-light">
+                        <i class="fas fa-eraser"></i>
+                    </a>
+
+                    <span class="navbar-item">
+                        <span id="zoom-label"></span>
+                    </span>
+                    <a id="zoom-minus" class="navbar-item">
+                        <i class="fas fa-search-minus"></i>
+                    </a>
+                    <a id="zoom-plus" class="navbar-item">
+                        <i class="fas fa-search-plus"></i>
+                    <a>
                     <div class="navbar-item has-dropdown is-hoverable has-dropdown-up">
                         <a class="navbar-link">
                             ツール
@@ -99,16 +98,9 @@ $ch = 1600;
                                 }
                                 </style>
                             </span>
-                            <span class="navbar-item">
-                                submenu
-                            </span>
-                            <hr class="navbar-divider">
-                            <span class="navbar-item">
-                                Report an issue
-                            </span>
                         </div>
                     </div>
-                </div>
+                </section>
             </section>
         </nav>
     </header>
