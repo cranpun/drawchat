@@ -7,7 +7,9 @@ RUN yum -y install httpd epel-release oepnssl mod_ssl less unzip nano
 
 # php https://rpms.remirepo.net/
 RUN rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
-RUN yum -y install --enablerepo=remi,remi-php72 php php-devel php-mbstring php-pdo php-gd php-mysqlnd php-intl php-pecl-xdebug php-dom
+RUN yum-config-manager --disable 'remi-php'
+RUN yum-config-manager --enable 'remi-php81'
+RUN yum -y install php php-devel php-mbstring php-pdo php-gd php-mysqlnd php-intl php-pecl-xdebug php-dom
 ## php
 COPY zzz-myphp.ini /etc/php.d/
 
@@ -15,7 +17,7 @@ COPY zzz-myphp.ini /etc/php.d/
 COPY MariaDB.repo /etc/yum.repos.d/
 RUN yum -y install MariaDB-server
 COPY zzz-my.cnf /etc/my.cnf.d/
-RUN mkdir /var/www/adminer; curl -L https://github.com/vrana/adminer/releases/download/v4.7.6/adminer-4.7.6-mysql.php > /var/www/adminer/index.php;
+RUN mkdir /var/www/adminer; curl -L https://github.com/vrana/adminer/releases/download/v4.8.1/adminer-4.8.1-mysql.php > /var/www/adminer/index.php;
 COPY zzz-vhosts.conf /etc/httpd/conf.d/
 
 RUN systemctl enable httpd

@@ -14,7 +14,7 @@ html {
 </head>
 
 <?php
-$cw = 2200;
+$cw = 375;
 $ch = 1600;
 ?>
 <body style="padding: 10px; display: inline-block;">
@@ -45,6 +45,9 @@ $ch = 1600;
                     burger.addEventListener("touchend", active);
                 });
                 </script>
+                <button>
+                    <i class="fa-solid fa-hand-back-point-up"></i>
+                </button>
             </section>
 
             <section id="toolbox-menu" class="navbar-menu">
@@ -109,7 +112,7 @@ $ch = 1600;
         <style type="text/css">
             #drawcanvases {
                 border: 3px solid #aaa;
-                border-radius: 5px;　
+                border-radius: 5px;
                 transform-origin: top left;
                 position: relative;
             }

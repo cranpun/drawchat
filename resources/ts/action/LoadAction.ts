@@ -12,14 +12,16 @@ export class LoadAction {
         this.paper = paper;
         this.datastore = datastore;
         this.pen = pen;
-        U.toast.normal("now loading...");
+        // U.toast.normal("now loading...");
         this.proc();
     }
     public async proc(): Promise<void> {
+        const sec = 7;
         await this.datastore.load();
         await this.redraw(this.paper, this.datastore, this.pen);
-        U.pd("loaded!!");
-        setTimeout(() => this.proc(), 7 * 1000);
+        U.toast.normal(`load ${sec} sec.`);
+        // U.pd("loaded!!");
+        setTimeout(() => this.proc(), sec * 1000);
     }
 
     private first: boolean = true; // 初回フラグ。ロード時にバタつくため。
