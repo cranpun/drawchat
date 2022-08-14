@@ -8,7 +8,7 @@ function normal(mes: string) {
     Swal.fire({
         text: mes,
         toast: true,
-        position: "bottom-end",
+        position: "top-end",
         timer: 3 * 1000,
         showConfirmButton: false
     });

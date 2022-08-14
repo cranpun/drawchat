@@ -16,10 +16,10 @@ export class LoadAction {
         this.proc();
     }
     public async proc(): Promise<void> {
-        const sec = 7;
+        const sec = 3;
         await this.datastore.load();
         await this.redraw(this.paper, this.datastore, this.pen);
-        U.toast.normal(`load ${sec} sec.`);
+        // U.toast.normal(`load ${sec} sec.`);
         // U.pd("loaded!!");
         setTimeout(() => this.proc(), sec * 1000);
     }
