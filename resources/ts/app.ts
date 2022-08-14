@@ -1,8 +1,4 @@
 import { DrawEventHandler } from "./DrawEventHandler";
-import smoothscroll from "smoothscroll-polyfill";
-smoothscroll.polyfill();
-
-require("./bootstrap");
 
 window.addEventListener("load", async () => {
     if (document.querySelector("#drawcanvases")) {

@@ -42,8 +42,8 @@ class DrawController extends Controller
     {
         // 前回の記述を削除
         $data = new \App\Draw();
-        $data->user_id = $request->input("user_id", $this->userid($paper_id));
-        $data->user_id = $data->user_id == null ? $this->userid($paper_id) : $data->user_id;
+        $data->user_id = $request->input("user_id", null);
+        $data->user_id = in_array($data->user_id, [null, "null"]) ? $this->userid($paper_id) : $data->user_id;
         $data->json_draw = $request->input("json_draw", "");
         $data->paper_id = $paper_id;
         $data->save();
@@ -59,7 +59,11 @@ class DrawController extends Controller
     {
         $q = \App\Draw::where("paper_id", "=", $paper_id);
         $ret = $q->max("user_id");
-        $ret++; // 次のユーザIDなので+1
-        return $ret;
+        if($ret) {
+            return $ret + 1;
+        } else {
+            // 最初のユーザなので1
+            return 1;
+        }
     }
 }

@@ -47,8 +47,26 @@ export class DrawMine {
             this.nowstroke = new Stroke();
         }
     }
-
     public async save(): Promise<void> {
+        const urls: string[] = window.location.pathname.split("/");
+        const paper_id: number = parseInt(urls[urls.length - 1]);
+        const url = `/api/draw/${paper_id}`;
+        const postdata = new FormData();
+        postdata.append("json_draw", this.draw.json());
+        postdata.append("user_id", this.user_id);
+        const option: RequestInit = {
+            method: "POST",
+            body: postdata,
+        }
+        const response = await fetch(url, option);
+        const res_save = JSON.parse(await response.text());
+        if (this.user_id === null) {
+            this.user_id = res_save.user_id.toString();
+        }
+        this.savedStroke = this.draw.peek();
+}
+
+    public async saveAxios(): Promise<void> {
         const urls: string[] = window.location.pathname.split("/");
         const paper_id: number = parseInt(urls[urls.length - 1]);
         let postdata = {
@@ -74,7 +92,7 @@ export class DrawMine {
         try {
             const [res_load] = await window.axios.all([api_load]);
             let strokes: any[] = [];
-            for(const d of (<any[]>res_load.data)) {
+            for (const d of (<any[]>res_load.data)) {
                 const obj = JSON.parse(d.json_draw);
                 strokes = strokes.concat(obj);
             }
@@ -98,7 +116,7 @@ export class DrawMine {
      * 保存したストローク数が正しければ保存済み。増えるばかりではなく、undoで減る場合もあり。
      */
     public isSaved(): boolean {
-        const ret:boolean = this.savedStroke === this.draw.peek();
+        const ret: boolean = this.savedStroke === this.draw.peek();
         return ret;
     }
 }

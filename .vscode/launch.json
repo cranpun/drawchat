@@ -8,7 +8,7 @@
             "name": "Listen for XDebug",
             "type": "php",
             "request": "launch",
-            "port": 9000,
+            "port": 9013,
             "pathMappings": {
                 "/var/www/html": "${workspaceRoot}"
             },
@@ -16,9 +16,11 @@
                 // Illuminate\Contracts\Encryption\DecryptException: The payload is invalid.
                 "**/vendor/laravel/framework/src/Illuminate/Encryption/Encrypter.php",
                 "**/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php",
+                "**/vendor/laravel/framework/src/Illuminate/View/FileViewFinder.php",
                 // "**/vendor/**/*.php",
                 "/var/www/adminer/index.php",
-            ]        },
+            ]
+        },
         {
             "name": "Launch currently open script",
             "type": "php",
