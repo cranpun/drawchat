@@ -74,9 +74,9 @@
                 </div>
             @endif
 
-            <div class="content">
+            <div class="content" style="padding: 3em;">
                 <div class="title m-b-md">
-                    Drawchat
+                    Draw<br/>chat
                 </div>
                 <div style="text-align: left"><a href="/paper">new paper</a></div>
                 <ul class="links" style="text-align: left">

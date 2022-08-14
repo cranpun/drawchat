@@ -83,7 +83,7 @@ $ch = 1600;
                         </a>
 
                         <div class="navbar-dropdown">
-                            <span class="navbar-item">
+                            <span class="navbar-item" style="display: none;">
                                 <div
                                     id="pen-color"
                                     class="picker"
