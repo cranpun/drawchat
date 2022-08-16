@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="has-navbar-fixed-bottom">
 <style type="text/css">
-html {
-    transform-origin: top left;
-    overflow-x: scroll;
-}
+    html {
+        transform-origin: top left;
+        overflow-x: scroll;
+    }
 </style>
+
 <head>
     @include("element/head")
     <title>{{ config("app.name") }}</title>
@@ -14,91 +15,112 @@ html {
 </head>
 
 <?php
-$cw = 375;
+$cw = 340;
 $ch = 1600;
 ?>
+
 <body style="padding: 10px; display: inline-block;">
     <section id="serverdata" style="display: none;">
-        <!-- MYTODO serverからのデータ -->
         <div id="sd-color">#00F</div>
     </section>
     <header id="toolbox">
         <nav class="navbar is-light is-fixed-bottom" role="navigation" aria-label="main navigation">
             <section class="navbar-brand">
-                <h2 class="navbar-item has-text-primary" data-testid="paper-{{ $paper_id }}">
-                    paper {{ $paper_id }}
-                </h2>
+                <a id="act-save" class="navbar-item">
+                    <i class="fas fa-save"></i>
+                </a>
+
+                <div class="dropdown is-up">
+                    <div class="dropdown-trigger navbar-item">
+                        <a class="" aria-haspopup="true" aria-controls="dropdown-menu">
+                            <span class="not-trigger">色</span>
+                            <span class="icon is-small not-trigger">
+                                <i class="fas fa-angle-up" aria-hidden="true"></i>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                        <div class="dropdown-content">
+                            <span class="dropdown-item" style="background: red; color: white;">赤</span>
+                            <span class="dropdown-item" style="background: green; color: white;">緑</span>
+                        </div>
+                    </div>
+                </div>
+
+                <a id="act-eraser" class="navbar-item has-background-light">
+                    <i class="fas fa-eraser"></i>
+                </a>
+
+                <div class="dropdown is-up">
+                    <div class="dropdown-trigger navbar-item">
+                        <a class="" aria-haspopup="true" aria-controls="dropdown-menu">
+                            <span id="zoom-label" class="not-trigger"></span>
+                            <span class="icon is-small not-trigger">
+                                <i class="fas fa-angle-up" aria-hidden="true"></i>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                        <div class="dropdown-content">
+                            <a id="zoom-plus" class="dropdown-item">
+                                <i class="fas fa-search-plus"></i>
+                                <span>拡大</span>
+                            <a>
+                            <a id="zoom-minus" class="dropdown-item">
+                                <i class="fas fa-search-minus"></i>
+                                <span>縮小</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
                 <a id="toolbox-burger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="toolbox">
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>
                 </a>
+
                 <script type="text/javascript">
-                window.addEventListener("load", function() {
-                    const burger = document.querySelector("#toolbox-burger");
-                    const active = function() {
-                        const menu = document.querySelector("#toolbox-menu");
-                        menu.classList.toggle("is-active");
-                        burger.classList.toggle("is-active");
-                    }
-                    burger.addEventListener("click", active);
-                    burger.addEventListener("touchend", active);
-                });
+                    window.addEventListener("load", function() {
+                        const burger = document.querySelector("#toolbox-burger");
+                        const active = function() {
+                            const menu = document.querySelector("#toolbox-menu");
+                            menu.classList.toggle("is-active");
+                            burger.classList.toggle("is-active");
+                        }
+                        burger.addEventListener("click", active);
+                        burger.addEventListener("touchend", active);
+                    });
                 </script>
-                <button>
-                    <i class="fa-solid fa-hand-back-point-up"></i>
-                </button>
             </section>
 
             <section id="toolbox-menu" class="navbar-menu">
                 <section class="navbar-start">
+                    <h2 class="navbar-item has-text-primary" data-testid="paper-{{ $paper_id }}">
+                        paper {{ $paper_id }}
+                    </h2>
                     <a id="act-back" class="navbar-item">
-                        戻る
+                        一覧に戻る
                     </a>
 
-                    <a id="act-save" class="navbar-item">
-                        <i class="fas fa-save"></i>
-                    </a>
-
-                    <a id="act-undo" class="navbar-item">
+                    <a id="act-undo" class="navbar-item" style="display: none">
                         <i class="fas fa-undo"></i>
                     </a>
 
-                    <a id="act-eraser" class="navbar-item has-background-light">
-                        <i class="fas fa-eraser"></i>
-                    </a>
-
-                    <span class="navbar-item">
-                        <span id="zoom-label"></span>
-                    </span>
-                    <a id="zoom-minus" class="navbar-item">
-                        <i class="fas fa-search-minus"></i>
-                    </a>
-                    <a id="zoom-plus" class="navbar-item">
-                        <i class="fas fa-search-plus"></i>
-                    <a>
-                    <div class="navbar-item has-dropdown is-hoverable has-dropdown-up">
+                    <div class="navbar-item has-dropdown is-hoverable has-dropdown-up" style="display: none;">
                         <a class="navbar-link">
-                            ツール
+                            色
                         </a>
 
                         <div class="navbar-dropdown">
                             <span class="navbar-item" style="display: none;">
-                                <div
-                                    id="pen-color"
-                                    class="picker"
-                                    acp-palette="black|red|green|pink|skyblue"
-                                    acp-palette-editable
-                                    acp-show-rgb="no"
-                                    acp-show-hsl="no"
-                                    acp-show-hex="no"
-                                ></div>
+                                <div id="pen-color" class="picker" acp-palette="black|red|green|pink|skyblue" acp-palette-editable acp-show-rgb="no" acp-show-hsl="no" acp-show-hex="no"></div>
                                 <style type="text/css">
-                                .picker {
-                                    display: inline-block;
-                                    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(3, 1, 1, 0.08);
-                                    width: 100%;
-                                }
+                                    .picker {
+                                        display: inline-block;
+                                        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(3, 1, 1, 0.08);
+                                        width: 100%;
+                                    }
                                 </style>
                             </span>
                         </div>
@@ -120,8 +142,8 @@ $ch = 1600;
             #drawcanvases,
             #mycanvas,
             #othercanvas {
-                width: <?=$cw?>px;
-                height: <?=$ch?>px;
+                width: <?= $cw ?>px;
+                height: <?= $ch ?>px;
             }
 
             #mycanvas,
@@ -132,8 +154,8 @@ $ch = 1600;
             }
         </style>
         <div id="drawcanvases">
-            <canvas id="mycanvas" width="<?=$cw?>" height="<?=$ch?>" style="cursor: pointer;"></canvas>
-            <canvas id="othercanvas" width="<?=$cw?>" height="<?=$ch?>" style="pointer-events: none;"></canvas>
+            <canvas id="mycanvas" width="<?= $cw ?>" height="<?= $ch ?>" style="cursor: pointer;"></canvas>
+            <canvas id="othercanvas" width="<?= $cw ?>" height="<?= $ch ?>" style="pointer-events: none;"></canvas>
         </div>
         <!-- <textarea id="prompt" style="width: 100%; height: 500px;"></textarea> -->
     </main>

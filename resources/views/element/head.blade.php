@@ -5,6 +5,7 @@
 
 <!-- Fonts -->
 <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
-<link href="{{ asset('css/app.css') . '?v=' . filemtime(public_path() .'/css/app.css') }}" rel="stylesheet">
+<link href="{{ \App\U\U::filetimelink(asset('css/app.css'), public_path() .'/css/app.css') }}" rel="stylesheet">
+<link href="{{ \App\U\U::filetimelink(asset('css/style.css'), public_path() .'/css/style.css') }}" rel="stylesheet">
 <!-- <link rel="shortcut icon" href="https://tm.cranpun-tool.ml/wp-content/themes/themeorg/favicon.ico" /> -->
 

@@ -1,5 +1,4 @@
 import { DrawMine } from "../data/DrawMine";
-import "../window";
 import * as U from "../u/u";
 
 
@@ -9,6 +8,7 @@ export class BackElement {
     constructor() {
         this.ele = document.querySelector("#act-back");
         this.ele.addEventListener("click", () => this.proc());
+        this.ele.addEventListener("touchend", () => this.proc());
     }
     public init(draw: DrawMine) {
         this.draw = draw;

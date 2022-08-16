@@ -1,7 +1,6 @@
 import { Point, Stroke } from "../data/Draw";
 import { DrawMine } from "../data/DrawMine";
 import { PaperElement } from "../element/PaperElement";
-import "../window";
 import { PenAction } from "../action/PenAction";
 
 export class UndoElement {
@@ -16,6 +15,7 @@ export class UndoElement {
         this.ele = document.querySelector("#act-undo");
 
         this.ele.addEventListener("click", () => this.proc());
+        this.ele.addEventListener("touchend", () => this.proc());
     }
     private proc(): void {
         // 最新のstrokeを破棄して、その内容を取得
