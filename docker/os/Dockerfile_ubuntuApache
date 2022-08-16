@@ -6,16 +6,18 @@ RUN apt install -y systemd less nano unzip curl ntpdate tzdata;
 RUN ntpdate ntp.nict.jp
 
 # apache
-RUN apt install -y nginx;
-COPY zzz-nginx.conf /etc/nginx/sites-enabled/
+RUN apt install -y apache2; \
+    a2enmod ssl; \
+    a2enmod rewrite;
+COPY zzz-vhosts.conf /etc/apache2/sites-enabled/
 
 # php
 RUN apt install -y software-properties-common;
 RUN add-apt-repository -y ppa:ondrej/php
 RUN apt -y update && apt -y upgrade && apt -y full-upgrade && apt -y autoremove;
-RUN apt install -y php8.1 php8.1-mbstring php8.1-pdo php8.1-gd php8.1-mysqlnd php8.1-intl php8.1-xdebug php8.1-dom php8.1-curl php8.1-fpm
+RUN apt install -y php8.1 php8.1-mbstring php8.1-pdo php8.1-gd php8.1-mysqlnd php8.1-intl php8.1-xdebug php8.1-dom php8.1-curl
 RUN update-alternatives --set php /usr/bin/php8.1
-COPY zzz-myphp.ini /etc/php/7.4/apache2/conf.d/
+COPY zzz-myphp.ini /etc/php/8.1/apache2/conf.d/
 
 # mariadb
 RUN apt install -y mariadb-server
@@ -25,7 +27,7 @@ COPY zzz-my.cnf /etc/mysql/conf.d/
 RUN mkdir /var/www/adminer; curl -L https://github.com/vrana/adminer/releases/download/v4.8.1/adminer-4.8.1-mysql.php > /var/www/adminer/index.php;
 COPY .htaccess /var/www/adminer/
 
-RUN systemctl enable nginx
+RUN systemctl enable apache2
 RUN systemctl enable mariadb
 
 # clean

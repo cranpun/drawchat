@@ -3,7 +3,7 @@ version: '3.8'
 
 services:
   drawchat:
-    build: ./centos
+    build: ./os
     image: drawchat
     container_name: drawchat
     volumes:

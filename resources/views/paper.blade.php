@@ -96,6 +96,8 @@ $ch = 1600;
 
             <section id="toolbox-menu" class="navbar-menu">
                 <section class="navbar-start">
+                </section>
+                <section class="navbar-end">
                     <h2 class="navbar-item has-text-primary" data-testid="paper-{{ $paper_id }}">
                         paper {{ $paper_id }}
                     </h2>
