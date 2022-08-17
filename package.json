@@ -2,9 +2,9 @@
     "private": true,
     "scripts": {
         "dev": "npx esbuild ./resources/ts/app.ts --bundle --sourcemap=inline --outfile=./public/js/app.js",
-        "devwatch": "",
-        "prod": "",
-        "prodwatch": ""
+        "devwatch": "npx esbuild ./resources/ts/app.ts --watch --bundle --sourcemap=inline --outfile=./public/js/app.js",
+        "prod": "npx esbuild ./resources/ts/app.ts --bundle --minify --outfile=./public/js/app.js",
+        "prodwatch": "npx esbuild ./resources/ts/app.ts --watch --bundle --minify --outfile=./public/js/app.js"
     },
     "devDependencies": {
         "@fortawesome/fontawesome-free": "^6.1.2",
