@@ -13,22 +13,24 @@ export class LoadAction {
         this.datastore = datastore;
         this.pen = pen;
         // U.toast.normal("now loading...");
-        this.proc();
+        this.proc(true);
     }
-    public async proc(): Promise<void> {
+    public async proc(periodic: boolean): Promise<void> {
         const sec = 3;
         await this.datastore.load();
         await this.redraw(this.paper, this.datastore, this.pen);
         // U.toast.normal(`load ${sec} sec.`);
         // U.pd("loaded!!");
-        setTimeout(() => this.proc(), sec * 1000);
+        if(periodic) {
+            setTimeout(() => this.proc(true), sec * 1000);
+        }
     }
 
     private first: boolean = true; // 初回フラグ。ロード時にバタつくため。
     private async redraw(paper: PaperElement, datastore: DrawOther, pen: PenAction): Promise<void> {
         const draws: Draw[] = datastore.getDraws();
 
-        let prepoint: Point = null;
+        let prepoint: Point | null = null;
         if (this.first) {
             paper.getCnv().style.visibility = "hidden";
         }
@@ -69,7 +71,7 @@ export class LoadAction {
     private async toImage(cnv: HTMLCanvasElement): Promise<HTMLImageElement> {
         return new Promise((resolve, reject) => {
             const image: HTMLImageElement = new Image();
-            const ctx: CanvasRenderingContext2D = cnv.getContext("2d");
+            const ctx: CanvasRenderingContext2D = <CanvasRenderingContext2D>cnv.getContext("2d");
             image.onload = () => resolve(image);
             image.onerror = (e) => reject(e);
             image.src = ctx.canvas.toDataURL();

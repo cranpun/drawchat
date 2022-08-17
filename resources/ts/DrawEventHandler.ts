@@ -9,6 +9,7 @@ import { PointerSensor } from "./sensor/PointerSensor";
 import { TouchSensor } from "./sensor/TouchSensor";
 import { SaveElement } from "./element/SaveElement";
 import { LoadAction } from "./action/LoadAction";
+import { LoadElement } from "./element/LoadElement";
 import { DrawcanvasesElement } from "./element/DrawcanvasesElement";
 import { DrawStatus } from "./data/DrawStatus";
 import { PenAction } from "./action/PenAction";
@@ -33,6 +34,7 @@ export class DrawEventHandler {
         color: new ColorElement(),
         undo: new UndoElement(),
         back: new BackElement(),
+        load: new LoadElement(),
     };
     private action = {
         load: new LoadAction(),
@@ -68,6 +70,7 @@ export class DrawEventHandler {
         this.element.eraser.init(this.mine.pen);
         this.element.undo.init(this.mine.paper, this.mine.draw, this.mine.pen);
         this.element.back.init(this.mine.draw);
+        this.element.load.init(this.action.load);
 
         this.device.mouse.init(this, this.mine.paper);
         this.device.pointer.init(this, this.mine.paper);

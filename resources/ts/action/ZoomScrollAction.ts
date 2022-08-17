@@ -6,12 +6,12 @@ import * as U from "../u/u";
 export class ZoomScrollAction {
     private wrapdiv: DrawcanvasesElement;
     private zoomscroll: ZoomElement;
-    private prep: Point = null;
+    private prep: Point | null = null;
     private nowzoom: number = 1;
     private orgw: number = 0;
     private orgh: number = 0;
 
-    private readonly ZOOM_MAX: number = 1;
+    private readonly ZOOM_MAX: number = 2;
     private readonly ZOOM_MIN: number = 0.5;
 
     public init(wrapdiv: DrawcanvasesElement, zoomscroll: ZoomElement) {
@@ -19,19 +19,19 @@ export class ZoomScrollAction {
         this.zoomscroll = zoomscroll;
         this.nowzoom = 1;
         this.zoomscroll.show(this.nowzoom);
-        const ele: HTMLElement = document.querySelector("main");
-        this.orgw = parseInt(ele.style.width.replace("px",""));
-        this.orgh = parseInt(ele.style.height.replace("px",""));
+        const ele: HTMLElement = <HTMLElement>document.querySelector("main");
+        this.orgw = parseInt(ele.style.width.replace("px", ""));
+        this.orgh = parseInt(ele.style.height.replace("px", ""));
     }
     public setPoint(x: number, y: number) {
         this.prep = new Point(x, y);
     }
     public scroll(x: number, y: number): void {
-        if(this.ignore()) {
+        if (this.ignore() || !this.prep) {
             return;
         }
         // 差分の計算
-        const dx =  (this.prep.x - x) * this.nowzoom * 7;
+        const dx = (this.prep.x - x) * this.nowzoom * 7;
         const dy = (this.prep.y - y) * this.nowzoom * 7;
 
         // スクロール実行
@@ -50,6 +50,9 @@ export class ZoomScrollAction {
         this.prep.y = y;
     }
     public zoomdrag(x: number, y: number): void {
+        if (!this.prep) {
+            return;
+        }
         const dy = this.prep.y - y;
         // 移動差分をzoom比率に変換。現在の比率によって差分量を調整（大きいと大きい）
         const diff = dy * 0.0005 * this.nowzoom;
@@ -58,15 +61,15 @@ export class ZoomScrollAction {
         this.prep.x = x;
         this.prep.y = y;
     }
-    public zoomproc(diff: number):void {
+    public zoomproc(diff: number): void {
         this.nowzoom += diff;
         // 範囲補正
         this.nowzoom = Math.min(Math.max(this.nowzoom, this.ZOOM_MIN), this.ZOOM_MAX);
-        const ele: HTMLElement = document.querySelector("main");
+        const ele: HTMLElement = <HTMLElement>document.querySelector("main");
         ele.style.transform = `scale(${this.nowzoom})`;
         this.zoomscroll.show(this.nowzoom);
-        ele.style.width =`${this.orgw * this.nowzoom}px`;
-        ele.style.height =`${this.orgh * this.nowzoom}px`;
+        ele.style.width = `${this.orgw * this.nowzoom}px`;
+        ele.style.height = `${this.orgh * this.nowzoom}px`;
     }
     public getZoom(): number {
         return this.nowzoom;
@@ -74,9 +77,9 @@ export class ZoomScrollAction {
 
     private pretime: number = 0;
     private ignore() {
-        const n:number = Date.now();
+        const n: number = Date.now();
         let ret = true;
-        if(n - this.pretime > 0.01 * 1000) {
+        if (n - this.pretime > 0.01 * 1000) {
             ret = false;
             this.pretime = n;
         }

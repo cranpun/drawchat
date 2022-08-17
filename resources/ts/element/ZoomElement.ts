@@ -9,9 +9,9 @@ export class ZoomElement {
 
     public init(zoomscroll: ZoomScrollAction): void {
         this.zoomscroll = zoomscroll;
-        this.lbl = document.querySelector("#zoom-label");
-        this.btp = document.querySelector("#zoom-plus");
-        this.btm = document.querySelector("#zoom-minus");
+        this.lbl = <HTMLElement>document.querySelector("#zoom-label");
+        this.btp = <HTMLButtonElement>document.querySelector("#zoom-plus");
+        this.btm = <HTMLButtonElement>document.querySelector("#zoom-minus");
 
         this.btp.addEventListener("click", () => this.zoomscroll.zoomproc(0.1));
         this.btp.addEventListener("touchstart", () => this.zoomscroll.zoomproc(0.1));
