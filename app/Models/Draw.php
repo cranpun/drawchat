@@ -1,11 +1,11 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Paper extends Model
+class Draw extends Model
 {
-    protected $table = "paper";
+    protected $table = "draw";
     protected $guarded = ["id"];
 }

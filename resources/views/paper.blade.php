@@ -98,8 +98,8 @@ $ch = 1600;
                 <section class="navbar-start">
                 </section>
                 <section class="navbar-end">
-                    <h2 class="navbar-item has-text-primary" data-testid="paper-{{ $paper_id }}">
-                        paper {{ $paper_id }}
+                    <h2 class="navbar-item has-text-primary" data-testid="paper-{{ $paper->id }}">
+                        {{ (\Carbon\Carbon::parse($paper->created_at))->format("Y-m-d") }}
                     </h2>
                     <a id="act-back" class="navbar-item">
                         一覧に戻る

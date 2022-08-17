@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Paper;
+use App\Models\Paper;
 use Illuminate\Http\Request;
 
 class PaperController extends Controller
@@ -14,7 +14,7 @@ class PaperController extends Controller
      */
     public function index()
     {
-        $q = \App\Paper::orderBy("id", "DESC");
+        $q = \App\Models\Paper::orderBy("id", "DESC");
         $ret = $q->get();
         return view("welcome", ["papers" => $ret]);
     }
@@ -28,14 +28,15 @@ class PaperController extends Controller
     public function show(Request $request, $paper_id = null)
     {
         $now_id = $paper_id;
+        $paper = \App\Models\Paper::find($paper_id);
         if($now_id == null) {
-            $data = new \App\Paper();
+            $data = new \App\Models\Paper();
             $data->save();
             $now_id = $data->id;
             // ページを生成したのでリダイレクト
             return redirect("/paper/{$now_id}");
         }
 
-        return view("paper", ["paper_id" => $now_id]);
+        return view("paper", ["paper" => $paper]);
     }
 }

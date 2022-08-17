@@ -11,8 +11,9 @@
         "a-color-picker": "^1.2.1",
         "axios": "^0.27",
         "cross-env": "^7.0",
+        "date-fns": "^2.29.1",
+        "esbuild": "^0.15.2",
         "smoothscroll-polyfill": "^0.4.4",
-        "sweetalert2": "^11.4.26",
-        "esbuild": "^0.15.2"
+        "sweetalert2": "^11.4.26"
     }
 }
