@@ -7,14 +7,16 @@ export class ColorElement {
 
     public init(pen: PenAction, color: string): void {
         this.pen = pen;
+        const handler = (ev: Event) => {
+            const item = <HTMLElement>ev.target;
+            const color = item.style.backgroundColor;
+            this.pen.opt.color = color;
+            U.toast.normal(`change to ${color}`);
+            // this.pen.opt.color = U.toRgbHex(color);
+        };
         document.querySelectorAll(".pen-color").forEach((ele: HTMLElement) => {
-            ele.addEventListener("click", (ev: Event) => {
-                const item = <HTMLElement>ev.target;
-                const color = item.style.backgroundColor;
-                this.pen.opt.color = color;
-                U.toast.normal(`change to ${color}`);
-                // this.pen.opt.color = U.toRgbHex(color);
-            });
+            ele.addEventListener("click", handler);
+            ele.addEventListener("touchend", handler);
         });
     }
 }

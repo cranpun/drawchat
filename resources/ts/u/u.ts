@@ -16,12 +16,11 @@ function normal(mes: string) {
 async function confirm(mes: string, ok: string, cancel: string): Promise<boolean> {
     const res = await Swal.fire({
         text: mes,
-        toast: false,
         allowOutsideClick: false,
         showConfirmButton: true,
         confirmButtonText: ok,
         showCancelButton: true,
-        cancelButtonText: cancel,
+        cancelButtonText: cancel
     });
     const ret:boolean = res.value;
     return ret;

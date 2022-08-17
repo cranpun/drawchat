@@ -18,7 +18,7 @@ export class PenAction {
         this.optbk = null;
     }
 
-    public proc(x: number, y: number, prep: Point, paper: PaperElement): void {
+    public proc(x: number, y: number, prep: Point | null, paper: PaperElement): void {
         let pre = prep;
         if (pre == null) {
             // 前回の点がなければ今回の点
@@ -33,7 +33,6 @@ export class PenAction {
         }
     }
     private pen(x: number, y: number, pre: Point, ctx: CanvasRenderingContext2D): void {
-        // MYTODO : 点に変更してみては？
         ctx.save()
         ctx.beginPath();
         ctx.lineCap = "round";
@@ -57,7 +56,7 @@ export class PenAction {
         // U.pd(this.optbk);
     }
     public restoreOpt() {
-        for(const [idx, val] of Object.entries(this.optbk)) {
+        for (const [idx, val] of Object.entries(this.optbk)) {
             this.opt[idx] = val;
         }
     }

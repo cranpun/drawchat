@@ -1,5 +1,5 @@
-import { Point} from "./data/Draw";
-import { Device } from "./u/types";
+import { Point } from "./data/Draw";
+import { Device, Tool } from "./u/types";
 import { PaperElement } from "./element/PaperElement";
 import { DrawMine } from "./data/DrawMine";
 import { DrawOther } from "./data/DrawOther";
@@ -11,7 +11,6 @@ import { SaveElement } from "./element/SaveElement";
 import { LoadAction } from "./action/LoadAction";
 import { DrawcanvasesElement } from "./element/DrawcanvasesElement";
 import { DrawStatus } from "./data/DrawStatus";
-import { LongpressStatus } from "./data/LongpressStatus";
 import { PenAction } from "./action/PenAction";
 import { UndoElement } from "./element/UndoElement";
 import { ZoomScrollAction } from "./action/ZoomScrollAction";
@@ -22,10 +21,9 @@ import { BackElement } from "./element/BackElement";
 
 export class DrawEventHandler {
     private paper_id: number;
-    private nowsensor: Device; // タッチ、ポインタ等、まとめて複数のイベントを検知した場合に備えて。
+    private nowsensor: Device | null; // タッチ、ポインタ等、まとめて複数のイベントを検知した場合に備えて。
     private status = {
         draw: new DrawStatus(),
-        longpress: new LongpressStatus()
     };
     private element = {
         wrapdiv: new DrawcanvasesElement(),
@@ -86,8 +84,8 @@ export class DrawEventHandler {
             "#sd-color"
         ];
         const ret = [];
-        for(const id of ids) {
-            ret[id] = document.querySelector(id).innerHTML;
+        for (const id of ids) {
+            ret[id] = document.querySelector(id)?.innerHTML;
         }
         return ret;
     }
@@ -101,7 +99,6 @@ export class DrawEventHandler {
 
         this.nowsensor = dev;
         this.status.draw.startStroke();
-        this.status.longpress.start(this.element.wrapdiv, x, y, this.action.zoomscroll); // 長押し開始地点
     }
 
     public move(dev: Device, e: Event, p: Point): void {
@@ -113,23 +110,19 @@ export class DrawEventHandler {
         // 無視する条件
         if (this.nowsensor === null // デバイス未決定なので何もしない
             || this.nowsensor !== dev // 違うデバイスのイベントなので無視
-            || this.status.longpress.isSamePoint(x, y) // 動いていないので何もしない
+            // 動いていないので何もしない
         ) {
             // do nothing
             return;
         }
 
+        this.status.draw.setTool("pen");
 
-        if (this.status.longpress.isStart()) {
-            // 長押し時間の判定
-            const tool = this.status.longpress.end();
-            this.status.draw.setTool(tool);
-        }
         // 現在のツールに応じて処理
         switch (this.status.draw.getTool()) {
             case "pen":
                 // 単押し移動＝記述
-                const p = this.mine.draw.lastPoint();
+                const p: Point | null = this.mine.draw.lastPoint();
                 this.mine.pen.proc(x, y, p, this.mine.paper);
                 const c = this.mine.pen.opt.color;
                 this.mine.draw.pushPoint(x, y);
@@ -160,7 +153,6 @@ export class DrawEventHandler {
         this.status.draw.endStroke();
         this.mine.draw.endStroke();
         this.element.wrapdiv.setNormal();
-        this.status.longpress.end(); // 長押しのまま離す場合もあり。
         this.nowsensor = null;
     }
 }
