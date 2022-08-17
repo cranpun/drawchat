@@ -19,10 +19,12 @@ export class DrawOther {
         this.pen = pen;
     }
     public async load(): Promise<void> {
-        const url = `/api/draw/${this.paper_id}/other/${this.user_id === null ? 0 : this.user_id}`;
+        const url = `/api/draw/${this.paper_id}`;
         const response = await fetch(url);
         const text = await response.text();
 
+        // 一旦空にして格納し直し
+        this.draws.splice(0, this.draws.length);
         for(const d of JSON.parse(text)) {
             const obj = JSON.parse(d.json_draw);
             const draw = new Draw();

@@ -2,18 +2,21 @@ export class Draw {
     private user_id: number;
     private s: Stroke[];
     constructor() {
-        this.s = [];
+        this.clear();
     }
     public push(p: Stroke): void {
         this.s.push(p);
     }
     public pop(): Stroke | null {
-        const ret: Stroke = this.s.pop();
+        const ret: Stroke | null = this.s.pop();
         return ret;
     }
     public peek(): Stroke | null {
-        const ret: Stroke = this.s.length > 0 ? this.s[this.s.length - 1] : null;
+        const ret: Stroke | null = this.s.length > 0 ? this.s[this.s.length - 1] : null;
         return ret;
+    }
+    public clear(): void {
+        this.s = [];
     }
     public getStrokes(): Stroke[] {
         return this.s;

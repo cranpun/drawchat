@@ -33,7 +33,7 @@ $ch = 1600;
                 <div class="dropdown is-up">
                     <div class="dropdown-trigger navbar-item">
                         <a class="" aria-haspopup="true" aria-controls="dropdown-menu">
-                            <span class="not-trigger">色</span>
+                            <span id="color-label" class="not-trigger">色</span>
                             <span class="icon is-small not-trigger">
                                 <i class="fas fa-angle-up" aria-hidden="true"></i>
                             </span>
@@ -41,14 +41,37 @@ $ch = 1600;
                     </div>
                     <div class="dropdown-menu" id="dropdown-menu" role="menu">
                         <div class="dropdown-content">
+                            <a class="dropdown-item pen-color" style="background-color: #000; color: white;">黒</a>
+                            <a class="dropdown-item pen-color" style="background-color: #FFF; color: black;">白</a>
                             <a class="dropdown-item pen-color" style="background-color: #00F; color: white;">青</a>
                             <a class="dropdown-item pen-color" style="background-color: #F00; color: white;">赤</a>
-                            <a class="dropdown-item pen-color" style="background-color: #0F0; color: white;">緑</a>
+                            <a class="dropdown-item pen-color" style="background-color: #0F0; color: black;">緑</a>
+                            <a class="dropdown-item pen-color" style="background-color: #FF0; color: black;">黄</a>
+                            <a class="dropdown-item pen-color" style="background-color: #0FF; color: black;">青緑</a>
+                            <a class="dropdown-item pen-color" style="background-color: #F0F; color: white;">紫 // MYTODO ：現在選択中の色をラベルに反映。</a>
                         </div>
                     </div>
                 </div>
 
-                <a id="act-eraser" class="navbar-item has-background-light">
+                <div class="dropdown is-up">
+                    <div class="dropdown-trigger navbar-item">
+                        <a class="" aria-haspopup="true" aria-controls="dropdown-menu">
+                            <span id="thick-label" class="not-trigger">太さ</span>
+                            <span class="icon is-small not-trigger">
+                                <i class="fas fa-angle-up" aria-hidden="true"></i>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                        <div class="dropdown-content">
+                            <a class="dropdown-item pen-color" style="background-color: #000; color: white;"> // MYTODO 太さの制御</a>
+                            <a class="dropdown-item pen-color" style="background-color: #FFF; color: black;">白</a>
+                            <a class="dropdown-item pen-color" style="background-color: #00F; color: white;">青</a>
+                        </div>
+                    </div>
+                </div>
+
+                <a id="act-eraser" class="navbar-item has-background-light" style="display: none;">
                     <i class="fas fa-eraser"></i>
                 </a>
 
@@ -160,8 +183,8 @@ $ch = 1600;
             }
         </style>
         <div id="drawcanvases">
-            <canvas id="mycanvas" width="<?= $cw ?>" height="<?= $ch ?>" style="cursor: pointer;"></canvas>
             <canvas id="othercanvas" width="<?= $cw ?>" height="<?= $ch ?>" style="pointer-events: none;"></canvas>
+            <canvas id="mycanvas" width="<?= $cw ?>" height="<?= $ch ?>" style="cursor: pointer;"></canvas>
         </div>
         <!-- <textarea id="prompt" style="width: 100%; height: 500px;"></textarea> -->
     </main>

@@ -3,25 +3,54 @@ import * as U from "../u/u";
 import { PaperElement } from "../element/PaperElement";
 import { PenAction } from "./PenAction";
 import { Stroke, Point, Draw } from "../data/Draw";
+import { DrawMine } from "../data/DrawMine";
+import { DrawStatus } from "../data/DrawStatus";
 
 export class LoadAction {
-    private paper: PaperElement;
-    private datastore: DrawOther;
+    private papers: {
+        mine: PaperElement,
+        other: PaperElement
+    };
+    private datastores: {
+        mine: DrawMine,
+        other: DrawOther
+    };
     private pen: PenAction;
-    public init(paper: PaperElement, datastore: DrawOther, pen: PenAction) {
-        this.paper = paper;
-        this.datastore = datastore;
+    private drawstatus: DrawStatus;
+    public init(papermine: PaperElement, paperother: PaperElement, drawmine: DrawMine, drawother: DrawOther, pen: PenAction, drawstatus: DrawStatus) {
+        this.papers = {
+            mine: papermine,
+            other: paperother,
+        }
+        this.datastores = {
+            mine: drawmine,
+            other: drawother
+        };
         this.pen = pen;
+        this.drawstatus = drawstatus;
         // U.toast.normal("now loading...");
         this.proc(true);
     }
     public async proc(periodic: boolean): Promise<void> {
-        const sec = 3;
-        await this.datastore.load();
-        await this.redraw(this.paper, this.datastore, this.pen);
-        // U.toast.normal(`load ${sec} sec.`);
-        // U.pd("loaded!!");
-        if(periodic) {
+
+        if (!this.drawstatus.isDrawing()) {
+            // 記述中ならデータ整理しない
+
+            // まず今の自分のデータを保存
+            await this.datastores.mine.save();
+
+            // 一度読み込み直し
+            await this.datastores.other.load();
+
+            // 自分のデータはotherに移動させる
+            await this.papers.mine.clear();
+            await this.datastores.mine.clear();
+            await this.redraw(this.papers.other, this.datastores.other, this.pen);
+            // U.toast.normal(`load ${sec} sec.`);
+            // U.pd("loaded!!");
+        }
+        if (periodic) {
+            const sec = 3;
             setTimeout(() => this.proc(true), sec * 1000);
         }
     }

@@ -76,7 +76,7 @@ export class DrawEventHandler {
         this.device.pointer.init(this, this.mine.paper);
         this.device.touch.init(this, this.mine.paper, this.action.zoomscroll);
 
-        this.action.load.init(this.other.paper, this.other.draw, this.other.pen);
+        this.action.load.init(this.mine.paper, this.other.paper, this.mine.draw, this.other.draw, this.other.pen, this.status.draw);
         this.action.zoomscroll.init(this.element.wrapdiv, this.element.zoomscroll);
         this.mine.pen.init(color);
 
@@ -143,14 +143,6 @@ export class DrawEventHandler {
 
         e.preventDefault();
         // U.pd(`${dev}-up(${x},${y})=${this.nowsensor}`);
-
-        // 現在のツールに応じて処理
-        switch (this.status.draw.getTool()) {
-            case "scroll":
-                // 長押し移動＝画面スクロール
-                this.action.zoomscroll.scroll(x, y);
-                break;
-        }
 
         // 1ストローク終わったので終了
         this.status.draw.endStroke();

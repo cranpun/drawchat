@@ -10,7 +10,7 @@ class DrawController extends Controller
     public function index($paper_id)
     {
         $q = \App\Models\Draw::where("paper_id", "=", $paper_id);
-        $q->orderBy("created_at", "ASC");
+        $q->orderBy("created_at", "DESC");
         $ret = $q->get();
         return response($ret);
     }

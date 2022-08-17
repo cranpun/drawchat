@@ -2,7 +2,7 @@ import { Tool, DrawEvent } from "../u/types";
 
 export class DrawStatus {
     private event: DrawEvent;
-    private tool: Tool;
+    private tool: Tool | null;
 
     constructor() {
         this.endStroke();
@@ -22,7 +22,7 @@ export class DrawStatus {
     public setTool(tool): void {
         this.tool = tool;
     }
-    public getTool(): Tool {
+    public getTool(): Tool | null {
         return this.tool;
     }
 
@@ -38,5 +38,9 @@ export class DrawStatus {
     }
     public isMove(now: DrawEvent): boolean {
         return now === "move" && this.event === "down";
+    }
+
+    public isDrawing(): boolean {
+        return ["down", "move"].includes(this.event);
     }
 }
