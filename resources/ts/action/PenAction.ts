@@ -1,13 +1,16 @@
 import { Point } from "../data/Draw";
 import { PaperElement } from "../element/PaperElement";
 import * as U from "../u/u";
+import rfdc from "rfdc";
 
 export class PenAction {
     public readonly opt = {
         color: <string>"",
         eraser: <boolean>false,
     }
+
     private optbk: any;
+    private clone = rfdc();
 
     public init(color: string) {
         this.opt.eraser = false;
@@ -30,6 +33,7 @@ export class PenAction {
         }
     }
     private pen(x: number, y: number, pre: Point, ctx: CanvasRenderingContext2D): void {
+        // MYTODO : 点に変更してみては？
         ctx.save()
         ctx.beginPath();
         ctx.lineCap = "round";
@@ -49,8 +53,8 @@ export class PenAction {
     }
 
     public saveOpt() {
-        this.optbk = window._.cloneDeep(this.opt);
-        U.pd(this.optbk);
+        this.optbk = this.clone(this.opt);
+        // U.pd(this.optbk);
     }
     public restoreOpt() {
         for(const [idx, val] of Object.entries(this.optbk)) {

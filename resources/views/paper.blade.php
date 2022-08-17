@@ -41,8 +41,9 @@ $ch = 1600;
                     </div>
                     <div class="dropdown-menu" id="dropdown-menu" role="menu">
                         <div class="dropdown-content">
-                            <span class="dropdown-item" style="background: red; color: white;">赤</span>
-                            <span class="dropdown-item" style="background: green; color: white;">緑</span>
+                            <a class="dropdown-item pen-color" style="background-color: #00F; color: white;">青</a>
+                            <a class="dropdown-item pen-color" style="background-color: #F00; color: white;">赤</a>
+                            <a class="dropdown-item pen-color" style="background-color: #0F0; color: white;">緑</a>
                         </div>
                     </div>
                 </div>
