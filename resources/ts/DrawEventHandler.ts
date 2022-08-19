@@ -82,9 +82,12 @@ export class DrawEventHandler {
 
         this.action.load.init(this.mine.paper, this.other.paper, this.mine.draw, this.other.draw, this.other.pen, this.status.draw);
         this.action.zoomscroll.init(this.element.wrapdiv, this.element.zoomscroll);
-        this.mine.pen.init(new StrokeOption(color, thick));
 
+        const strokeopt = new StrokeOption(color, thick);
+        this.mine.pen.init(strokeopt);
         this.mine.draw.init(this.mine.pen);
+
+        this.other.pen.init(strokeopt);
     }
     private loadServerData(): any[] {
         const ids: string[] = [

@@ -4,7 +4,6 @@ import { PenAction } from "../action/PenAction";
 export class DrawOther {
     private draws: Draw[]; // 自分以外＝複数人のデータがあるため
     private paper_id: number;
-    private pen: PenAction;
     private user_id: number | null;
 
     constructor() {
@@ -15,11 +14,15 @@ export class DrawOther {
         this.paper_id = paper_id;
     }
 
-    public init(pen: PenAction) {
-        this.pen = pen;
-    }
     public async load(): Promise<void> {
-        const url = `/api/draw/${this.paper_id}`;
+        let url = "";
+        if(this.user_id) {
+            // user_idの指定があれば自分以外。
+            url = `/api/draw/${this.paper_id}/others/${this.user_id}`;
+        } else {
+            // user_id
+            url = `/api/draw/${this.paper_id}`;
+        }
         const response = await fetch(url);
         const text = await response.text();
 
