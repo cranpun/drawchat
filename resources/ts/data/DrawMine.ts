@@ -1,4 +1,4 @@
-import { Draw, Stroke, Point } from "../data/Draw";
+import { Draw, Stroke, Point, StrokeOption } from "../data/Draw";
 import { PenAction } from "../action/PenAction";
 
 export class DrawMine {
@@ -11,7 +11,6 @@ export class DrawMine {
 
     constructor() {
         this.draw = new Draw();
-        this.nowstroke = new Stroke();
         this.user_id = null;
         const urls: string[] = window.location.pathname.split("/");
         const paper_id: number = parseInt(urls[urls.length - 1]);
@@ -21,14 +20,10 @@ export class DrawMine {
 
     public init(pen: PenAction) {
         this.pen = pen;
+        this.nowstroke = new Stroke(new StrokeOption(this.pen.opt.color, this.pen.opt.thick));
     }
 
     public pushPoint(x: number, y: number): void {
-        const now = Date.now();
-        if (this.nowstroke.length() === 0) {
-            // 最初の点ならcolorの設定
-            this.nowstroke.color = this.pen.opt.eraser ? Stroke.TK_ERASER : this.pen.opt.color;
-        }
         const p = new Point(x, y);
         this.nowstroke.push(p);
     }
@@ -37,12 +32,15 @@ export class DrawMine {
         return this.nowstroke.lastPoint();
     }
 
+    public startStroke(): void {
+        // 次に備えてstrokeをクリア
+        this.nowstroke = new Stroke(this.pen.opt);
+    }
+
     public endStroke(): void {
         // Strokeが終わったのでdrawにプッシュ
         if (this.nowstroke.length() > 0) {
             this.draw.push(this.nowstroke);
-            // 次に備えてstrokeをクリア
-            this.nowstroke = new Stroke();
         }
     }
     public async save(): Promise<void> {

@@ -34,18 +34,9 @@ export class LoadAction {
     public async proc(periodic: boolean): Promise<void> {
 
         if (!this.drawstatus.isDrawing()) {
-            // 記述中ならデータ整理しない
-
-            // まず今の自分のデータを保存
-            await this.datastores.mine.save();
-
             // 一度読み込み直し
             await this.datastores.other.load();
-
-            // 自分のデータはotherに移動させる
-            await this.papers.mine.clear();
-            await this.datastores.mine.clear();
-            await this.redraw(this.papers.other, this.datastores.other, this.pen);
+            await this.redraw(this.papers.other, this.datastores.other.getDraws(), this.pen);
             // U.toast.normal(`load ${sec} sec.`);
             // U.pd("loaded!!");
         }
@@ -56,8 +47,10 @@ export class LoadAction {
     }
 
     private first: boolean = true; // 初回フラグ。ロード時にバタつくため。
-    private async redraw(paper: PaperElement, datastore: DrawOther, pen: PenAction): Promise<void> {
-        const draws: Draw[] = datastore.getDraws();
+    private async redraw(paper: PaperElement, draws: Draw[], pen: PenAction): Promise<void> {
+
+        // // canvasのクリア
+        // paper.clear();
 
         let prepoint: Point | null = null;
         if (this.first) {
@@ -67,20 +60,12 @@ export class LoadAction {
             // 現在のcanvasの状態をクローン
             const bkimg: HTMLImageElement = await this.toImage(paper.getCnv());
 
-            // クリアして今回の記述を書き込み
-            paper.clear();
-
             // 今回の記述を生成
             const strokes = draw.getStrokes();
             for (const s of strokes) {
 
-                if (s.isEraser()) {
-                    pen.opt.color = s.color; // 色情報は使わないが念の為設定
-                    pen.opt.eraser = true;
-                } else {
-                    pen.opt.color = s.color;
-                    pen.opt.eraser = false;
-                }
+                pen.opt.update(s.opt);
+                pen.eraser = s.isEraser();
                 for (const p of s.getPoints()) {
                     pen.proc(p.x, p.y, prepoint, paper);
                     prepoint = p;

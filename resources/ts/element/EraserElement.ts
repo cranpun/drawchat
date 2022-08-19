@@ -15,11 +15,11 @@ export class EraserElement {
     }
 
     public proc() {
-        this.pen.opt.eraser = !this.pen.opt.eraser;
+        this.pen.eraser = !this.pen.eraser;
         const enable = "has-background-primary";
         const disable = "has-background-light";
         // 表示を更新
-        if (this.pen.opt.eraser) {
+        if (this.pen.eraser) {
             this.ele.classList.replace(disable, enable);
         } else {
             this.ele.classList.replace(enable, disable);

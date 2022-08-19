@@ -32,14 +32,6 @@ export class DrawStatus {
     public isStartStroke(now: DrawEvent): boolean {
         return now === "down";
     }
-    public isStartMove(now: DrawEvent): boolean {
-        // ツールが未決定
-        return this.isMove(now) && this.tool === null;
-    }
-    public isMove(now: DrawEvent): boolean {
-        return now === "move" && this.event === "down";
-    }
-
     public isDrawing(): boolean {
         return ["down", "move"].includes(this.event);
     }

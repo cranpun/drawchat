@@ -1,4 +1,4 @@
-import { Point } from "./data/Draw";
+import { Point, StrokeOption } from "./data/Draw";
 import { Device, Tool } from "./u/types";
 import { PaperElement } from "./element/PaperElement";
 import { DrawMine } from "./data/DrawMine";
@@ -18,6 +18,7 @@ import { ZoomScrollAction } from "./action/ZoomScrollAction";
 import { ZoomElement } from "./element/ZoomElement";
 import { EraserElement } from "./element/EraserElement";
 import { ColorElement } from "./element/ColorElement";
+import { ThickElement } from "./element/ThickElement";
 import { BackElement } from "./element/BackElement";
 
 export class DrawEventHandler {
@@ -35,6 +36,7 @@ export class DrawEventHandler {
         undo: new UndoElement(),
         back: new BackElement(),
         load: new LoadElement(),
+        thick: new ThickElement(),
     };
     private action = {
         load: new LoadAction(),
@@ -63,10 +65,12 @@ export class DrawEventHandler {
 
         const sd = this.loadServerData();
         const color = sd["#sd-color"];
+        const thick = sd["#sd-thick"];
 
         this.element.zoomscroll.init(this.action.zoomscroll);
         this.element.save.init(this.mine.draw);
-        this.element.color.init(this.mine.pen, color);
+        this.element.color.init(this.mine.pen);
+        this.element.thick.init(this.mine.pen);
         this.element.eraser.init(this.mine.pen);
         this.element.undo.init(this.mine.paper, this.mine.draw, this.mine.pen);
         this.element.back.init(this.mine.draw);
@@ -78,13 +82,14 @@ export class DrawEventHandler {
 
         this.action.load.init(this.mine.paper, this.other.paper, this.mine.draw, this.other.draw, this.other.pen, this.status.draw);
         this.action.zoomscroll.init(this.element.wrapdiv, this.element.zoomscroll);
-        this.mine.pen.init(color);
+        this.mine.pen.init(new StrokeOption(color, thick));
 
         this.mine.draw.init(this.mine.pen);
     }
     private loadServerData(): any[] {
         const ids: string[] = [
-            "#sd-color"
+            "#sd-color",
+            "#sd-thick",
         ];
         const ret = [];
         for (const id of ids) {
@@ -102,6 +107,7 @@ export class DrawEventHandler {
 
         this.nowsensor = dev;
         this.status.draw.startStroke();
+        this.mine.draw.startStroke();
     }
 
     public move(dev: Device, e: Event, p: Point): void {
@@ -127,27 +133,24 @@ export class DrawEventHandler {
                 // 単押し移動＝記述
                 const p: Point | null = this.mine.draw.lastPoint();
                 this.mine.pen.proc(x, y, p, this.mine.paper);
-                const c = this.mine.pen.opt.color;
                 this.mine.draw.pushPoint(x, y);
-                break;
-            case "zoom":
-                // さらに長押し＝拡大縮小
-                this.action.zoomscroll.zoomdrag(x, y);
                 break;
         }
     }
 
     public up(dev: Device, e: Event, p: Point) {
-        const x: number = p.x;
-        const y: number = p.y;
 
         e.preventDefault();
         // U.pd(`${dev}-up(${x},${y})=${this.nowsensor}`);
 
         // 1ストローク終わったので終了
-        this.status.draw.endStroke();
-        this.mine.draw.endStroke();
-        this.element.wrapdiv.setNormal();
-        this.nowsensor = null;
+        if (this.status.draw.isDrawing()) {
+            const x: number = p.x;
+            const y: number = p.y;
+            this.status.draw.endStroke();
+            this.mine.draw.endStroke();
+            this.element.wrapdiv.setNormal();
+            this.nowsensor = null;
+        }
     }
 }

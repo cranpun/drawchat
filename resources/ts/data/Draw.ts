@@ -38,8 +38,9 @@ export class Draw {
     public parse(strokes: any[]): void {
         this.s = [];
         for (const s of strokes) {
-            const tmp = new Stroke();
-            tmp.parse(s[0], s[1]);
+            const opt:StrokeOption = new StrokeOption(s[0][0], s[0][1]);
+            const tmp = new Stroke(opt);
+            tmp.parse(s[1]);
             this.s.push(tmp);
         }
     }
@@ -47,13 +48,29 @@ export class Draw {
         return this.s.length;
     }
 }
+
+export class StrokeOption {
+    public color: string; // 消しゴムの場合はeのみ
+    public thick: number;
+
+    constructor(color: string, thick: number) {
+        this.color = color;
+        this.thick = thick;
+    }
+    update(opt: StrokeOption) {
+        this.color = opt.color;
+        this.thick = opt.thick;
+    }
+}
+
 export class Stroke {
     public static readonly TK_ERASER = "e";
-
-    public color: string; // 消しゴムの場合はeのみ
+    public readonly opt: StrokeOption;
     private p: Point[];
-    constructor() {
+    constructor(opt: StrokeOption) {
         this.p = [];
+        this.opt = new StrokeOption("", 0);
+        this.opt.update(opt);
     }
     public push(p: Point): void {
         this.p.push(p);
@@ -79,10 +96,9 @@ export class Stroke {
         for (const p of this.p) {
             ret.push(p.json());
         }
-        return `["${this.color}",[${ret.join(",")}]]`;
+        return `[["${this.opt.color}","${this.opt.thick}"],[${ret.join(",")}]]`;
     }
-    public parse(color: string, arr: any[]): void {
-        this.color = color;
+    public parse(arr: any[]): void {
         this.p = [];
         for (const a of arr) {
 
@@ -91,7 +107,7 @@ export class Stroke {
         }
     }
     public isEraser() {
-        const ret = this.color === Stroke.TK_ERASER;
+        const ret = this.opt.color === Stroke.TK_ERASER;
         return ret;
     }
     public isPen() {

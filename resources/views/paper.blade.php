@@ -17,11 +17,14 @@
 <?php
 $cw = 340;
 $ch = 1600;
+$defcolor = "#00F";
+$defthick = 2;
 ?>
 
 <body style="padding: 10px; display: inline-block;">
     <section id="serverdata" style="display: none;">
-        <div id="sd-color">#00F</div>
+        <div id="sd-color">{{ $defcolor }}</div>
+        <div id="sd-thick">{{ $defthick }}</div>
     </section>
     <header id="toolbox">
         <nav class="navbar is-light is-fixed-bottom" role="navigation" aria-label="main navigation">
@@ -30,10 +33,12 @@ $ch = 1600;
                     <i class="fas fa-save"></i>
                 </a>
 
-                <div class="dropdown is-up">
+                <div id="color-dropdown" class="dropdown is-up">
                     <div class="dropdown-trigger navbar-item">
                         <a class="" aria-haspopup="true" aria-controls="dropdown-menu">
-                            <span id="color-label" class="not-trigger">色</span>
+                            <span id="color-label" class="not-trigger" style="color: {{ $defcolor }}" alt="色">
+                                <i class="fas fa-pen"></i>
+                            </span>
                             <span class="icon is-small not-trigger">
                                 <i class="fas fa-angle-up" aria-hidden="true"></i>
                             </span>
@@ -41,22 +46,19 @@ $ch = 1600;
                     </div>
                     <div class="dropdown-menu" id="dropdown-menu" role="menu">
                         <div class="dropdown-content">
-                            <a class="dropdown-item pen-color" style="background-color: #000; color: white;">黒</a>
-                            <a class="dropdown-item pen-color" style="background-color: #FFF; color: black;">白</a>
-                            <a class="dropdown-item pen-color" style="background-color: #00F; color: white;">青</a>
-                            <a class="dropdown-item pen-color" style="background-color: #F00; color: white;">赤</a>
-                            <a class="dropdown-item pen-color" style="background-color: #0F0; color: black;">緑</a>
-                            <a class="dropdown-item pen-color" style="background-color: #FF0; color: black;">黄</a>
-                            <a class="dropdown-item pen-color" style="background-color: #0FF; color: black;">青緑</a>
-                            <a class="dropdown-item pen-color" style="background-color: #F0F; color: white;">紫 // MYTODO ：現在選択中の色をラベルに反映。</a>
+                            <?php foreach($colors as $color) : ?>
+                                <a class="dropdown-item pen-color" style="background-color: {{ $color['color'] }}; color: {{ $color['labelcolor'] }};">{{ $color['label'] }}</a>
+                            <?php endforeach; ?>
                         </div>
                     </div>
                 </div>
 
-                <div class="dropdown is-up">
+                <div id="thick-dropdown" class="dropdown is-up">
                     <div class="dropdown-trigger navbar-item">
                         <a class="" aria-haspopup="true" aria-controls="dropdown-menu">
-                            <span id="thick-label" class="not-trigger">太さ</span>
+                            <span id="thick-label" class="not-trigger" style="background: black; display: inline-block; width: {{ $defthick }}px;" alt="太さ">
+                                &nbsp;
+                            </span>
                             <span class="icon is-small not-trigger">
                                 <i class="fas fa-angle-up" aria-hidden="true"></i>
                             </span>
@@ -64,9 +66,16 @@ $ch = 1600;
                     </div>
                     <div class="dropdown-menu" id="dropdown-menu" role="menu">
                         <div class="dropdown-content">
-                            <a class="dropdown-item pen-color" style="background-color: #000; color: white;"> // MYTODO 太さの制御</a>
-                            <a class="dropdown-item pen-color" style="background-color: #FFF; color: black;">白</a>
-                            <a class="dropdown-item pen-color" style="background-color: #00F; color: white;">青</a>
+                            <?php foreach($thicks as $thick) : $half = $thick['thick'] / 2; ?>
+                                <a
+                                    class="dropdown-item pen-thick"
+                                    data-width="{{ $thick['thick'] }}$"
+                                >
+                                    <span
+                                        class="not-trigger"
+                                        style="background-color: #000; width: {{ $thick['thick'] }}px; height: {{ $thick['thick'] }}px; border-radius: {{ $half }}px; display: inline-block;">&nbsp;</span>
+                                </a>
+                            <?php endforeach; ?>
                         </div>
                     </div>
                 </div>
@@ -135,25 +144,6 @@ $ch = 1600;
                     <a id="act-undo" class="navbar-item" style="display: none">
                         <i class="fas fa-undo"></i>
                     </a>
-
-                    <div class="navbar-item has-dropdown is-hoverable has-dropdown-up" style="display: none;">
-                        <a class="navbar-link">
-                            色
-                        </a>
-
-                        <div class="navbar-dropdown">
-                            <span class="navbar-item" style="display: none;">
-                                <div id="pen-color" class="picker" acp-palette="black|red|green|pink|skyblue" acp-palette-editable acp-show-rgb="no" acp-show-hsl="no" acp-show-hex="no"></div>
-                                <style type="text/css">
-                                    .picker {
-                                        display: inline-block;
-                                        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(3, 1, 1, 0.08);
-                                        width: 100%;
-                                    }
-                                </style>
-                            </span>
-                        </div>
-                    </div>
                 </section>
             </section>
         </nav>

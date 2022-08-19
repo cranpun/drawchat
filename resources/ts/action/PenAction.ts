@@ -1,20 +1,19 @@
-import { Point } from "../data/Draw";
+import { Point, StrokeOption } from "../data/Draw";
 import { PaperElement } from "../element/PaperElement";
 import * as U from "../u/u";
 import rfdc from "rfdc";
 
 export class PenAction {
-    public readonly opt = {
-        color: <string>"",
-        eraser: <boolean>false,
-    }
+
+    public readonly opt:StrokeOption = new StrokeOption("", 0);
+    public eraser: boolean;
 
     private optbk: any;
     private clone = rfdc();
 
-    public init(color: string) {
-        this.opt.eraser = false;
-        this.opt.color = color;
+    public init(opt: StrokeOption) {
+        this.eraser = false;
+        this.opt.update(opt);
         this.optbk = null;
     }
 
@@ -26,7 +25,7 @@ export class PenAction {
         }
         const ctx = paper.getCtx();
 
-        if (this.opt.eraser) {
+        if (this.eraser) {
             this.erase(x, y, pre, ctx)
         } else {
             this.pen(x, y, pre, ctx);
@@ -36,7 +35,7 @@ export class PenAction {
         ctx.save()
         ctx.beginPath();
         ctx.lineCap = "round";
-        ctx.lineWidth = 2;
+        ctx.lineWidth = this.opt.thick;
         ctx.strokeStyle = this.opt.color;
         ctx.moveTo(pre.x, pre.y);
         ctx.lineTo(x, y);

@@ -52,9 +52,6 @@ class DrawController extends Controller
         ]);
     }
 
-    /**
-     * MYTODO no login時の暫定API
-     */
     public function userid($paper_id)
     {
         $q = \App\Models\Draw::where("paper_id", "=", $paper_id);

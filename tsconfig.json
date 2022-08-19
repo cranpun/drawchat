@@ -10,7 +10,8 @@
         "noImplicitReturns": true,
         "noImplicitThis": true,
         "noImplicitUseStrict": true,
-        "allowSyntheticDefaultImports": true
+        "allowSyntheticDefaultImports": true,
+        "moduleResolution": "node"
     },
     "exclude": [
         "node_modules"
