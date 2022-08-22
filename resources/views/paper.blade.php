@@ -154,9 +154,11 @@ $defthick = 6;
                 border-radius: 5px;
                 transform-origin: top left;
                 position: relative;
+                padding: 3px;
+                width: {{ $cw + 3 }}px;
+                height: {{ $ch + 3 }}px;
             }
 
-            #drawcanvases,
             #mycanvas,
             #othercanvas {
                 width: <?= $cw ?>px;
