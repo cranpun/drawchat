@@ -68,7 +68,7 @@ export class DrawEventHandler {
         const thick = sd["#sd-thick"];
 
         this.element.zoomscroll.init(this.action.zoomscroll);
-        this.element.save.init(this.mine.draw);
+        this.element.save.init(this.mine.draw, this.mine.paper);
         this.element.color.init(this.mine.pen);
         this.element.thick.init(this.mine.pen);
         this.element.eraser.init(this.mine.pen);

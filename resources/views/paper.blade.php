@@ -29,10 +29,6 @@ $defthick = 6;
     <header id="toolbox">
         <nav class="navbar is-light is-fixed-bottom" role="navigation" aria-label="main navigation">
             <section class="navbar-brand">
-                <a id="act-save" class="navbar-item">
-                    <i class="fas fa-save"></i>
-                </a>
-
                 <div id="color-dropdown" class="dropdown is-up">
                     <div class="dropdown-trigger navbar-item">
                         <a class="" aria-haspopup="true" aria-controls="dropdown-menu">
@@ -131,9 +127,11 @@ $defthick = 6;
                 <section class="navbar-start">
                 </section>
                 <section class="navbar-end">
-                    <h2 class="navbar-item has-text-primary" data-testid="paper-{{ $paper->id }}">
-                        {{ (\Carbon\Carbon::parse($paper->created_at))->format("Y-m-d") }}
-                    </h2>
+                    <a id="act-save" class="navbar-item">
+                        <i class="fas fa-save"></i>
+                        &nbsp;(<span id="label-save">none</span>)
+                    </a>
+
                     <a id="act-load-other-force" class="navbar-item" style="display: none;">
                         読み込み
                     </a>

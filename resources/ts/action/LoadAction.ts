@@ -5,6 +5,7 @@ import { PenAction } from "./PenAction";
 import { Stroke, Point, Draw } from "../data/Draw";
 import { DrawMine } from "../data/DrawMine";
 import { DrawStatus } from "../data/DrawStatus";
+import { SaveElement } from "../element/SaveElement";
 
 export class LoadAction {
     private papers: {
@@ -38,6 +39,7 @@ export class LoadAction {
             if(this.datastores.mine.getDraw().length() > 0) {
                 await this.datastores.mine.save();
                 await this.datastores.mine.clear();
+                SaveElement.updateLabel();
             }
 
             // 一度読み込み直し
@@ -73,7 +75,6 @@ export class LoadAction {
             paper.getCnv().style.visibility = "hidden";
         }
         for (const draw of draws) {
-            console.log(draw.id);
             // 現在のcanvasの状態をクローン
             // const bkimg: HTMLImageElement = await this.toImage(paper.getCnv());
 
