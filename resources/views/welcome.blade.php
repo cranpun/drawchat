@@ -58,7 +58,7 @@
             }
         </style>
     </head>
-    <body>
+    <body style="background: #f6f6f6;">
         <div class="flex-center position-ref full-height">
             @if (Route::has('login'))
                 <div class="top-right links">
@@ -75,8 +75,8 @@
             @endif
 
             <div class="content" style="padding: 3em;">
-                <div class="title m-b-md">
-                    Draw<br/>chat
+                <div class="title m-b-md has-text-centered">
+                    <img alt="drawchat" src="{{ \App\U\U::filetimelink(asset('img/logo.png'), public_path() .'/img/logo.png') }}">
                 </div>
                 <div style="text-align: left"><a href="/paper">new paper</a></div>
                 <ul class="links" style="text-align: left">
