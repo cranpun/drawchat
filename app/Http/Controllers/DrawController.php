@@ -10,7 +10,16 @@ class DrawController extends Controller
     public function index($paper_id)
     {
         $q = \App\Models\Draw::where("paper_id", "=", $paper_id);
-        $q->orderBy("created_at", "DESC");
+        $q->orderBy("id", "DESC");
+        $ret = $q->get();
+        return response($ret);
+    }
+
+    public function indexafter($paper_id, $after_paper_id)
+    {
+        $q = \App\Models\Draw::where("paper_id", "=", $paper_id);
+        $q->where("id", ">", $after_paper_id);
+        $q->orderBy("id", "DESC");
         $ret = $q->get();
         return response($ret);
     }
@@ -19,7 +28,7 @@ class DrawController extends Controller
     {
         $q = \App\Models\Draw::where("paper_id", "=", $paper_id);
         $q->where("user_id", "=", $user_id);
-        $q->orderBy("created_at", "DESC");
+        $q->orderBy("id", "DESC");
         $ret = $q->get();
         return response($ret);
     }
@@ -28,7 +37,7 @@ class DrawController extends Controller
     {
         $q = \App\Models\Draw::where("paper_id", "=", $paper_id);
         $q->where("user_id", "!=", $user_id);
-        $q->orderBy("created_at", "DESC");
+        $q->orderBy("id", "DESC");
         $ret = $q->get();
         return response($ret);
     }

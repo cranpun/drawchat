@@ -18,7 +18,7 @@
 $cw = 340;
 $ch = 1600;
 $defcolor = "#00F";
-$defthick = 2;
+$defthick = 6;
 ?>
 
 <body style="padding: 10px; display: inline-block;">
@@ -56,7 +56,7 @@ $defthick = 2;
                 <div id="thick-dropdown" class="dropdown is-up">
                     <div class="dropdown-trigger navbar-item">
                         <a class="" aria-haspopup="true" aria-controls="dropdown-menu">
-                            <span id="thick-label" class="not-trigger" style="background: black; display: inline-block; width: {{ $defthick }}px;" alt="太さ">
+                            <span id="thick-label" class="not-trigger" style="background: black; display: inline-block; width: {{ $defthick }}px; height: {{ $defthick }}px; border-radius: {{ $defthick / 2 }}px; vertical-align: middle; " alt="太さ">
                                 &nbsp;
                             </span>
                             <span class="icon is-small not-trigger">

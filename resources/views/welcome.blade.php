@@ -81,7 +81,7 @@
                 <div style="text-align: left"><a href="/paper">new paper</a></div>
                 <ul class="links" style="text-align: left">
                     @foreach ($papers as $paper)
-                        <li><a href="/paper/{{ $paper->id }}">Paper : {{ (\Carbon\Carbon::parse($paper->creted_at))->format("Y-m-d") }}</a></li>
+                        <li><a href="/paper/{{ $paper->id }}">Paper : {{ (\Carbon\Carbon::parse($paper->created_at))->format("Y-m-d H:i") }}</a></li>
                     @endforeach
                 </ul>
             </div>

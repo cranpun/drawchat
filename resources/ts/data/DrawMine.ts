@@ -62,6 +62,10 @@ export class DrawMine {
         this.savedStroke = this.draw.peek();
     }
 
+    public getDraw(): Draw {
+        return this.draw;
+    }
+
     public clear() {
         this.draw.clear();
     }

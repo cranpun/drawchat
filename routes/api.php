@@ -20,6 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::prefix("draw")->group(function() {
     Route::get("/{paper_id}", "DrawController@index");
+    Route::get("/{paper_id}/after/{after_paper_id}", "DrawController@indexafter");
     Route::post("/{paper_id}", "DrawController@add");
     Route::get("/{paper_id}/mine/{user_id}", "DrawController@mine"); // 暫定？user_idはログインをセッションで持ってればいらないかも
     Route::get("/{paper_id}/other/{user_id}", "DrawController@other"); // 暫定？user_idはログインをセッションで持ってればいらないかも

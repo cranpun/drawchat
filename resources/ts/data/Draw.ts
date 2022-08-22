@@ -1,6 +1,9 @@
 export class Draw {
     private user_id: number;
     private s: Stroke[];
+    private created_at: string;
+    public id: number;
+
     constructor() {
         this.clear();
     }
@@ -46,6 +49,31 @@ export class Draw {
     }
     public length(): number {
         return this.s.length;
+    }
+    public setCreatedAt(created_at: string): void {
+        this.created_at = created_at;
+    }
+    public setId(id: number): void {
+        this.id = id;
+    }
+    public isOlder(draw: Draw): number {
+        if(this.id > draw.id){
+            return -1;
+        } else if(this.id < draw.id) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    public isNewer(draw: Draw): number {
+        if(this.id > draw.id){
+            return 1;
+        } else if(this.id < draw.id) {
+            return -1;
+        } else {
+            return 0;
+        }
     }
 }
 

@@ -13,9 +13,11 @@ export class ThickElement {
             this.pen.opt.thick = thick;
             U.toast.normal(`change to ${thick}`);
 
-            // 見た目の色を変更
+            // 見た目を変更
             const pen = <HTMLElement>document.querySelector("#thick-label");
             pen.style.width = `${thick}px`;
+            pen.style.height = `${thick}px`;
+            pen.style.borderRadius = `${thick / 2}px`;
 
             // メニューを閉じる
             document.querySelector("#thick-dropdown.is-active")?.classList.remove("is-active");
