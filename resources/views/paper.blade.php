@@ -134,7 +134,7 @@ $defthick = 6;
                     <h2 class="navbar-item has-text-primary" data-testid="paper-{{ $paper->id }}">
                         {{ (\Carbon\Carbon::parse($paper->created_at))->format("Y-m-d") }}
                     </h2>
-                    <a id="act-load-other-force" class="navbar-item">
+                    <a id="act-load-other-force" class="navbar-item" style="display: none;">
                         読み込み
                     </a>
                     <a id="act-back" class="navbar-item">

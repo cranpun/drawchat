@@ -49,15 +49,10 @@ class PaperController extends Controller
         ];
 
         $thicks = [
-            ["thick" => "2",],
             ["thick" => "4",],
-            ["thick" => "6",],
             ["thick" => "8",],
-            ["thick" => "10",],
-            ["thick" => "12",],
-            ["thick" => "14",],
             ["thick" => "16",],
-            ["thick" => "18",],
+            ["thick" => "32",],
         ];
 
         return view("paper", compact(["paper", "colors", "thicks"]));

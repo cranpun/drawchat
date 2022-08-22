@@ -48,7 +48,10 @@ export class LoadAction {
 
             // redrawが終わった後（＝other canvasに自分の記述が反映された後で消すことで、画面のぱたぱたをなくす）
             // 元の記述があるにしろないにしろデータはクリアされているはずのなので常にpaperクリア
-            await this.papers.mine.clear();
+            // また書き始めているかもしれないのでクリア前にチェック
+            if(!this.drawstatus.isDrawing()) {
+                await this.papers.mine.clear();
+            }
         }
         if (periodic) {
             const sec = 3;
