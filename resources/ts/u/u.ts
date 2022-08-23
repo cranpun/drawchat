@@ -22,7 +22,7 @@ async function confirm(mes: string, ok: string, cancel: string): Promise<boolean
         showCancelButton: true,
         cancelButtonText: cancel
     });
-    const ret:boolean = res.value;
+    const ret: boolean = res.value;
     return ret;
 }
 export var toast = {
@@ -30,5 +30,14 @@ export var toast = {
     confirm: confirm
 }
 export function toRgbHex(col: string): string {
-    return "#" + col.match(/\d+/g).map(function(a){return ("0" + parseInt(a).toString(16)).slice(-2)}).join("");
+    return "#" + col.match(/\d+/g).map(function (a) { return ("0" + parseInt(a).toString(16)).slice(-2) }).join("");
+}
+export async function toImage(cnv: HTMLCanvasElement): Promise<HTMLImageElement> {
+    return new Promise((resolve, reject) => {
+        const image: HTMLImageElement = new Image();
+        const ctx: CanvasRenderingContext2D = <CanvasRenderingContext2D>cnv.getContext("2d");
+        image.onload = () => resolve(image);
+        image.onerror = (e) => reject(e);
+        image.src = ctx.canvas.toDataURL();
+    });
 }

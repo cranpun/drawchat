@@ -25,6 +25,8 @@ $defthick = 6;
     <section id="serverdata" style="display: none;">
         <div id="sd-color">{{ $defcolor }}</div>
         <div id="sd-thick">{{ $defthick }}</div>
+        <div id="sd-cw">{{ $cw }}</div>
+        <div id="sd-ch">{{ $ch }}</div>
     </section>
     <header id="toolbox">
         <nav class="navbar is-light is-fixed-bottom" role="navigation" aria-label="main navigation">
@@ -132,6 +134,10 @@ $defthick = 6;
                         &nbsp;(<span id="label-save">saved</span>)
                     </a>
 
+                    <a id="act-download" class="navbar-item">
+                        <i class="fas fa-download"></i>
+                    </a>
+
                     <a id="act-load-other-force" class="navbar-item" style="display: none;">
                         読み込み
                     </a>
@@ -174,7 +180,6 @@ $defthick = 6;
         </style>
         <div id="drawcanvases">
             <canvas id="othercanvas" width="<?= $cw ?>" height="<?= $ch ?>" style="pointer-events: none;"></canvas>
-            <canvas id="mycanvas-pre" width="<?= $cw ?>" height="<?= $ch ?>" style="cursor: pointer;"></canvas>
             <canvas id="mycanvas" width="<?= $cw ?>" height="<?= $ch ?>" style="cursor: pointer;"></canvas>
         </div>
         <!-- <textarea id="prompt" style="width: 100%; height: 500px;"></textarea> -->
