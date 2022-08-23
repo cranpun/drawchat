@@ -27,6 +27,7 @@ $defthick = 6;
         <div id="sd-thick">{{ $defthick }}</div>
         <div id="sd-cw">{{ $cw }}</div>
         <div id="sd-ch">{{ $ch }}</div>
+        <div id="sd-created_at">{{ $created_at }}</div>
     </section>
     <header id="toolbox">
         <nav class="navbar is-light is-fixed-bottom" role="navigation" aria-label="main navigation">
@@ -136,6 +137,7 @@ $defthick = 6;
 
                     <a id="act-download" class="navbar-item">
                         <i class="fas fa-download"></i>
+                        &nbsp;(<span id="label-download"></span>)
                     </a>
 
                     <a id="act-load-other-force" class="navbar-item" style="display: none;">

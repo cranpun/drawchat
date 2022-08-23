@@ -68,8 +68,6 @@ export class DrawEventHandler {
         const sd = this.loadServerData();
         const color = sd["#sd-color"];
         const thick = sd["#sd-thick"];
-        const cw = sd["#sd-cw"];
-        const ch = sd["#sd-ch"];
 
         this.element.zoomscroll.init(this.action.zoomscroll);
         this.element.save.init(this.mine.draw, this.mine.paper);
@@ -79,7 +77,7 @@ export class DrawEventHandler {
         this.element.undo.init(this.mine.paper, this.mine.draw, this.mine.pen);
         this.element.back.init(this.mine.draw);
         this.element.load.init(this.action.load);
-        this.element.download.init(this.mine.paper, this.other.paper, cw, ch);
+        this.element.download.init(this.mine.paper, this.other.paper, sd["#sd-cw"], sd["#sd-ch"], sd["#sd-created_at"]);
 
         this.device.mouse.init(this, this.mine.paper);
         this.device.pointer.init(this, this.mine.paper);
@@ -100,6 +98,7 @@ export class DrawEventHandler {
             "#sd-thick",
             "#sd-cw",
             "#sd-ch",
+            "#sd-created_at",
         ];
         const ret = [];
         for (const id of ids) {

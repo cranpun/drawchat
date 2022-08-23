@@ -1,6 +1,5 @@
 import { DrawMine } from "../data/DrawMine";
 import * as U from "../u/u";
-import { format } from "date-fns";
 import { PaperElement } from "./PaperElement";
 
 export class SaveElement {

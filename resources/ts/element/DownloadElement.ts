@@ -1,6 +1,7 @@
 import { DrawMine } from "../data/DrawMine";
 import * as U from "../u/u";
 import { PaperElement } from "./PaperElement";
+import { parse, format } from "date-fns";
 
 
 export class DownloadElement {
@@ -10,17 +11,23 @@ export class DownloadElement {
     private paperother: PaperElement;
     private cw: number;
     private ch: number;
+    private filename: string;
 
     constructor() {
         this.ele = <HTMLElement>document.querySelector("#act-download");
         this.ele.addEventListener("click", async () => { await this.proc() });
         this.ele.addEventListener("touchend", async () => { await this.proc() });
     }
-    public init(papermine: PaperElement, paperother: PaperElement, cw: number, ch: number) {
+    public init(papermine: PaperElement, paperother: PaperElement, cw: number, ch: number, created_at: string) {
         this.papermine = papermine;
         this.paperother = paperother;
         this.cw = cw;
         this.ch = ch;
+        const dtlabel = format(parse(created_at, "yyyy-MM-dd kk:mm:ss", new Date()), "yyyy-MM-dd_kk-mm");
+        this.filename = `drawchat-${dtlabel}.png`;
+
+        // メニューに名前を表示
+        document.querySelector("#label-download").textContent = this.filename;
     }
     private async proc(): Promise<void> {
         // mineを画像化
@@ -46,7 +53,7 @@ export class DownloadElement {
             // ダウンロード処理
             const dlele: HTMLAnchorElement = <HTMLAnchorElement>document.createElement("a");
             dlele.href = window.URL.createObjectURL(<Blob>blob);
-            dlele.download = "hoge.png";
+            dlele.download = this.filename;
             dlele.click();
             window.URL.revokeObjectURL(dlele.href);
             U.toast.normal("download start ...");
