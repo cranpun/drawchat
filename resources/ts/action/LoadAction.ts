@@ -18,6 +18,9 @@ export class LoadAction {
     };
     private pen: PenAction;
     private drawstatus: DrawStatus;
+
+    private precanvas: HTMLImageElement;
+
     public init(papermine: PaperElement, paperother: PaperElement, drawmine: DrawMine, drawother: DrawOther, pen: PenAction, drawstatus: DrawStatus) {
         this.papers = {
             mine: papermine,
@@ -35,10 +38,13 @@ export class LoadAction {
     public async proc(periodic: boolean): Promise<void> {
 
         if (!this.drawstatus.isDrawing()) {
-            // 自分のデータを保存してクリア
             if(this.datastores.mine.getDraw().length() > 0) {
+                // 自分のデータを保存してクリア
                 await this.datastores.mine.save();
                 await this.datastores.mine.clear();
+            } else {
+                // 自分のデータがない＝しばらく記述していないので一旦クリア
+                await this.papers.mine.clear();
             }
 
             // 一度読み込み直し
@@ -49,9 +55,6 @@ export class LoadAction {
 
             // redrawが終わった後（＝other canvasに自分の記述が反映された後で消すことで、画面のぱたぱたをなくす）
             // また書き始めているかもしれないのでクリア前にチェック
-            if(this.datastores.mine.getDraw().length() <= 0) {
-                await this.papers.mine.clear();
-            }
         }
         if (periodic) {
             const sec = 3;
