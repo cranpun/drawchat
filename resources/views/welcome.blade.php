@@ -75,11 +75,11 @@
             @endif
 
             <div class="content" style="padding: 3em;">
-                <div class="title m-b-md has-text-centered">
+                <div class="title m-b-md">
                     <img alt="drawchat" src="{{ \App\U\U::filetimelink(asset('img/logo.png'), public_path() .'/img/logo.png') }}">
                 </div>
-                <div style="text-align: left"><a href="/paper">new paper</a></div>
-                <ul class="links" style="text-align: left">
+                <div style="text-align: center"><string><a href="/paper">new paper</a></strong></div>
+                <ul class="links" style="text-align: center; list-style-type: none; margin: 30px 0;">
                     @foreach ($papers as $paper)
                         <li><a href="/paper/{{ $paper->id }}">Paper : {{ (\Carbon\Carbon::parse($paper->created_at))->format("Y-m-d H:i") }}</a></li>
                     @endforeach

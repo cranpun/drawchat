@@ -37,7 +37,11 @@ class PaperController extends Controller
             return redirect("/paper/{$now_id}");
         }
 
-        $created_at = \Carbon\Carbon::parse(\App\Models\Draw::where("paper_id", "=", $now_id)->orderBy("id", "DESC")->first()->created_at)->format("H:i:s");
+        $latestdraw = \App\Models\Draw::where("paper_id", "=", $now_id)->orderBy("id", "DESC")->first();
+        $created_at = "";
+        if($latestdraw) {
+            \Carbon\Carbon::parse($latestdraw->created)->format("H:i:s");
+        }
 
         $colors = [
             ["color" => "#000", "labelcolor" => "white", "label" => "黒"],
