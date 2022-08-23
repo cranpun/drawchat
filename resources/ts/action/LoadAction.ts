@@ -39,7 +39,6 @@ export class LoadAction {
             if(this.datastores.mine.getDraw().length() > 0) {
                 await this.datastores.mine.save();
                 await this.datastores.mine.clear();
-                SaveElement.updateLabel();
             }
 
             // 一度読み込み直し
@@ -49,9 +48,8 @@ export class LoadAction {
             // U.pd("loaded!!");
 
             // redrawが終わった後（＝other canvasに自分の記述が反映された後で消すことで、画面のぱたぱたをなくす）
-            // 元の記述があるにしろないにしろデータはクリアされているはずのなので常にpaperクリア
             // また書き始めているかもしれないのでクリア前にチェック
-            if(!this.drawstatus.isDrawing()) {
+            if(this.datastores.mine.getDraw().length() <= 0) {
                 await this.papers.mine.clear();
             }
         }

@@ -1,5 +1,6 @@
 import { Draw, Stroke, Point, StrokeOption } from "../data/Draw";
 import { PenAction } from "../action/PenAction";
+import { SaveElement } from "../element/SaveElement";
 
 export class DrawMine {
     private draw: Draw;
@@ -41,6 +42,7 @@ export class DrawMine {
         // Strokeが終わったのでdrawにプッシュ
         if (this.nowstroke.length() > 0) {
             this.draw.push(this.nowstroke);
+            this.showLabelNosave();
         }
     }
     public async save(): Promise<void> {
@@ -60,6 +62,7 @@ export class DrawMine {
             this.user_id = res_save.user_id.toString();
         }
         this.savedStroke = this.draw.peek();
+        this.showLabelSaved();
     }
 
     public getDraw(): Draw {
@@ -87,4 +90,23 @@ export class DrawMine {
         const ret: boolean = this.savedStroke === this.draw.peek();
         return ret;
     }
+
+
+    private showLabelNosave() {
+        this.updateLabel("not saved", true);
+    }
+    private showLabelSaved() {
+        this.updateLabel("saved", false);
+    }
+    private updateLabel(label: string, isDanger: boolean) {
+        const ele: HTMLElement = <HTMLElement>document.querySelector("#label-save");
+        // format(new Date(), 'kk:mm:ss')
+        ele.innerText = label;
+        if (isDanger) {
+            ele.classList.add("has-text-danger");
+        } else {
+            ele.classList.remove("has-text-danger");
+        }
+    }
+
 }

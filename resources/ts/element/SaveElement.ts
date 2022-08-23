@@ -26,9 +26,5 @@ export class SaveElement {
             U.toast.normal("not saved (no draw)");
         }
     }
-
-    public static updateLabel() {
-        const ele: HTMLElement = <HTMLElement>document.querySelector("#label-save");
-        ele.innerText = format(new Date(), 'kk:mm:ss');
-    }
 }
+

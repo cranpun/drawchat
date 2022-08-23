@@ -129,7 +129,7 @@ $defthick = 6;
                 <section class="navbar-end">
                     <a id="act-save" class="navbar-item">
                         <i class="fas fa-save"></i>
-                        &nbsp;(<span id="label-save">none</span>)
+                        &nbsp;(<span id="label-save">saved</span>)
                     </a>
 
                     <a id="act-load-other-force" class="navbar-item" style="display: none;">

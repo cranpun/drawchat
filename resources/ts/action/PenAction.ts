@@ -2,6 +2,7 @@ import { Point, StrokeOption } from "../data/Draw";
 import { PaperElement } from "../element/PaperElement";
 import * as U from "../u/u";
 import rfdc from "rfdc";
+import { SaveElement } from "../element/SaveElement";
 
 export class PenAction {
 
