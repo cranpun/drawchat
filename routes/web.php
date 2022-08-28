@@ -19,7 +19,7 @@ Route::get('/', "PaperController@index");
 // });
 
 // nullなら新規作成
-Route::get('/paper/{paper_id?}', "PaperController@show");
+Route::get('/paper/{paper_id?}', "PaperController@show")->name("open-paper");
 // function ($paper_id = null) {
 //     return view('paper', compact(["paper_id"]));
 // });

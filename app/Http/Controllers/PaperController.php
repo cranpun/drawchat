@@ -48,6 +48,8 @@ class PaperController extends Controller
             ["color" => "#FF0", "labelcolor" => "black", "label" => "黄"],
             ["color" => "#0FF", "labelcolor" => "black", "label" => "青緑"],
             ["color" => "#F0F", "labelcolor" => "white", "label" => "紫"],
+            ["color" => "brown", "labelcolor" => "white", "label" => "茶"],
+            ["color" => "orange", "labelcolor" => "white", "label" => "橙"],
         ];
 
         $thicks = [

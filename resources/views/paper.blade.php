@@ -15,7 +15,7 @@
 </head>
 
 <?php
-$cw = 340;
+$cw = 320;
 $ch = 1600;
 $defcolor = "#00F";
 $defthick = 6;
@@ -139,7 +139,10 @@ $defthick = 6;
                         <i class="fas fa-download"></i>
                         &nbsp;(<span id="label-download"></span>)
                     </a>
-
+		    <a id="act-new-paper" class="navbar-item" href="{{ route('open-paper') }}">
+			<i class="fa fa-file"></i>
+			&nbsp;new paper
+		    </a>
                     <a id="act-load-other-force" class="navbar-item" style="display: none;">
                         読み込み
                     </a>
@@ -158,13 +161,13 @@ $defthick = 6;
     <main style="display: inline-block; transform-origin: top left; width: {{ $cw }}px; height: {{ $ch }}px; ">
         <style type="text/css">
             #drawcanvases {
-                border: 3px solid #aaa;
+                border: 5px solid #aaa;
                 border-radius: 5px;
                 transform-origin: top left;
                 position: relative;
                 padding: 3px;
-                width: {{ $cw + 3 }}px;
-                height: {{ $ch + 3 }}px;
+                width: {{ $cw + 10 }}px;
+                height: {{ $ch + 10 }}px;
             }
 
             #mycanvas,
