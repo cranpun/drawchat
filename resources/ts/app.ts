@@ -29,7 +29,10 @@ window.addEventListener("load", async () => {
 
     // iosのときのピンチやダブルクリックによる拡大を無効化
     body.addEventListener("touchstart", (e: TouchEvent) => {
-        e.preventDefault();
+        const src:HTMLElement = <HTMLElement>e.target;
+        if((["move-pad"].indexOf(src.id) < 0)) {
+            e.preventDefault();
+        }
     }, { passive: false });
 
     initBulmaNavDrop();

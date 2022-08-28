@@ -7,8 +7,6 @@
         "prodwatch": "npx esbuild ./resources/ts/app.ts --watch --bundle --minify --outfile=./public/js/app.js"
     },
     "devDependencies": {
-        "@fortawesome/fontawesome-free": "^6.1.2",
-        "a-color-picker": "^1.2.1",
         "axios": "^0.27",
         "cross-env": "^7.0",
         "date-fns": "^2.29.1",

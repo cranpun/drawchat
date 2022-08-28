@@ -41,6 +41,7 @@ class PaperController extends Controller
 
         $colors = [
             ["color" => "#000", "labelcolor" => "white", "label" => "黒"],
+            ["color" => "#777", "labelcolor" => "black", "label" => "灰"],
             ["color" => "#FFF", "labelcolor" => "black", "label" => "白"],
             ["color" => "#00F", "labelcolor" => "white", "label" => "青"],
             ["color" => "#F00", "labelcolor" => "white", "label" => "赤"],
@@ -49,7 +50,9 @@ class PaperController extends Controller
             ["color" => "#0FF", "labelcolor" => "black", "label" => "青緑"],
             ["color" => "#F0F", "labelcolor" => "white", "label" => "紫"],
             ["color" => "brown", "labelcolor" => "white", "label" => "茶"],
-            ["color" => "orange", "labelcolor" => "white", "label" => "橙"],
+            ["color" => "orange", "labelcolor" => "black", "label" => "橙"],
+            ["color" => "pink", "labelcolor" => "black", "label" => "桃"],
+            ["color" => "#F4BE9B", "labelcolor" => "black", "label" => "肌"],
         ];
 
         $thicks = [
@@ -57,6 +60,7 @@ class PaperController extends Controller
             ["thick" => "8",],
             ["thick" => "16",],
             ["thick" => "32",],
+            ["thick" => "48",],
         ];
 
         return view("paper", compact(["paper", "created_at", "colors", "thicks"]));

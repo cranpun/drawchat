@@ -11,8 +11,8 @@ export class ZoomScrollAction {
     private orgw: number = 0;
     private orgh: number = 0;
 
-    private readonly ZOOM_MAX: number = 2;
-    private readonly ZOOM_MIN: number = 0.5;
+    private readonly ZOOM_MAX: number = 10;
+    private readonly ZOOM_MIN: number = 0.1;
 
     public init(wrapdiv: DrawcanvasesElement, zoomscroll: ZoomElement) {
         this.wrapdiv = wrapdiv;
