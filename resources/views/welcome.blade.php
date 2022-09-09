@@ -81,7 +81,12 @@
                 <div style="text-align: center"><string><a href="/paper">new paper</a></strong></div>
                 <ul class="links" style="text-align: center; list-style-type: none; margin: 30px 0;">
                     @foreach ($papers as $paper)
-                        <li><a href="/paper/{{ $paper->id }}">Paper : {{ (\Carbon\Carbon::parse($paper->created_at))->format("Y-m-d H:i") }}</a></li>
+                        <li>
+				<a href="/paper/{{ $paper->id }}">
+					<span>Paper : {{ (\Carbon\Carbon::parse($paper->created_at))->format("Y-m-d H:i") }} </span>
+					<span style="display: inline-block; width: 90px; text-align: right;">({{ sprintf("%10s", number_format($paper["len"])) }})</span>
+				</a>
+			</li>
                     @endforeach
                 </ul>
             </div>

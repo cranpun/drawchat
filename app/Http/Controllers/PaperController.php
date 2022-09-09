@@ -15,7 +15,18 @@ class PaperController extends Controller
     public function index()
     {
         $q = \App\Models\Paper::orderBy("id", "DESC");
-        $ret = $q->get();
+        $raws = $q->get();
+
+	$ret = [];
+
+	foreach($raws as $raw) {
+	    $drawq = \App\Models\Draw::where("paper_id", "=", $raw->id);
+	    $drawq->select([\DB::raw("LENGTH(json_draw) AS len")]);
+	    $draws = $drawq->get()->toArray();
+	    $len = array_sum(array_column($draws, "len"));
+            $raw["len"] = $len;
+	    $ret[] = $raw;
+	}
         return view("welcome", ["papers" => $ret]);
     }
 
