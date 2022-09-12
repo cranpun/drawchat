@@ -1,3 +1,5 @@
+import { Tool } from "../u/types";
+
 export class Draw {
     private user_id: number;
     private s: Stroke[];
@@ -78,8 +80,9 @@ export class Draw {
 }
 
 export class StrokeOption {
-    public color: string; // 消しゴムの場合はeのみ
+    public color: string;
     public thick: number;
+    public tool: Tool;
 
     constructor(color: string, thick: number) {
         this.color = color;
