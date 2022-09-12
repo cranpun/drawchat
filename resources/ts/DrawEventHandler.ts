@@ -14,7 +14,6 @@ import { DrawcanvasesElement } from "./element/DrawcanvasesElement";
 import { DrawStatus } from "./data/DrawStatus";
 import { PenAction } from "./action/PenAction";
 import { UndoElement } from "./element/UndoElement";
-import { ZoomScrollAction } from "./action/ZoomScrollAction";
 import { ZoomElement } from "./element/ZoomElement";
 import { EraserElement } from "./element/EraserElement";
 import { ColorElement } from "./element/ColorElement";
@@ -30,7 +29,7 @@ export class DrawEventHandler {
     };
     private element = {
         wrapdiv: new DrawcanvasesElement(),
-        zoomscroll: new ZoomElement(),
+        zoom: new ZoomElement(),
         save: new SaveElement(),
         eraser: new EraserElement(),
         color: new ColorElement(),
@@ -42,7 +41,6 @@ export class DrawEventHandler {
     };
     private action = {
         load: new LoadAction(),
-        zoomscroll: new ZoomScrollAction(),
     };
 
     private mine = {
@@ -69,7 +67,7 @@ export class DrawEventHandler {
         const color = sd["#sd-color"];
         const thick = sd["#sd-thick"];
 
-        this.element.zoomscroll.init(this.action.zoomscroll);
+        this.element.zoom.init();
         this.element.save.init(this.mine.draw, this.mine.paper);
         this.element.color.init(this.mine.pen);
         this.element.thick.init(this.mine.pen);
@@ -81,10 +79,9 @@ export class DrawEventHandler {
 
         this.device.mouse.init(this, this.mine.paper);
         this.device.pointer.init(this, this.mine.paper);
-        this.device.touch.init(this, this.mine.paper, this.action.zoomscroll);
+        this.device.touch.init(this, this.mine.paper, this.element.zoom);
 
         this.action.load.init(this.mine.paper, this.other.paper, this.mine.draw, this.other.draw, this.other.pen, this.status.draw);
-        this.action.zoomscroll.init(this.element.wrapdiv, this.element.zoomscroll);
 
         const strokeopt = new StrokeOption(color, thick);
         this.mine.pen.init(strokeopt);

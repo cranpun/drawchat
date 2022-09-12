@@ -2,14 +2,15 @@ import { DrawEventHandler } from "../DrawEventHandler";
 import { PaperElement } from "../element/PaperElement";
 import { Point } from "../data/Draw";
 import * as U from "../u/u";
-import { ZoomScrollAction } from "../action/ZoomScrollAction";
+import { ZoomElement } from "../element/ZoomElement";
+
 export class TouchSensor {
     private sense: DrawEventHandler;
     private paper: PaperElement;
-    private zoomscroll: ZoomScrollAction;
+    private zoomscroll: ZoomElement;
     private canvashandlers: ((e: TouchEvent) => void)[] = [];
 
-    public init(sense: DrawEventHandler, paper: PaperElement, zoomscroll: ZoomScrollAction): void {
+    public init(sense: DrawEventHandler, paper: PaperElement, zoomscroll: ZoomElement): void {
         this.sense = sense;
         this.paper = paper;
         this.zoomscroll = zoomscroll;
