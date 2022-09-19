@@ -74,12 +74,12 @@
                 </div>
             @endif
 
-            <div class="content" style="padding: 3em;">
+            <div class="content" style="padding: 1em;">
                 <div class="title m-b-md">
                     <img alt="drawchat" src="{{ \App\U\U::filetimelink(asset('img/logo.png'), public_path() .'/img/logo.png') }}">
                 </div>
                 <div style="text-align: center"><string><a href="/paper">new paper</a></strong></div>
-                <ul class="links" style="text-align: center; list-style-type: none; margin: 30px 0;">
+                <ul class="links" style="text-align: center; list-style-type: none; margin: 30px 0; overflow-y: scroll; height: 30vh;">
                     @foreach ($papers as $paper)
                         <li>
 				<a href="/paper/{{ $paper->id }}">

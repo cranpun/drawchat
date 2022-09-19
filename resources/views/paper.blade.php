@@ -211,7 +211,7 @@ $defthick = 6;
                 left: 0;
             }
         </style>
-        <div id="drawcanvases">
+        <div id="drawcanvases" style="margin-bottom; 5vh;">
             <canvas id="othercanvas" width="<?= $cw ?>" height="<?= $ch ?>" style="pointer-events: none;"></canvas>
             <canvas id="mycanvas" width="<?= $cw ?>" height="<?= $ch ?>" style="cursor: pointer;"></canvas>
         </div>

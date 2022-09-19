@@ -31,6 +31,11 @@ export class PenAction {
         } else {
             this.pen(x, y, pre, ctx);
         }
+
+        // メニューは閉じる
+        document.querySelectorAll(".is-active").forEach(ele => {
+            ele.classList.remove("is-active");
+        });
     }
     private pen(x: number, y: number, pre: Point, ctx: CanvasRenderingContext2D): void {
         ctx.save()
