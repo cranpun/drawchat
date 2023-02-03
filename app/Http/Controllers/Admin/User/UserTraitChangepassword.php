@@ -18,7 +18,7 @@ trait UserTraitChangepassword
         }
 
         $password = $request->input("password");
-        $row = \App\Models\User::where("id", "=", $user_id)->get()->toArray()[0];
+        $row = \App\Models\User::where("id", "=", $user->id)->get()->toArray()[0];
         if(!$row->saveProc(["password" => $password])) {
             // 保存失敗
             \App\U\U::invokeErrorValidate($request, "保存に失敗しました。");

@@ -1,6 +1,7 @@
 import { Draw, Stroke, Point, StrokeOption } from "../data/Draw";
 import { PenAction } from "../action/PenAction";
 import { SaveElement } from "../element/SaveElement";
+import * as U from "../u/u";
 
 export class DrawMine {
     private draw: Draw;
@@ -49,7 +50,7 @@ export class DrawMine {
         const urls: string[] = window.location.pathname.split("/");
         const paper_id: number = parseInt(urls[urls.length - 1]);
         const url = `/api/draw/${paper_id}`;
-        const postdata = new FormData();
+        const postdata = U.makeCsrf();
         postdata.append("json_draw", this.draw.json());
         postdata.append("user_id", <string>this.user_id);
         const option: RequestInit = {

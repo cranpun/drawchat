@@ -24,8 +24,10 @@ class DrawController extends \App\Http\Controllers\Controller
         return response($ret);
     }
 
-    public function mine($paper_id, $user_id)
+    public function mine($paper_id)
     {
+        $user = \Illuminate\Support\Facades\Auth::user();
+        $user_id = $user->id;
         $q = \App\Models\Draw::where("paper_id", "=", $paper_id);
         $q->where("user_id", "=", $user_id);
         $q->orderBy("id", "DESC");
@@ -47,29 +49,18 @@ class DrawController extends \App\Http\Controllers\Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function add(Request $request, $paper_id)
+    public function add(\Illuminate\Http\Request $request, $paper_id)
     {
         // 前回の記述を削除
+        $user = $request->user();
+
         $data = new \App\Models\Draw();
-        $data->user_id = $request->input("user_id", null);
-        $data->user_id = in_array($data->user_id, [null, "null"]) ? $this->userid($paper_id) : $data->user_id;
+        $data->user_id = $user->id;
         $data->json_draw = $request->input("json_draw", "");
         $data->paper_id = $paper_id;
         $data->save();
         return response([
             "user_id" => $data->user_id
         ]);
-    }
-
-    public function userid($paper_id)
-    {
-        $q = \App\Models\Draw::where("paper_id", "=", $paper_id);
-        $ret = $q->max("user_id");
-        if($ret) {
-            return $ret + 1;
-        } else {
-            // 最初のユーザなので1
-            return 1;
-        }
     }
 }

@@ -25,6 +25,7 @@ $defthick = 6;
 
 <body style="padding: 10px; display: inline-block;">
     <section id="serverdata" style="display: none;">
+        <div id="sd-csrf-token">{{ csrf_token() }}</div>
         <div id="sd-color">{{ $defcolor }}</div>
         <div id="sd-thick">{{ $defthick }}</div>
         <div id="sd-cw">{{ $cw }}</div>

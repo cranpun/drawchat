@@ -23,6 +23,6 @@ Route::prefix("draw")->group(function() {
     Route::get("/{paper_id}", [DrawController::class, "index"]);
     Route::get("/{paper_id}/after/{after_paper_id}", [DrawController::class, "indexafter"]);
     Route::post("/{paper_id}", [DrawController::class, "add"]);
-    Route::get("/{paper_id}/mine/{user_id}", [DrawController::class, "mine"]); // 暫定？user_idはログインをセッションで持ってればいらないかも
+    Route::get("/{paper_id}/mine", [DrawController::class, "mine"]); // 暫定？user_idはログインをセッションで持ってればいらないかも
     Route::get("/{paper_id}/other/{user_id}", [DrawController::class, "other"]); // 暫定？user_idはログインをセッションで持ってればいらないかも
 });

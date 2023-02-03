@@ -1,14 +1,27 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<?php
+/**
+ * @param なし
+ */
+?>
+@extends("admin.base")
 
-<head>
-    @include("head")
+@section("title")
+drawchat
+@endsection
 
+@section("labeltitle")
+drawchat
+@endsection
+
+@section("labelsubtitle")
+@endsection
+
+@section("main")
     <!-- Styles -->
     <style>
         html,
         body {
-            background-color: #fff;
+            background: #f6f6f6;
             color: #636b6f;
             font-family: 'Nunito', sans-serif;
             font-weight: 200;
@@ -57,29 +70,14 @@
         .m-b-md {
             margin-bottom: 30px;
         }
+        #main-header  {
+            display: none;
+        }
     </style>
-</head>
-
-<body style="background: #f6f6f6;">
     <div class="flex-center position-ref full-height">
-        @if (Route::has('login'))
-        <div class="top-right links">
-            @auth
-            <a href="{{ route('top') }}">Home</a>
-            @else
-            <a href="{{ route('login') }}">Login</a>
-
-            @if (Route::has('register'))
-            <a href="{{ route('register') }}">Register</a>
-            @endif
-            @endauth
-        </div>
-        @endif
-
         <div class="content" style="padding: 1em;">
             <div class="title m-b-md">
                 <img alt="drawchat" src="{{ \App\U\U::publicfiletimelink('img/logo.png') }}">
-
             </div>
             <div style="text-align: center">
                 <string><a href="/paper">new paper</a></strong>
@@ -96,6 +94,5 @@
             </ul>
         </div>
     </div>
-</body>
 
-</html>
+@endsection
