@@ -12,13 +12,13 @@ server {
 
     location ~ \.php$ {
         include snippets/fastcgi-php.conf;
-        fastcgi_pass unix:/run/php/php8.1-fpm.sock;
+        fastcgi_pass unix:/run/php/php8.2-fpm.sock;
     }
 
     listen [::]:443 ssl ipv6only=on; # managed by Certbot
     listen 443 ssl; # managed by Certbot
-    ssl_certificate /var/www/html/docker/os/sslkey/_wildcard.dev.ll+2.pem;
-    ssl_certificate_key /var/www/html/docker/os/sslkey/_wildcard.dev.ll+2-key.pem;
+    ssl_certificate /var/www/html/docker/common/sslkey/_wildcard.dev.ll+2.pem;
+    ssl_certificate_key /var/www/html/docker/common/sslkey/_wildcard.dev.ll+2-key.pem;
     # include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
     # ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
 }

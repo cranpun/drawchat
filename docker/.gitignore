@@ -1,2 +1,3 @@
-centos/apachelog/*
-centos/data.sql
+os/apachelog/*
+os/data.sql
+!.env
