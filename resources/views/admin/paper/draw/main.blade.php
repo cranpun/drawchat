@@ -11,10 +11,9 @@
 </style>
 
 <head>
-    @include("element/head")
-    <title>{{ config("app.name") }}</title>
+    @include("head")
     <meta name="viewport" content="initial-scale=1 user-scalable=no">
-    <script src="{{ asset('js/app.js') . '?v=' . filemtime(public_path() .'/js/app.js') }}" defer></script>
+    <script type="text/javascript" src="{{ \App\U\U::publicfiletimelink('js/app.js') }}"></script>
 </head>
 
 <?php

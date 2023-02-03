@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin\Paper;
 
-use App\Models\Paper;
 use Illuminate\Http\Request;
 
-class PaperController extends Controller
+class PaperController extends \App\Http\Controllers\Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,17 +16,17 @@ class PaperController extends Controller
         $q = \App\Models\Paper::orderBy("id", "DESC");
         $raws = $q->get();
 
-	$ret = [];
+        $ret = [];
 
-	foreach($raws as $raw) {
-	    $drawq = \App\Models\Draw::where("paper_id", "=", $raw->id);
-	    $drawq->select([\DB::raw("LENGTH(json_draw) AS len")]);
-	    $draws = $drawq->get()->toArray();
-	    $len = array_sum(array_column($draws, "len"));
+        foreach ($raws as $raw) {
+            $drawq = \App\Models\Draw::where("paper_id", "=", $raw->id);
+            $drawq->select([\DB::raw("LENGTH(json_draw) AS len")]);
+            $draws = $drawq->get()->toArray();
+            $len = array_sum(array_column($draws, "len"));
             $raw["len"] = $len;
-	    $ret[] = $raw;
-	}
-        return view("welcome", ["papers" => $ret]);
+            $ret[] = $raw;
+        }
+        return view("admin.paper.index.main", ["papers" => $ret]);
     }
 
     /**
@@ -36,11 +35,11 @@ class PaperController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $paper_id = null)
+    public function draw(Request $request, $paper_id = null)
     {
         $now_id = $paper_id;
         $paper = \App\Models\Paper::find($paper_id);
-        if($now_id == null) {
+        if ($now_id == null) {
             $data = new \App\Models\Paper();
             $data->save();
             $now_id = $data->id;
@@ -77,6 +76,6 @@ class PaperController extends Controller
             ["thick" => "48",],
         ];
 
-        return view("paper", compact(["paper", "created_at", "colors", "thicks"]));
+        return view("admin.paper.draw.main", compact(["paper", "created_at", "colors", "thicks"]));
     }
 }

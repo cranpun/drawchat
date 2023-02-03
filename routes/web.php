@@ -13,13 +13,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', "PaperController@index");
-// function () {
-//     return view('welcome');
-// });
-
-// nullなら新規作成
-Route::get('/paper/{paper_id?}', "PaperController@show")->name("open-paper");
-// function ($paper_id = null) {
-//     return view('paper', compact(["paper_id"]));
-// });
+require_once(__DIR__ . DIRECTORY_SEPARATOR . "web_pub.php");
+require_once(__DIR__ . DIRECTORY_SEPARATOR . "web_admin.php");

@@ -3,53 +3,59 @@
 namespace App\U;
 
 
-class U {
-    public static function invokeErrorValidate($request, $message)
+class U
+{
+    public static function invokeErrorValidate(\Illuminate\Http\Request $request, string $message): void
     {
-        if($message != null) {
+        if ($message != null) {
             $request->session()->flash("message-error", $message);
+            \Log::channel("myerror")->debug("invokeErrorValidate : {$message}");
         }
         $validate = [
             "dummy" => "required"
         ];
         $request->validate($validate);
     }
-    public static function toAssoc($rows, $clmid = "id", $clmname = "name")
+    public static function toAssoc(array $rows, string $clmid = "id", string $clmname = "name"): array
     {
         // 連想配列に変換
         $ret = [];
-        foreach($rows as $row) {
+        foreach ($rows as $row) {
             $ret[$row[$clmid]] = $row[$clmname];
         }
         return $ret;
     }
-    public static function query2array($q)
+    public static function query2array(\Illuminate\Database\Eloquent\Builder $q): array
     {
-        $ret = $q->get()->map(function($item) {
+        $ret = $q->get()->map(function ($item) {
             return (array)$item;
         })->all();
         return $ret;
     }
-    public static function getd($key, $array, $def) {
+    public static function getd(mixed $key, array $array, mixed $def): string
+    {
         $arr = (array)$array;
         $ret = array_key_exists($key, $arr) ? $arr[$key] : $def;
         return $ret;
     }
-    public static function vald($val, $def) {
+    public static function vald(mixed $val, mixed $def): mixed
+    {
         $ret = $val ? $val : $def;
         return $ret;
     }
     /**
      * 配列nameを安全な内容に変更
      */
-    public static function safeArrayname($name, $replace) {
+    public static function safeArrayname(string $name, string $replace): string
+    {
         $ret = str_replace("[", $replace, str_replace("]", "", $name));
         return $ret;
     }
-    public static function filetimelink($url, $filepath) {
-        return $url . '?v=' . filemtime($filepath); 
+    public static function publicfiletimelink(string $filepath): string
+    {
+        return asset($filepath) . '?v=' . filemtime(join(DIRECTORY_SEPARATOR, [public_path(), $filepath]));
     }
-    public static function toSql(\Illuminate\Database\Eloquent\Builder $q)
+    public static function toSql(\Illuminate\Database\Eloquent\Builder $q): string
     {
         return vsprintf(
             str_replace('?', '%s', $q->toSql()),
@@ -58,35 +64,53 @@ class U {
             })->toArray()
         );
     }
+    public static function isURL(string $url): bool
+    {
+        $ret = filter_var($url, FILTER_VALIDATE_URL);
+        return $ret !== false; // 失敗した場合はfalseなのでそれ以外であればURL
+    }
+    // public static function makeCsvWriterObj()
+    // {
+    //     $csv = \League\Csv\Writer::createFromStream(fopen("php://temp", "r+"));
+    //     \League\Csv\CharsetConverter::addTo($csv, "UTF-8", "SJIS");
+    //     $csv->setEnclosure('"');
+    //     return $csv;
+    // }
 
-    public static function div($num1, $num2)
-    {
-        if($num2 == 0) {
-            return 0;
-        } else {
-            return $num1 / $num2;
-        }
-    }
-    public static function totalclm($data): array
-    {
-        // 数値データであればトータルを計算。
-        $ret = [];
-        foreach($data as $row) {
-            if(is_array($row)) {
-                $arr = $row;
-            } else {
-                // モデルなら配列化
-                $arr = $row->toArray();
-            }
-            foreach($arr as $clm => $val) {
-                if(is_numeric($val)) {
-                    if(!array_key_exists($clm, $ret)) {
-                        $ret[$clm] = 0;
-                    }
-                    $ret[$clm] += $val;
-                }
-            }
-        }
-        return $ret;
-    }
+    // public static function makeCsvReaderObj($filepath)
+    // {
+    //     $csv = \League\Csv\Reader::createFromPath($filepath);
+    //     $csv->addStreamFilter('convert.iconv.cp932/UTF-8');
+    //     return $csv;
+    // }
+    //     public static function sendMail($subject, $text, $tos, $ccs, $bccs)
+    //     {
+    //         $mail = \Illuminate\Support\Facades\Mail::raw($text, function($message) use ($subject, $tos, $ccs, $bccs) {
+    //             $message->to($tos);
+    //             if($ccs) {
+    //                 $message->cc($ccs);
+    //             }
+    //             if($bccs) {
+    //                 $message->bcc($bccs);
+    //             }
+    //             $message->from(config('myconf.email_contact'));
+    //             $message->subject($subject);
+    //         });
+
+    //         // ログ保存
+    //         $strtos = join(",", $tos);
+    //         $strccs = $ccs ? join(",", $ccs) : "null";
+    //         $strbccs = $bccs ? join(",", $bccs) : "null";
+    //         $log = <<< EOM
+
+    // subject: {$subject}
+    // to : {$strtos}
+    // cc : {$strccs}
+    // bcc: {$strbccs}
+    // body:
+    // {$text}
+
+    // EOM;
+    //         \Log::channel("mail")->info($log);
+    //     }
 }

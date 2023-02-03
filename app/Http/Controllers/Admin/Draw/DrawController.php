@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin\Draw;
 
 use App\Models\Draw;
 use Illuminate\Http\Request;
 
-class DrawController extends Controller
+class DrawController extends \App\Http\Controllers\Controller
 {
     public function index($paper_id)
     {
