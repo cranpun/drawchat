@@ -1,9 +1,9 @@
-import { DrawOther } from "../data/DrawOther";
+import { Drawstore } from "../data/Drawstore";
 import * as U from "../u/u";
 import { PaperElement } from "../element/PaperElement";
 import { PenAction } from "./PenAction";
 import { Stroke, Point, Draw } from "../data/Draw";
-import { DrawMine } from "../data/DrawMine";
+import { Drawing } from "../data/Drawing";
 import { DrawStatus } from "../data/DrawStatus";
 import { SaveElement } from "../element/SaveElement";
 
@@ -13,22 +13,22 @@ export class LoadAction {
         other: PaperElement
     };
     private datastores: {
-        mine: DrawMine,
-        other: DrawOther
+        mine: Drawing,
+        other: Drawstore
     };
     private pen: PenAction;
     private drawstatus: DrawStatus;
 
     private precanvas: HTMLImageElement;
 
-    public init(papermine: PaperElement, paperother: PaperElement, drawmine: DrawMine, drawother: DrawOther, pen: PenAction, drawstatus: DrawStatus) {
+    public init(papermine: PaperElement, paperother: PaperElement, Drawing: Drawing, Drawstore: Drawstore, pen: PenAction, drawstatus: DrawStatus) {
         this.papers = {
             mine: papermine,
             other: paperother,
         }
         this.datastores = {
-            mine: drawmine,
-            other: drawother
+            mine: Drawing,
+            other: Drawstore
         };
         this.pen = pen;
         this.drawstatus = drawstatus;

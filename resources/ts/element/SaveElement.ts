@@ -1,13 +1,13 @@
-import { DrawMine } from "../data/DrawMine";
+import { Drawing } from "../data/Drawing";
 import * as U from "../u/u";
 import { PaperElement } from "./PaperElement";
 
 export class SaveElement {
     private ele: HTMLElement;
-    private datastore: DrawMine;
+    private datastore: Drawing;
     private paper: PaperElement;
 
-    public init(datastore: DrawMine, paper: PaperElement) {
+    public init(datastore: Drawing, paper: PaperElement) {
         this.datastore = datastore;
         this.paper = paper;
         this.ele = <HTMLElement>document.querySelector("#act-save");

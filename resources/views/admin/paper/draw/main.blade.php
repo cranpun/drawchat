@@ -186,20 +186,20 @@ $defthick = 6;
         </nav>
     </header>
     <!--  -->
-    <main style="display: inline-block; transform-origin: top left; width: {{ $cw }}px; height: {{ $ch }}px; ">
+    <main style="display: inline-block; transform-origin: top left; width: {{ $cw }}px;">
         <style type="text/css">
             #drawcanvases {
-                border: 5px solid #aaa;
                 border-radius: 5px;
                 transform-origin: top left;
                 position: relative;
                 padding: 3px;
                 width: {{ $cw + 10 }}px;
-                height: {{ $ch + 10 }}px;
+                height: {{ $ch + 30 }}px;
             }
 
             #mycanvas,
             #othercanvas {
+                border: 5px solid #aaa;
                 width: <?= $cw ?>px;
                 height: <?= $ch ?>px;
             }
@@ -211,7 +211,7 @@ $defthick = 6;
                 left: 0;
             }
         </style>
-        <div id="drawcanvases" style="margin-bottom; 5vh;">
+        <div id="drawcanvases" style="margin-bottom: 5vh;">
             <canvas id="othercanvas" width="<?= $cw ?>" height="<?= $ch ?>" style="pointer-events: none;"></canvas>
             <canvas id="mycanvas" width="<?= $cw ?>" height="<?= $ch ?>" style="cursor: pointer;"></canvas>
         </div>

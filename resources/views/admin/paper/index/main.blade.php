@@ -19,16 +19,6 @@ drawchat
 @section("main")
     <!-- Styles -->
     <style>
-        html,
-        body {
-            background: #f6f6f6;
-            color: #636b6f;
-            font-family: 'Nunito', sans-serif;
-            font-weight: 200;
-            height: 100vh;
-            margin: 0;
-        }
-
         .full-height {
             height: 100vh;
         }
@@ -73,6 +63,9 @@ drawchat
         #main-header  {
             display: none;
         }
+        #paper-index {
+            background: white;
+        }
     </style>
     <div class="flex-center position-ref full-height">
         <div class="content" style="padding: 1em;">
@@ -82,7 +75,7 @@ drawchat
             <div style="text-align: center">
                 <string><a href="/paper">new paper</a></strong>
             </div>
-            <ul class="links" style="text-align: center; list-style-type: none; margin: 30px 0; overflow-y: scroll; height: 30vh;">
+            <ul id="paper-index" class="links" style="text-align: center; list-style-type: none; margin: 30px 0; overflow-y: scroll; height: 30vh;">
                 @foreach ($papers as $paper)
                 <li>
                     <a href="/paper/{{ $paper->id }}">

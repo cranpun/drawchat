@@ -9,11 +9,15 @@ export class Draw {
     constructor() {
         this.clear();
     }
+    public setIDs(id: number, user_id: number): void {
+        this.user_id = user_id;
+        this.id = id;
+    }
     public push(p: Stroke): void {
         this.s.push(p);
     }
-    public pop(): Stroke | null {
-        const ret: Stroke | null = this.s.pop();
+    public pop(): Stroke | undefined {
+        const ret: Stroke | undefined = this.s.pop();
         return ret;
     }
     public peek(): Stroke | null {
@@ -43,7 +47,7 @@ export class Draw {
     public parse(strokes: any[]): void {
         this.s = [];
         for (const s of strokes) {
-            const opt:StrokeOption = new StrokeOption(s[0][0], s[0][1]);
+            const opt: StrokeOption = new StrokeOption(s[0][0], s[0][1]);
             const tmp = new Stroke(opt);
             tmp.parse(s[1]);
             this.s.push(tmp);
@@ -55,13 +59,11 @@ export class Draw {
     public setCreatedAt(created_at: string): void {
         this.created_at = created_at;
     }
-    public setId(id: number): void {
-        this.id = id;
-    }
+
     public isOlder(draw: Draw): number {
-        if(this.id > draw.id){
+        if (this.id > draw.id) {
             return -1;
-        } else if(this.id < draw.id) {
+        } else if (this.id < draw.id) {
             return 1;
         } else {
             return 0;
@@ -69,9 +71,9 @@ export class Draw {
     }
 
     public isNewer(draw: Draw): number {
-        if(this.id > draw.id){
+        if (this.id > draw.id) {
             return 1;
-        } else if(this.id < draw.id) {
+        } else if (this.id < draw.id) {
             return -1;
         } else {
             return 0;

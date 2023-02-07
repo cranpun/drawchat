@@ -1,28 +1,30 @@
-import { Draw, Stroke, Point, StrokeOption } from "../data/Draw";
+import { Draw, Stroke, Point, StrokeOption } from "./Draw";
 import { PenAction } from "../action/PenAction";
 import { SaveElement } from "../element/SaveElement";
 import * as U from "../u/u";
+import { Drawstore } from "./Drawstore";
 
-export class DrawMine {
+export class Drawing {
     private draw: Draw;
     private nowstroke: Stroke;
-    private user_id: string | null;
     private paper_id: number;
     private pen: PenAction;
-    private savedStroke: Stroke | null; // 保存したときのstroke
+    private drawstore: Drawstore;
 
     constructor() {
-        this.draw = new Draw();
-        this.user_id = null;
+        this.initDraw();
         const urls: string[] = window.location.pathname.split("/");
-        const paper_id: number = parseInt(urls[urls.length - 1]);
-        this.paper_id = paper_id;
-        this.savedStroke = null;
+        this.paper_id = parseInt(urls[urls.length - 1]); // urlの末尾がページID
     }
 
-    public init(pen: PenAction) {
+    public init(pen: PenAction, drawstore: Drawstore) {
         this.pen = pen;
         this.nowstroke = new Stroke(new StrokeOption(this.pen.opt.color, this.pen.opt.thick));
+        this.drawstore = drawstore;
+    }
+
+    private initDraw(): void {
+        this.draw = new Draw();
     }
 
     public pushPoint(x: number, y: number): void {
@@ -47,22 +49,21 @@ export class DrawMine {
         }
     }
     public async save(): Promise<void> {
-        const urls: string[] = window.location.pathname.split("/");
-        const paper_id: number = parseInt(urls[urls.length - 1]);
-        const url = `/api/draw/${paper_id}`;
+        // まず現在のdrawを退避してクリア。次のdrawを受け付けるため。
+        const json_draw:string = this.draw.json();
+        this.drawstore.addDraws(this.draw); // 取り急ぎ直接drawを追加
+        this.initDraw();
+
+        const url = `/api/draw/${this.paper_id}`;
         const postdata = U.makeCsrf();
-        postdata.append("json_draw", this.draw.json());
-        postdata.append("user_id", <string>this.user_id);
+        postdata.append("json_draw", json_draw);
         const option: RequestInit = {
             method: "POST",
             body: postdata,
         }
         const response = await fetch(url, option);
         const res_save = JSON.parse(await response.text());
-        if (this.user_id === null) {
-            this.user_id = res_save.user_id.toString();
-        }
-        this.savedStroke = this.draw.peek();
+
         this.showLabelSaved();
     }
 
@@ -75,6 +76,7 @@ export class DrawMine {
     }
 
     public undo(): Stroke[] {
+        // MYTODO。現在の記述が空なら、Datastoreのundoを実施。
         this.draw.getStrokes().pop();
         const ret = this.draw.getStrokes();
         return ret;
@@ -84,11 +86,8 @@ export class DrawMine {
         return this.nowstroke;
     }
 
-    /**
-     * 保存したストローク数が正しければ保存済み。増えるばかりではなく、undoで減る場合もあり。
-     */
     public isSaved(): boolean {
-        const ret: boolean = this.savedStroke === this.draw.peek();
+        const ret: boolean = this.draw.getStrokes().length == 0;
         return ret;
     }
 

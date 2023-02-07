@@ -1,8 +1,8 @@
 import { Point, StrokeOption } from "./data/Draw";
 import { Device, Tool } from "./u/types";
 import { PaperElement } from "./element/PaperElement";
-import { DrawMine } from "./data/DrawMine";
-import { DrawOther } from "./data/DrawOther";
+import { Drawing } from "./data/Drawing";
+import { Drawstore } from "./data/Drawstore";
 import * as U from "./u/u";
 import { MouseSensor } from "./sensor/MouseSensor";
 import { PointerSensor } from "./sensor/PointerSensor";
@@ -43,14 +43,14 @@ export class DrawEventHandler {
         load: new LoadAction(),
     };
 
-    private mine = {
+    private drawing = {
         paper: PaperElement.makeMine(),
-        draw: new DrawMine(),
+        drawing: new Drawing(),
         pen: new PenAction(),
     };
-    private other = {
+    private drawstore = {
         paper: PaperElement.makeOther(),
-        draw: new DrawOther(),
+        drawstore: new Drawstore(),
         pen: new PenAction(),
     };
     private device = {
@@ -68,26 +68,26 @@ export class DrawEventHandler {
         const thick = sd["#sd-thick"];
 
         this.element.zoom.init();
-        this.element.save.init(this.mine.draw, this.mine.paper);
-        this.element.color.init(this.mine.pen);
-        this.element.thick.init(this.mine.pen);
-        this.element.eraser.init(this.mine.pen);
-        this.element.undo.init(this.mine.paper, this.mine.draw, this.mine.pen);
-        this.element.back.init(this.mine.draw);
+        this.element.save.init(this.drawing.drawing, this.drawing.paper);
+        this.element.color.init(this.drawing.pen);
+        this.element.thick.init(this.drawing.pen);
+        this.element.eraser.init(this.drawing.pen);
+        this.element.undo.init(this.drawing.paper, this.drawing.drawing, this.drawing.pen);
+        this.element.back.init(this.drawing.drawing);
         this.element.load.init(this.action.load);
-        this.element.download.init(this.mine.paper, this.other.paper, sd["#sd-cw"], sd["#sd-ch"], sd["#sd-created_at"]);
+        this.element.download.init(this.drawing.paper, this.drawstore.paper, sd["#sd-cw"], sd["#sd-ch"], sd["#sd-created_at"]);
 
-        this.device.mouse.init(this, this.mine.paper);
-        this.device.pointer.init(this, this.mine.paper);
-        this.device.touch.init(this, this.mine.paper, this.element.zoom);
+        this.device.mouse.init(this, this.drawing.paper);
+        this.device.pointer.init(this, this.drawing.paper);
+        this.device.touch.init(this, this.drawing.paper, this.element.zoom);
 
-        this.action.load.init(this.mine.paper, this.other.paper, this.mine.draw, this.other.draw, this.other.pen, this.status.draw);
+        this.action.load.init(this.drawing.paper, this.drawstore.paper, this.drawing.drawing, this.drawstore.drawstore, this.drawstore.pen, this.status.draw);
 
         const strokeopt = new StrokeOption(color, thick);
-        this.mine.pen.init(strokeopt);
-        this.mine.draw.init(this.mine.pen);
+        this.drawing.pen.init(strokeopt);
+        this.drawing.drawing.init(this.drawing.pen, this.drawstore.drawstore);
 
-        this.other.pen.init(strokeopt);
+        this.drawstore.pen.init(strokeopt);
     }
     private loadServerData(): any[] {
         const ids: string[] = [
@@ -113,7 +113,7 @@ export class DrawEventHandler {
 
         this.nowsensor = dev;
         this.status.draw.startStroke();
-        this.mine.draw.startStroke();
+        this.drawing.drawing.startStroke();
     }
 
     public move(dev: Device, e: Event, p: Point): void {
@@ -137,9 +137,9 @@ export class DrawEventHandler {
         switch (this.status.draw.getTool()) {
             case "pen":
                 // 単押し移動＝記述
-                const p: Point | null = this.mine.draw.lastPoint();
-                this.mine.pen.proc(x, y, p, this.mine.paper);
-                this.mine.draw.pushPoint(x, y);
+                const p: Point | null = this.drawing.drawing.lastPoint();
+                this.drawing.pen.proc(x, y, p, this.drawing.paper);
+                this.drawing.drawing.pushPoint(x, y);
                 break;
         }
     }
@@ -154,7 +154,7 @@ export class DrawEventHandler {
             const x: number = p.x;
             const y: number = p.y;
             this.status.draw.endStroke();
-            this.mine.draw.endStroke();
+            this.drawing.drawing.endStroke();
             this.element.wrapdiv.setNormal();
             this.nowsensor = null;
         }

@@ -43,7 +43,7 @@ class User extends Authenticatable implements MustVerifyEmail
     static function validaterule() : array
     {
         return [
-            "name" => "required|unique:user",
+            "name" => "required|unique:users",
             "display_name" => "required|string",
             // "role" => "required|in:" . join(",", array_keys((new \App\L\Role())->labels())),
             "role" => "required|in:" . \App\L\Role::ID_ADMIN,

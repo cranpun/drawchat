@@ -9,9 +9,9 @@ trait UserTraitIndex
     {
         $q = \App\Models\User::query();
         $q->select([
-            "user.id AS id",
-            "user.name AS name",
-            "user.display_name AS display_name",
+            "users.id AS id",
+            "users.name AS name",
+            "users.display_name AS display_name",
         ]);
         $rows = $q->get();
         return view("admin.user.index.main", compact(["rows"]));

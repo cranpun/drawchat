@@ -111,11 +111,15 @@
                     ];
                     for(const menuactive of menuactives) {
                         document.querySelector(menuactive.button).addEventListener("click", function () {
-                            document.querySelector(menuactive.menu).classList.toggle("is-active");
+                            const ele = document.querySelector(menuactive.menu);
+                            ele.classList.toggle("is-active");
+                            ele.classList.toggle("fadein");
                         });
                         document.querySelector(menuactive.button).addEventListener("touchend", function (ev) {
                             ev.preventDefault();
-                            document.querySelector(menuactive.menu).classList.toggle("is-active");
+                            const ele = document.querySelector(menuactive.menu);
+                            ele.classList.toggle("is-active");
+                            ele.classList.toggle("fadein");
                         });
                     }
                 });

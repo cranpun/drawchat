@@ -1,16 +1,16 @@
-import { DrawMine } from "../data/DrawMine";
+import { Drawing } from "../data/Drawing";
 import * as U from "../u/u";
 
 
 export class BackElement {
     private ele: HTMLElement;
-    private draw: DrawMine;
+    private draw: Drawing;
     constructor() {
         this.ele = <HTMLElement>document.querySelector("#act-back");
         this.ele.addEventListener("click", () => this.proc());
         this.ele.addEventListener("touchend", () => this.proc());
     }
-    public init(draw: DrawMine) {
+    public init(draw: Drawing) {
         this.draw = draw;
     }
     private async proc(): Promise<void> {

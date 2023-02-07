@@ -1,4 +1,4 @@
-import { DrawMine } from "../data/DrawMine";
+import { Drawing } from "../data/Drawing";
 import * as U from "../u/u";
 import { PaperElement } from "./PaperElement";
 import { parse, format } from "date-fns";

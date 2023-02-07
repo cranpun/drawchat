@@ -1,18 +1,18 @@
 import { Point, Stroke } from "../data/Draw";
-import { DrawMine } from "../data/DrawMine";
+import { Drawing } from "../data/Drawing";
 import { PaperElement } from "../element/PaperElement";
 import { PenAction } from "../action/PenAction";
 
 export class UndoElement {
     private ele: HTMLElement;
-    private draw: DrawMine;
+    private draw: Drawing;
     private paper: PaperElement;
     private pen: PenAction;
-    public init(paper: PaperElement, draw: DrawMine, pen: PenAction) {
+    public init(paper: PaperElement, draw: Drawing, pen: PenAction) {
         this.paper = paper;
         this.draw = draw;
         this.pen = pen;
-        this.ele = document.querySelector("#act-undo");
+        this.ele = <HTMLElement>document.querySelector("#act-undo");
 
         this.ele.addEventListener("click", () => this.proc());
         this.ele.addEventListener("touchend", () => this.proc());
