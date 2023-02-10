@@ -71,7 +71,7 @@ $defthick = 6;
                             <?php foreach($thicks as $thick) : $half = $thick['thick'] / 2; ?>
                                 <a
                                     class="dropdown-item pen-thick"
-                                    data-width="{{ $thick['thick'] }}$"
+                                    data-width="{{ $thick['thick'] }}"
                                 >
                                     <span
                                         class="not-trigger"
@@ -169,9 +169,6 @@ $defthick = 6;
                     <a id="act-new-paper" class="navbar-item material-icons-parent" href="{{ route('open-paper') }}">
                         <span class="material-icons" aria-hidden="true">file_open</span>
                         &nbsp;new
-                    </a>
-                    <a id="act-load-other-force" class="navbar-item" style="display: none;">
-                        読み込み
                     </a>
                     <a id="act-back" class="navbar-item material-icons-parent">
                         <span class="material-icons" aria-hidden="true">low_priority</span>

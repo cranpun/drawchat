@@ -1,17 +1,23 @@
+import { PenAction } from "../action/PenAction";
+import { Draw, Stroke, Point, StrokeOption } from "../data/Draw";
 
 export class PaperElement {
     private cnv: HTMLCanvasElement;
     private ctx: CanvasRenderingContext2D;
+    private pen: PenAction;
+    private first: boolean;
 
-    public static makeMine(): PaperElement {
-        return new PaperElement("#mycanvas");
+    public static makeDrawing(opt: StrokeOption): PaperElement {
+        return new PaperElement("#mycanvas", opt);
     }
-    public static makeOther(): PaperElement {
-        return new PaperElement("#othercanvas");
+    public static makeDrawstore(opt: StrokeOption): PaperElement {
+        return new PaperElement("#othercanvas", opt);
     }
-    private constructor(selector: string) {
+    private constructor(selector: string, opt: StrokeOption) {
         this.cnv = document.querySelector(selector);
         this.ctx = this.cnv.getContext("2d");
+        this.pen = new PenAction();
+        this.pen.init(opt);
     }
 
     public getCtx(): CanvasRenderingContext2D {
@@ -20,9 +26,51 @@ export class PaperElement {
     public getCnv(): HTMLCanvasElement {
         return this.cnv;
     }
+    public getPen(): PenAction {
+        return this.pen;
+    }
     public clear(): void {
         const w: number = this.cnv.width;
         const h: number = this.cnv.height;
         this.ctx.clearRect(0, 0, w, h);
+    }
+
+    public draw(draws: Draw[]): void {
+
+        // pen状態の保存
+        this.pen.saveOpt();
+
+        // canvasのクリア
+        // paper.clear();
+
+        let prepoint: Point | null = null;
+        if (this.first) {
+            this.getCnv().style.visibility = "hidden";
+        }
+        for (const draw of draws) {
+            // 今回の記述を生成
+            const strokes = draw.getStrokes();
+            for (const s of strokes) {
+
+                this.pen.opt.update(s.opt);
+                this.pen.eraser = s.isEraser();
+                for (const p of s.getPoints()) {
+                    this.pen.proc(p.x, p.y, prepoint, this);
+                    prepoint = p;
+                }
+                prepoint = null;
+            }
+
+            // 取っておいたcanvasと重ね合わせ
+            // paper.getCtx().drawImage(bkimg, 0, 0, bkimg.width, bkimg.height);
+        }
+
+        if (this.first) {
+            this.getCnv().style.visibility = "visible";
+            this.first = false;
+        }
+
+        // pen状態の復旧
+        this.pen.restoreOpt();
     }
 }

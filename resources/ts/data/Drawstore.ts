@@ -1,15 +1,18 @@
-import { Draw, Stroke, Point } from "./Draw";
+import { Draw, Stroke, Point, StrokeOption } from "./Draw";
 import { PenAction } from "../action/PenAction";
+import { PaperElement } from "../element/PaperElement";
 
 export class Drawstore {
     private draws: Draw[]; // 自分以外＝複数人のデータがあるため
     private paper_id: number;
+    private paper: PaperElement;
 
-    constructor() {
+    constructor(opt: StrokeOption) {
         this.draws = [];
         const urls: string[] = window.location.pathname.split("/");
         const paper_id: number = parseInt(urls[urls.length - 1]);
         this.paper_id = paper_id;
+        this.paper = PaperElement.makeDrawstore(opt);
     }
 
     public async load(): Promise<void> {
@@ -19,7 +22,7 @@ export class Drawstore {
 
         // 一旦空にして格納し直し
         this.draws.splice(0, this.draws.length);
-        for(const d of JSON.parse(text)) {
+        for (const d of JSON.parse(text)) {
             const obj = JSON.parse(d.json_draw);
             const draw = new Draw();
             draw.setIDs(d.id, d.user_id);
@@ -34,11 +37,29 @@ export class Drawstore {
         });
     }
 
+    public draw(): void {
+        this.paper.draw(this.draws);
+    }
+
+    public getPaper(): PaperElement {
+        return this.paper;
+    }
+
     public getDraws(): Draw[] {
         return this.draws;
     }
 
     public addDraws(draw: Draw): void {
         this.draws.push(draw);
+    }
+
+    public autoload(): void {
+        const sec = 3;
+        const proc = async () => {
+            await this.load();
+            this.paper.draw(this.draws);
+            setTimeout(proc, sec * 1000);
+        };
+        (async () => await proc())();
     }
 }

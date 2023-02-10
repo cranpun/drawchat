@@ -3,28 +3,29 @@ import { PenAction } from "../action/PenAction";
 import { SaveElement } from "../element/SaveElement";
 import * as U from "../u/u";
 import { Drawstore } from "./Drawstore";
+import { PaperElement } from "../element/PaperElement";
 
 export class Drawing {
     private draw: Draw;
     private nowstroke: Stroke;
     private paper_id: number;
-    private pen: PenAction;
+    private paper: PaperElement;
     private drawstore: Drawstore;
 
-    constructor() {
+    constructor(opt: StrokeOption, drawstore: Drawstore) {
         this.initDraw();
         const urls: string[] = window.location.pathname.split("/");
         this.paper_id = parseInt(urls[urls.length - 1]); // urlの末尾がページID
-    }
-
-    public init(pen: PenAction, drawstore: Drawstore) {
-        this.pen = pen;
-        this.nowstroke = new Stroke(new StrokeOption(this.pen.opt.color, this.pen.opt.thick));
+        this.paper = PaperElement.makeDrawing(opt);
         this.drawstore = drawstore;
     }
 
     private initDraw(): void {
         this.draw = new Draw();
+    }
+
+    public getPaper(): PaperElement {
+        return this.paper;
     }
 
     public pushPoint(x: number, y: number): void {
@@ -38,7 +39,7 @@ export class Drawing {
 
     public startStroke(): void {
         // 次に備えてstrokeをクリア
-        this.nowstroke = new Stroke(this.pen.opt);
+        this.nowstroke = new Stroke(this.paper.getPen().opt);
     }
 
     public endStroke(): void {
@@ -49,22 +50,42 @@ export class Drawing {
         }
     }
     public async save(): Promise<void> {
-        // まず現在のdrawを退避してクリア。次のdrawを受け付けるため。
-        const json_draw:string = this.draw.json();
-        this.drawstore.addDraws(this.draw); // 取り急ぎ直接drawを追加
-        this.initDraw();
+        if (this.draw.length() > 0) {
+            // 保存　→　drawstoreロード（保存したデータがDatastoreに）　→　クリアして再描画
+            // まず現在のdrawを退避してクリア。次のdrawを受け付けるため。
+            const json_draw: string = this.draw.json();
+            this.initDraw();
 
-        const url = `/api/draw/${this.paper_id}`;
-        const postdata = U.makeCsrf();
-        postdata.append("json_draw", json_draw);
-        const option: RequestInit = {
-            method: "POST",
-            body: postdata,
+            // 保存
+            const url = `/api/draw/${this.paper_id}`;
+            const postdata = U.makeCsrf();
+            postdata.append("json_draw", json_draw);
+            const option: RequestInit = {
+                method: "POST",
+                body: postdata,
+            }
+            const response = await fetch(url, option);
+            const res_save = JSON.parse(await response.text());
+
+            // datastore
+            await this.drawstore.load();
+            this.drawstore.draw();
+
+            // 再描画
+            this.paper.clear();
+            await this.paper.draw([this.draw]);
+
+            this.showLabelSaved();
         }
-        const response = await fetch(url, option);
-        const res_save = JSON.parse(await response.text());
+    }
 
-        this.showLabelSaved();
+    public autosave() {
+        const sec = 3;
+        const proc = async () => {
+            await this.save();
+            setTimeout(proc, sec * 1000);
+        }
+        (async () => await proc())();
     }
 
     public getDraw(): Draw {
@@ -90,7 +111,6 @@ export class Drawing {
         const ret: boolean = this.draw.getStrokes().length == 0;
         return ret;
     }
-
 
     private showLabelNosave() {
         this.updateLabel("not saved", true);
