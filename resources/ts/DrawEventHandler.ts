@@ -88,16 +88,35 @@ export class DrawEventHandler {
     public down(dev: Device, e: Event, p: Point): void {
         e.preventDefault();
         e.stopPropagation();
+
+        // positionAsk状態であれば何もしない
+        if (this.drawing.isAskingPos) {
+            return;
+        }
+
         const x: number = p.x;
         const y: number = p.y;
-        // U.pd(`${dev}-down(${x},${y})=${this.nowsensor}`);
+        if (this.status.draw.getTool() === "shape") {
+            // shapeの場合、現在位置をShapeProcに送る
 
-        this.nowsensor = dev;
-        this.status.draw.startStroke();
-        this.drawing.startStroke();
+        } else {
+
+            // U.pd(`${dev}-down(${x},${y})=${this.nowsensor}`);
+
+            this.nowsensor = dev;
+            if (!this.drawing.isAskingPos) {
+                this.status.draw.startStroke();
+                this.drawing.startStroke();
+            }
+        }
     }
 
     public move(dev: Device, e: Event, p: Point): void {
+        // positionAsk状態であれば何もしない
+        if (this.drawing.isAskingPos) {
+            return;
+        }
+
         e.preventDefault();
         const x: number = p.x;
         const y: number = p.y;
@@ -130,14 +149,18 @@ export class DrawEventHandler {
         e.preventDefault();
         // U.pd(`${dev}-up(${x},${y})=${this.nowsensor}`);
 
-        // 1ストローク終わったので終了
-        if (this.status.draw.isDrawing()) {
-            const x: number = p.x;
-            const y: number = p.y;
-            this.status.draw.endStroke();
-            this.drawing.endStroke();
-            this.element.wrapdiv.setNormal();
-            this.nowsensor = null;
+        // askPos状態であればそれを実行
+        if (this.drawing.isAskingPos) {
+            this.drawing.isAskingPos.endAskPos(this.drawing, p);
+        } else {
+
+            // 1ストローク終わったので終了
+            if (this.status.draw.isDrawing()) {
+                this.status.draw.endStroke();
+                this.drawing.endStroke();
+                this.element.wrapdiv.setNormal();
+                this.nowsensor = null;
+            }
         }
     }
 }

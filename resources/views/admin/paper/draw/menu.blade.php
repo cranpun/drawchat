@@ -109,7 +109,7 @@
         </div>
         <div class="dropdown-menu" role="menu">
             <div class="dropdown-content">
-                <a id="shape-square" class="dropdown-item material-icons-parent act-shape" data-shape="triangle">
+                <a id="shape-square" class="dropdown-item material-icons-parent act-shape" data-shape="square">
                     <span class="material-symbols-outlined"> square </span>
                 </a>
                 <a id="shape-triangle" class="dropdown-item material-icons-parent act-shape" data-shape="triangle">

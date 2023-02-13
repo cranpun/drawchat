@@ -4,6 +4,7 @@ import { SaveElement } from "../element/SaveElement";
 import * as U from "../u/u";
 import { Drawstore } from "./Drawstore";
 import { PaperElement } from "../element/PaperElement";
+import { ShapeProc } from "../element/shape/ShapeProc";
 
 export class Drawing {
     private draw: Draw;
@@ -11,6 +12,7 @@ export class Drawing {
     private paper_id: number;
     private _paper: PaperElement;
     private drawstore: Drawstore;
+    private _askPosProc: ShapeProc | null;
 
     constructor(opt: StrokeOption, drawstore: Drawstore) {
         this.initDraw();
@@ -18,11 +20,20 @@ export class Drawing {
         this.paper_id = parseInt(urls[urls.length - 1]); // urlの末尾がページID
         this._paper = PaperElement.makeDrawing(opt);
         this.drawstore = drawstore;
+        this._askPosProc = null;
     }
 
     get paper(): PaperElement {
         return this._paper;
     }
+
+    get isAskingPos(): ShapeProc | null {
+        return this._askPosProc;
+    }
+    set isAskingPos(v: ShapeProc | null) {
+        this._askPosProc = v;
+    }
+
 
     private initDraw(): void {
         this.draw = new Draw();
@@ -112,7 +123,7 @@ export class Drawing {
         return ret;
     }
 
-    private showLabelNosave() {
+    public showLabelNosave() {
         this.updateLabel("not saved", true);
     }
     private showLabelSaved() {
@@ -128,5 +139,4 @@ export class Drawing {
             ele.classList.remove("has-text-danger");
         }
     }
-
 }
