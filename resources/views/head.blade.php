@@ -20,7 +20,6 @@
 <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
 
 <!-- my library -->
-<link rel="stylesheet" href="{{ \App\U\U::publicfiletimelink('style.css') }}" />
-<link rel="stylesheet" href="{{ \App\U\U::publicfiletimelink('print.css') }}" />
-<script type="text/javascript" src="{{ \App\U\U::publicfiletimelink('U.js') }}"></script>
-<title>{{ config("app.name") }}</title>
+<link rel="stylesheet" href="{{ \App\U\U::publicfiletimelink('css/style.css') }}" />
+<link rel="stylesheet" href="{{ \App\U\U::publicfiletimelink('css/print.css') }}" />
+<script type="text/javascript" src="{{ \App\U\U::publicfiletimelink('js/U.js') }}"></script>

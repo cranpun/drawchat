@@ -1,0 +1,9 @@
+html {
+    transform-origin: top left;
+    overflow-x: scroll;
+}
+
+.material-icons-parent,
+.material-icons-parent span {
+    vertical-align: middle;
+}

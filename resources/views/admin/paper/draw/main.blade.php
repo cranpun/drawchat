@@ -1,21 +1,11 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="has-navbar-fixed-bottom">
-<style type="text/css">
-    html {
-        transform-origin: top left;
-        overflow-x: scroll;
-    }
-
-    .material-icons-parent,
-    .material-icons-parent span {
-        vertical-align: middle;
-    }
-</style>
-
 <head>
     @include("head")
     <meta name="viewport" content="initial-scale=1 user-scalable=no">
     <script type="text/javascript" src="{{ \App\U\U::publicfiletimelink('js/app.js') }}"></script>
+    <link type="text/css" rel="{{ \App\U\U::publicfiletimelink('css/draw.css') }}">
+    <title>drawchat</title>
 </head>
 
 <?php
