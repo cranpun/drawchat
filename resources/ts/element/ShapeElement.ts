@@ -1,6 +1,7 @@
 import { Drawing } from "../data/Drawing";
 import * as U from "../u/u";
-
+import { ShapeProc } from "./shape/ShapeProc";
+import { ShapeProcFill } from "./shape/ShapeProcFill";
 
 export class ShapeElement {
     private draw: Drawing;
@@ -36,41 +37,6 @@ export class ShapeElement {
         }
         const shape: string = parent.getAttribute("data-shape");
         return shape;
-    }
-
-}
-
-abstract class ShapeProc {
-    protected abstract proc(draw: Drawing): void;
-    async exec(draw: Drawing): Promise<void> {
-        await this.proc(draw);
-    }
-}
-
-class ShapeProcFill extends ShapeProc {
-    private cw: number;
-    private ch: number;
-    constructor(cw: number, ch: number) {
-        super();
-        this.cw = cw;
-        this.ch = ch;
-    }
-    protected proc(draw: Drawing): void {
-        draw.paper.pen.saveOpt();
-
-        // ペンの太さを太く
-        draw.paper.pen.opt.thick = this.cw;
-
-        // 上から縦に極太を引いて塗りつぶし
-        draw.startStroke();
-        // 左から右に
-        draw.pushPoint(this.cw / 2, 0);
-        draw.pushPoint(this.cw / 2, this.ch);
-
-        draw.endStroke();
-
-        draw.paper.pen.restoreOpt();
-        draw.paper.draw([draw.getDraw()]);
     }
 
 }
