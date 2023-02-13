@@ -4,7 +4,7 @@ import { Draw, Stroke, Point, StrokeOption } from "../data/Draw";
 export class PaperElement {
     private cnv: HTMLCanvasElement;
     private ctx: CanvasRenderingContext2D;
-    private pen: PenAction;
+    private _pen: PenAction;
     private first: boolean;
 
     public static makeDrawing(opt: StrokeOption): PaperElement {
@@ -16,7 +16,7 @@ export class PaperElement {
     private constructor(selector: string, opt: StrokeOption) {
         this.cnv = document.querySelector(selector);
         this.ctx = this.cnv.getContext("2d");
-        this.pen = new PenAction();
+        this._pen = new PenAction();
         this.pen.init(opt);
     }
 
@@ -26,8 +26,8 @@ export class PaperElement {
     public getCnv(): HTMLCanvasElement {
         return this.cnv;
     }
-    public getPen(): PenAction {
-        return this.pen;
+    get pen(): PenAction {
+        return this._pen;
     }
     public clear(): void {
         const w: number = this.cnv.width;

@@ -11,12 +11,11 @@
 
 <!-- icons -->
 <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
-
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 <!-- sweetalert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
 <!-- Fonts -->
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
 
 <!-- my library -->

@@ -15,6 +15,7 @@ import { ColorElement } from "./element/ColorElement";
 import { ThickElement } from "./element/ThickElement";
 import { BackElement } from "./element/BackElement";
 import { DownloadElement } from "./element/DownloadElement";
+import { ShapeElement } from "./element/ShapeElement";
 
 export class DrawEventHandler {
     private paper_id: number;
@@ -31,6 +32,7 @@ export class DrawEventHandler {
         back: new BackElement(),
         thick: new ThickElement(),
         download: new DownloadElement(),
+        shape: new ShapeElement(),
     };
     private drawing: Drawing;
     private drawstore: Drawstore;
@@ -52,16 +54,17 @@ export class DrawEventHandler {
         this.drawing = new Drawing(strokeopt, this.drawstore);
 
         this.element.zoom.init();
-        this.element.save.init(this.drawing, this.drawing.getPaper());
-        this.element.color.init(this.drawing.getPaper().getPen());
-        this.element.thick.init(this.drawing.getPaper().getPen());
-        this.element.undo.init(this.drawing.getPaper(), this.drawing, this.drawing.getPaper().getPen());
+        this.element.save.init(this.drawing, this.drawing.paper);
+        this.element.color.init(this.drawing.paper.pen);
+        this.element.thick.init(this.drawing.paper.pen);
+        this.element.undo.init(this.drawing.paper, this.drawing, this.drawing.paper.pen);
         this.element.back.init(this.drawing);
-        this.element.download.init(this.drawing.getPaper(), this.drawstore.getPaper(), sd["#sd-cw"], sd["#sd-ch"], sd["#sd-created_at"]);
+        this.element.download.init(this.drawing.paper, this.drawstore.paper, sd["#sd-cw"], sd["#sd-ch"], sd["#sd-created_at"]);
+        this.element.shape.init(this.drawing, sd["#sd-cw"], sd["#sd-ch"]);
 
-        this.device.mouse.init(this, this.drawing.getPaper());
-        this.device.pointer.init(this, this.drawing.getPaper());
-        this.device.touch.init(this, this.drawing.getPaper(), this.element.zoom);
+        this.device.mouse.init(this, this.drawing.paper);
+        this.device.pointer.init(this, this.drawing.paper);
+        this.device.touch.init(this, this.drawing.paper, this.element.zoom);
 
         // 自動起動
         this.drawstore.autoload();
@@ -116,7 +119,7 @@ export class DrawEventHandler {
             case "pen":
                 // 単押し移動＝記述
                 const p: Point | null = this.drawing.lastPoint();
-                this.drawing.getPaper().getPen().proc(x, y, p, this.drawing.getPaper());
+                this.drawing.paper.pen.proc(x, y, p, this.drawing.paper);
                 this.drawing.pushPoint(x, y);
                 break;
         }

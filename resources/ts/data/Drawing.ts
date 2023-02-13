@@ -9,23 +9,23 @@ export class Drawing {
     private draw: Draw;
     private nowstroke: Stroke;
     private paper_id: number;
-    private paper: PaperElement;
+    private _paper: PaperElement;
     private drawstore: Drawstore;
 
     constructor(opt: StrokeOption, drawstore: Drawstore) {
         this.initDraw();
         const urls: string[] = window.location.pathname.split("/");
         this.paper_id = parseInt(urls[urls.length - 1]); // urlの末尾がページID
-        this.paper = PaperElement.makeDrawing(opt);
+        this._paper = PaperElement.makeDrawing(opt);
         this.drawstore = drawstore;
+    }
+
+    get paper(): PaperElement {
+        return this._paper;
     }
 
     private initDraw(): void {
         this.draw = new Draw();
-    }
-
-    public getPaper(): PaperElement {
-        return this.paper;
     }
 
     public pushPoint(x: number, y: number): void {
@@ -39,7 +39,7 @@ export class Drawing {
 
     public startStroke(): void {
         // 次に備えてstrokeをクリア
-        this.nowstroke = new Stroke(this.paper.getPen().opt);
+        this.nowstroke = new Stroke(this.paper.pen.opt);
     }
 
     public endStroke(): void {

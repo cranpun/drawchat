@@ -5,14 +5,18 @@ import { PaperElement } from "../element/PaperElement";
 export class Drawstore {
     private draws: Draw[]; // 自分以外＝複数人のデータがあるため
     private paper_id: number;
-    private paper: PaperElement;
+    private _paper: PaperElement;
 
     constructor(opt: StrokeOption) {
         this.draws = [];
         const urls: string[] = window.location.pathname.split("/");
         const paper_id: number = parseInt(urls[urls.length - 1]);
         this.paper_id = paper_id;
-        this.paper = PaperElement.makeDrawstore(opt);
+        this._paper = PaperElement.makeDrawstore(opt);
+    }
+
+    get paper(): PaperElement {
+        return this._paper;
     }
 
     public async load(): Promise<void> {

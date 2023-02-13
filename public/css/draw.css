@@ -5,5 +5,5 @@ html {
 
 .material-icons-parent,
 .material-icons-parent span {
-    vertical-align: middle;
+    vertical-align: top;
 }
