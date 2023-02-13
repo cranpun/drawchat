@@ -8,9 +8,6 @@ use Illuminate\Http\Request;
 class DrawController extends \App\Http\Controllers\Controller
 {
     use \App\Http\Controllers\Admin\Draw\DrawTraitAdd;
-    use \App\Http\Controllers\Admin\Draw\DrawTraitIndex;
-    use \App\Http\Controllers\Admin\Draw\DrawTraitIndexafter;
     use \App\Http\Controllers\Admin\Draw\DrawTraitLoad;
-    use \App\Http\Controllers\Admin\Draw\DrawTraitOther;
     use \App\Http\Controllers\Admin\Draw\DrawTraitUndo; // use load
 }

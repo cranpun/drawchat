@@ -7,8 +7,8 @@ import { parse, format } from "date-fns";
 export class DownloadElement {
 
     private ele: HTMLElement;
-    private papermine: PaperElement;
-    private paperother: PaperElement;
+    private paperdrawing: PaperElement;
+    private paperdrawstore: PaperElement;
     private cw: number;
     private ch: number;
     private filename: string;
@@ -18,9 +18,9 @@ export class DownloadElement {
         this.ele.addEventListener("click", async () => { await this.proc() });
         this.ele.addEventListener("touchend", async () => { await this.proc() });
     }
-    public init(papermine: PaperElement, paperother: PaperElement, cw: number, ch: number, created_at: string) {
-        this.papermine = papermine;
-        this.paperother = paperother;
+    public init(paperdrawing: PaperElement, paperdrawstore: PaperElement, cw: number, ch: number, created_at: string) {
+        this.paperdrawing = paperdrawing;
+        this.paperdrawstore = paperdrawstore;
         this.cw = cw;
         this.ch = ch;
         const dtlabel = format(parse(created_at, "yyyy-MM-dd kk:mm:ss", new Date()), "yyyy-MM-dd_kk-mm");
@@ -30,11 +30,11 @@ export class DownloadElement {
         document.querySelector("#label-download").textContent = this.filename;
     }
     private async proc(): Promise<void> {
-        // mineを画像化
-        const mineimg: HTMLImageElement = await U.toImage(this.papermine.getCnv());
+        // drawingを画像化
+        const drawingimg: HTMLImageElement = await U.toImage(this.paperdrawing.getCnv());
 
-        // otherを画像化
-        const otherimg: HTMLImageElement = await U.toImage(this.paperother.getCnv());
+        // drawstoreを画像化
+        const drawstoreimg: HTMLImageElement = await U.toImage(this.paperdrawstore.getCnv());
 
         // workキャンバス要素を作成
         const workcnv: HTMLCanvasElement = document.createElement("canvas");
@@ -44,9 +44,9 @@ export class DownloadElement {
         workctx.fillStyle = "white";
         workctx.fillRect(0, 0, this.cw, this.ch);
 
-        // other,mineの順に書き込み
-        workctx.drawImage(mineimg, 0, 0, mineimg.width, mineimg.height);
-        workctx.drawImage(otherimg, 0, 0, otherimg.width, otherimg.height);
+        // drawstore,drawingの順に書き込み
+        workctx.drawImage(drawingimg, 0, 0, drawingimg.width, drawingimg.height);
+        workctx.drawImage(drawstoreimg, 0, 0, drawstoreimg.width, drawstoreimg.height);
 
         // workキャンバスを画像化＆データ化
         workcnv.toBlob((blob) => {

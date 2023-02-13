@@ -13,7 +13,6 @@ trait DrawTraitAdd
      */
     public function add(\Illuminate\Http\Request $request, $paper_id)
     {
-        // 前回の記述を削除
         $user = $request->user();
 
         $data = new \App\Models\Draw();

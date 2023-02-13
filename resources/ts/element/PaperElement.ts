@@ -8,10 +8,10 @@ export class PaperElement {
     private first: boolean;
 
     public static makeDrawing(opt: StrokeOption): PaperElement {
-        return new PaperElement("#mycanvas", opt);
+        return new PaperElement("#canvas-drawing", opt);
     }
     public static makeDrawstore(opt: StrokeOption): PaperElement {
-        return new PaperElement("#othercanvas", opt);
+        return new PaperElement("#canvas-drawstore", opt);
     }
     private constructor(selector: string, opt: StrokeOption) {
         this.cnv = document.querySelector(selector);

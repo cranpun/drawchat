@@ -20,10 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::middleware(["can:admin","auth","verified"])->group(function () {
-    Route::get("/draw/{paper_id}", [DrawController::class, "index"]);
-    Route::get("/draw/{paper_id}/load", [DrawController::class, "load"]);
-    Route::get("/draw/{paper_id}/after/{after_paper_id}", [DrawController::class, "indexafter"]);
+    Route::get("/draw/{paper_id}", [DrawController::class, "load"]);
     Route::post("/draw/{paper_id}", [DrawController::class, "add"]);
     Route::post("/draw/undo/{draw_id}", [DrawController::class, "undo"]);
-    Route::get("/draw/{paper_id}/other/{user_id}", [DrawController::class, "other"]); // 暫定？user_idはログインをセッションで持ってればいらないかも
 });
