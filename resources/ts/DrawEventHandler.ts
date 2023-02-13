@@ -1,6 +1,5 @@
 import { Draw, Point, StrokeOption } from "./data/Draw";
 import { Device, Tool } from "./u/types";
-import { PaperElement } from "./element/PaperElement";
 import { Drawing } from "./data/Drawing";
 import { Drawstore } from "./data/Drawstore";
 import * as U from "./u/u";
@@ -12,7 +11,6 @@ import { DrawcanvasesElement } from "./element/DrawcanvasesElement";
 import { DrawStatus } from "./data/DrawStatus";
 import { UndoElement } from "./element/UndoElement";
 import { ZoomElement } from "./element/ZoomElement";
-import { EraserElement } from "./element/EraserElement";
 import { ColorElement } from "./element/ColorElement";
 import { ThickElement } from "./element/ThickElement";
 import { BackElement } from "./element/BackElement";
@@ -28,7 +26,6 @@ export class DrawEventHandler {
         wrapdiv: new DrawcanvasesElement(),
         zoom: new ZoomElement(),
         save: new SaveElement(),
-        eraser: new EraserElement(),
         color: new ColorElement(),
         undo: new UndoElement(),
         back: new BackElement(),
@@ -58,7 +55,6 @@ export class DrawEventHandler {
         this.element.save.init(this.drawing, this.drawing.getPaper());
         this.element.color.init(this.drawing.getPaper().getPen());
         this.element.thick.init(this.drawing.getPaper().getPen());
-        this.element.eraser.init(this.drawing.getPaper().getPen());
         this.element.undo.init(this.drawing.getPaper(), this.drawing, this.drawing.getPaper().getPen());
         this.element.back.init(this.drawing);
         this.element.download.init(this.drawing.getPaper(), this.drawstore.getPaper(), sd["#sd-cw"], sd["#sd-ch"], sd["#sd-created_at"]);

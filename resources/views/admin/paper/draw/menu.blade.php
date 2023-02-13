@@ -51,10 +51,6 @@
         </div>
     </div>
 
-    <a id="act-eraser" class="navbar-item has-background-light" style="display: none;">
-        <i class="fas fa-eraser"></i>
-    </a>
-
     <div id="move-dropdown" class="dropdown is-up">
         <div class="dropdown-trigger navbar-item">
             <a class="" aria-haspopup="true" aria-controls="dropdown-menu">
@@ -97,10 +93,6 @@
             </div>
         </div>
     </div>
-
-    <a id="act-eraser" class="navbar-item has-background-light" style="display: none;">
-        <i class="fas fa-eraser"></i>
-    </a>
 
     <a id="toolbox-burger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="toolbox">
         <span aria-hidden="true"></span>
