@@ -57,7 +57,7 @@ export class DrawEventHandler {
         this.element.save.init(this.drawing, this.drawing.paper);
         this.element.color.init(this.drawing.paper.pen);
         this.element.thick.init(this.drawing.paper.pen);
-        this.element.undo.init(this.drawing.paper, this.drawing, this.drawing.paper.pen);
+        this.element.undo.init(this.drawing);
         this.element.back.init(this.drawing);
         this.element.download.init(this.drawing.paper, this.drawstore.paper, sd["#sd-cw"], sd["#sd-ch"], sd["#sd-created_at"]);
         this.element.shape.init(this.drawing, sd["#sd-cw"], sd["#sd-ch"]);

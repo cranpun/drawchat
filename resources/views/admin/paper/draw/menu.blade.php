@@ -122,6 +122,12 @@
         </div>
     </div>
 
+    <a id="act-undo" class="navbar-item">
+        <span class="material-symbols-outlined">
+            undo
+        </span>
+    </a>
+
     <a id="toolbox-burger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
         data-target="toolbox">
         <span aria-hidden="true"></span>
@@ -164,8 +170,5 @@
             &nbsp;一覧へ
         </a>
 
-        <a id="act-undo" class="navbar-item" style="display: none">
-            <i class="fas fa-undo"></i>
-        </a>
     </section>
 </section>

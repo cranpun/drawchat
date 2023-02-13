@@ -61,7 +61,7 @@ export class Drawing {
         }
     }
     public async save(): Promise<void> {
-        if (this.draw.length() > 0) {
+        if (!this.isSaved()) {
             // 保存　→　drawstoreロード（保存したデータがDatastoreに）　→　クリアして再描画
             // まず現在のdrawを退避してクリア。次のdrawを受け付けるため。
             const json_draw: string = this.draw.json();
@@ -86,8 +86,8 @@ export class Drawing {
             this.paper.clear();
             await this.paper.draw([this.draw]);
 
-            this.showLabelSaved();
         }
+        this.showLabelSaved();
     }
 
     public autosave() {
@@ -107,11 +107,15 @@ export class Drawing {
         this.draw.clear();
     }
 
-    public undo(): Stroke[] {
+    public undo(): void {
+
         // MYTODO。現在の記述が空なら、Datastoreのundoを実施。
-        this.draw.getStrokes().pop();
-        const ret = this.draw.getStrokes();
-        return ret;
+        if(!this.isSaved()) {
+            // 保存前なのでそこだけ書き直し
+            this.draw.getStrokes().pop();
+            this.paper.clear();
+            this.paper.draw([this.draw]);
+        }
     }
 
     public getNowStroke(): Stroke {
