@@ -1,11 +1,14 @@
 import { Draw, Stroke, Point, StrokeOption } from "./Draw";
 import { PenAction } from "../action/PenAction";
 import { PaperElement } from "../element/PaperElement";
+import { differenceInSeconds } from "date-fns";
+import * as U from "../u/u";
 
 export class Drawstore {
     private draws: Draw[]; // 自分以外＝複数人のデータがあるため
     private paper_id: number;
     private _paper: PaperElement;
+    private draw_at: Date;
 
     constructor(opt: StrokeOption) {
         this.draws = [];
@@ -13,6 +16,7 @@ export class Drawstore {
         const paper_id: number = parseInt(urls[urls.length - 1]);
         this.paper_id = paper_id;
         this._paper = PaperElement.makeDrawstore(opt);
+        this.draw_at = null;
     }
 
     get paper(): PaperElement {
@@ -24,6 +28,10 @@ export class Drawstore {
         const response = await fetch(url);
         const text = await response.text();
 
+        this.update(text);
+    }
+
+    public update(text: string): void {
         // 一旦空にして格納し直し
         this.draws.splice(0, this.draws.length);
         for (const d of JSON.parse(text)) {
@@ -43,6 +51,8 @@ export class Drawstore {
 
     public draw(): void {
         this.paper.draw(this.draws);
+        this.draw_at = new Date();
+        console.log("draw");
     }
 
     public getPaper(): PaperElement {
@@ -60,10 +70,29 @@ export class Drawstore {
     public autoload(): void {
         const sec = 3;
         const proc = async () => {
-            await this.load();
-            this.paper.draw(this.draws);
+            // 前回のdrawが直近であればやらない
+            const diff: number = differenceInSeconds(new Date(), this.draw_at);
+            if ((diff >= sec) || !this.draw_at) {
+                await this.load();
+                this.draw();
+            }
             setTimeout(proc, sec * 1000);
         };
         (async () => await proc())();
+    }
+    public async undo(): Promise<void> {
+        // 保存後なのでサーバデータ改変
+        const url = `/api/draw/${this.paper_id}/undo`;
+        const postdata = U.makeCsrf();
+        const option: RequestInit = {
+            method: "POST",
+            body: postdata,
+        }
+        const response = await fetch(url, option);
+        const text = await response.text();
+
+        // datastoreにデータ反映してredraw
+        this.update(text);
+        this.draw();
     }
 }

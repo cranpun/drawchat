@@ -16,10 +16,20 @@ trait DrawTraitUndo
 
         // この記述のjsonを復元
         $json = json_decode($row->json_draw);
+        // 一番最初のstrokeを除去
+        array_pop($json);
+        if(count($json) > 0) {
+            // 一筆なくしたdrawで更新
+            $row->json_draw = json_encode($json);
+            $row->save();
+        } else {
+            // 記述がなくなったのでdraw自体削除
+            $row->delete();
+        }
 
         // 現在のpaperの記述を全部取得して返す
         $ret = $this->load($request, $paper_id);
-        return response($ret);
+        return $ret;
     }
 
     // *************************************

@@ -68,7 +68,7 @@ export class Drawing {
             this.initDraw();
 
             // 保存
-            const url = `/api/draw/${this.paper_id}`;
+            const url = `/api/draw/${this.paper_id}/add`;
             const postdata = U.makeCsrf();
             postdata.append("json_draw", json_draw);
             const option: RequestInit = {
@@ -76,10 +76,10 @@ export class Drawing {
                 body: postdata,
             }
             const response = await fetch(url, option);
-            const res_save = JSON.parse(await response.text());
+            const text = await response.text();
 
-            // datastore
-            await this.drawstore.load();
+            // datastoreにデータ反映してredraw
+            this.drawstore.update(text);
             this.drawstore.draw();
 
             // 再描画
@@ -107,10 +107,11 @@ export class Drawing {
         this.draw.clear();
     }
 
-    public undo(): void {
+    public async undo(): Promise<void> {
 
-        // MYTODO。現在の記述が空なら、Datastoreのundoを実施。
-        if(!this.isSaved()) {
+        if(this.isSaved()) {
+            this.drawstore.undo();
+        } else {
             // 保存前なのでそこだけ書き直し
             this.draw.getStrokes().pop();
             this.paper.clear();
@@ -123,7 +124,7 @@ export class Drawing {
     }
 
     public isSaved(): boolean {
-        const ret: boolean = this.draw.getStrokes().length == 0;
+        const ret: boolean = this.draw.getStrokes().length <= 0;
         return ret;
     }
 

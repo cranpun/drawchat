@@ -5,7 +5,7 @@ use Illuminate\Http\Request;
 
 trait DrawTraitLoad
 {
-    public function load($paper_id)
+    public function load(\Illuminate\Http\Request $request, $paper_id)
     {
         $q = \App\Models\Draw::where("paper_id", "=", $paper_id);
         $q->orderBy("id", "DESC");

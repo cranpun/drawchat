@@ -21,6 +21,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::middleware(["can:admin","auth","verified"])->group(function () {
     Route::get("/draw/{paper_id}", [DrawController::class, "load"]);
-    Route::post("/draw/{paper_id}", [DrawController::class, "add"]);
-    Route::post("/draw/undo/{draw_id}", [DrawController::class, "undo"]);
+    Route::post("/draw/{paper_id}/add", [DrawController::class, "add"]);
+    Route::post("/draw/{draw_id}/undo", [DrawController::class, "undo"]);
 });

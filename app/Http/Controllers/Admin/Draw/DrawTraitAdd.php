@@ -15,14 +15,21 @@ trait DrawTraitAdd
     {
         $user = $request->user();
 
+        $json_draw = $request->input("json_draw", "");;
+        if($json_draw == "[]" || !$json_draw || $json_draw == "") {
+            return response([
+                "result" => "no draw",
+            ]);
+        }
+
         $data = new \App\Models\Draw();
         $data->user_id = $user->id;
-        $data->json_draw = $request->input("json_draw", "");
+        $data->json_draw = $json_draw;
         $data->paper_id = $paper_id;
         $data->save();
-        return response([
-            "result" => "success",
-        ]);
+
+        $ret = $this->load($request, $paper_id);
+        return $ret;
     }
 
     // *************************************
