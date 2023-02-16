@@ -14,4 +14,18 @@ window.addEventListener("load", async () => {
             e.preventDefault();
         }
     }, { passive: false });
+    ws();
 });
+
+const ws = () => {
+    const conn = new WebSocket("wss://dev.dev.ll/ws");
+    conn.onopen = (e) => {
+        console.log(e);
+    };
+    conn.onmessage = (e) => {
+        console.log(e);
+    }
+    document.querySelector("#act-load").addEventListener("click", () => {
+        conn.send("hogehoge");
+    });
+}

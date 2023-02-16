@@ -127,6 +127,7 @@
             undo
         </span>
     </a>
+    <a id="act-load" class="navbar-item">load</a>
 
     <a id="toolbox-burger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
         data-target="toolbox">

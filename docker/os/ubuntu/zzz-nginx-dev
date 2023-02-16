@@ -9,6 +9,16 @@ server {
     location / {
         try_files $uri $uri/ /index.php?$query_string;
     }
+    location /ws {
+        proxy_pass http://dev.dev.ll:8000;
+        proxy_redirect http:// https://;
+        proxy_http_version 1.1;
+        # proxy_set_header Host $host;
+        proxy_set_header Upgrade $http_upgrade;
+        # proxy_set_header Connection $connection_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_redirect off;
+    }
 
     location ~ \.php$ {
         include snippets/fastcgi-php.conf;

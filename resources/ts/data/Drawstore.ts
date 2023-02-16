@@ -52,7 +52,6 @@ export class Drawstore {
     public draw(): void {
         this.paper.draw(this.draws);
         this.draw_at = new Date();
-        console.log("draw");
     }
 
     public getPaper(): PaperElement {
