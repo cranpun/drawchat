@@ -109,14 +109,14 @@ export class Drawing {
 
     public async undo(): Promise<void> {
 
-        if(this.isSaved()) {
-            this.drawstore.undo();
-        } else {
+        if(!this.isSaved()) {
             // 保存前なのでそこだけ書き直し
             this.draw.getStrokes().pop();
             this.paper.clear();
             this.paper.draw([this.draw]);
         }
+        // 自分の分はどちらにしろ書き直し
+        this.drawstore.undo();
     }
 
     public getNowStroke(): Stroke {

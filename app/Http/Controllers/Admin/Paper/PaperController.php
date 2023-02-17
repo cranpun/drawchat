@@ -50,22 +50,22 @@ class PaperController extends \App\Http\Controllers\Controller
         $created_at = $paper->created_at;
 
         $colors = [
-            ["color" => "#000", "labelcolor" => "white", "label" => "黒"],
-            ["color" => "#777", "labelcolor" => "black", "label" => "灰"],
-            ["color" => "#FFF", "labelcolor" => "black", "label" => "白"],
-            ["color" => "#000080", "labelcolor" => "white", "label" => "藍"],
-            ["color" => "#00F", "labelcolor" => "white", "label" => "青"],
-            ["color" => "#F00", "labelcolor" => "white", "label" => "赤"],
-            ["color" => "#0F0", "labelcolor" => "black", "label" => "緑"],
-            ["color" => "#00cc66", "labelcolor" => "black", "label" => "緑2"],
-            ["color" => "#243829", "labelcolor" => "white", "label" => "深緑"],
-            ["color" => "#FF0", "labelcolor" => "black", "label" => "黄"],
-            ["color" => "#0FF", "labelcolor" => "black", "label" => "青緑"],
-            ["color" => "#F0F", "labelcolor" => "white", "label" => "紫"],
-            ["color" => "brown", "labelcolor" => "white", "label" => "茶"],
-            ["color" => "orange", "labelcolor" => "black", "label" => "橙"],
-            ["color" => "pink", "labelcolor" => "black", "label" => "桃"],
-            ["color" => "#F4BE9B", "labelcolor" => "black", "label" => "肌"],
+            ["color" => "#000", "labelcolor" => "white", "label" => "くろ"],
+            ["color" => "#777", "labelcolor" => "black", "label" => "ねずみいろ"],
+            ["color" => "#FFF", "labelcolor" => "black", "label" => "しろ"],
+            ["color" => "#000080", "labelcolor" => "white", "label" => "くらいあお"],
+            ["color" => "#00F", "labelcolor" => "white", "label" => "あお"],
+            ["color" => "#F00", "labelcolor" => "white", "label" => "あか"],
+            ["color" => "#0F0", "labelcolor" => "black", "label" => "あかるいみどり"],
+            ["color" => "#00cc66", "labelcolor" => "black", "label" => "みどり"],
+            ["color" => "#243829", "labelcolor" => "white", "label" => "くらいみどり"],
+            ["color" => "#FF0", "labelcolor" => "black", "label" => "きいろ"],
+            ["color" => "#0FF", "labelcolor" => "black", "label" => "あおみどり"],
+            ["color" => "#F0F", "labelcolor" => "white", "label" => "むらさき"],
+            ["color" => "brown", "labelcolor" => "white", "label" => "ちゃいろ"],
+            ["color" => "orange", "labelcolor" => "black", "label" => "おれんじ"],
+            ["color" => "pink", "labelcolor" => "black", "label" => "ぴんく"],
+            ["color" => "#F4BE9B", "labelcolor" => "black", "label" => "はだいろ"],
         ];
 
         $thicks = [

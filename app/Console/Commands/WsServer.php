@@ -4,14 +4,14 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 
-class WssAddServer extends Command
+class WsServer extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'WssAddServer';
+    protected $signature = 'WsServer';
 
     /**
      * The console command description.
@@ -33,7 +33,7 @@ class WssAddServer extends Command
                     new AddDrawServer()
                 )
             ),
-            8000
+            config("drawchat.ws_port")
         );
 
         $server->run();

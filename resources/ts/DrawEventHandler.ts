@@ -17,8 +17,20 @@ import { BackElement } from "./element/BackElement";
 import { DownloadElement } from "./element/DownloadElement";
 import { ShapeElement } from "./element/ShapeElement";
 
+export type DrawchatWSParams = {
+    url: string
+}
+export type DrawchatParams = {
+    width: number,
+    height: number,
+    csrf_token: string,
+    created_at: string,
+    color: string,
+    thick: number,
+    ws: DrawchatWSParams
+}
+
 export class DrawEventHandler {
-    private paper_id: number;
     private nowsensor: Device | null; // タッチ、ポインタ等、まとめて複数のイベントを検知した場合に備えて。
     private status = {
         draw: new DrawStatus(),
@@ -42,14 +54,11 @@ export class DrawEventHandler {
         touch: new TouchSensor(),
     }
 
-    public init(): void {
+    public init(params: DrawchatParams): void {
 
         this.nowsensor = null;
 
-        const sd = this.loadServerData();
-        const color = sd["#sd-color"];
-        const thick = sd["#sd-thick"];
-        const strokeopt = new StrokeOption(color, thick);
+        const strokeopt = new StrokeOption(params.color, params.thick);
         this.drawstore = new Drawstore(strokeopt);
         this.drawing = new Drawing(strokeopt, this.drawstore);
 
@@ -59,8 +68,8 @@ export class DrawEventHandler {
         this.element.thick.init(this.drawing.paper.pen);
         this.element.undo.init(this.drawing);
         this.element.back.init(this.drawing);
-        this.element.download.init(this.drawing.paper, this.drawstore.paper, sd["#sd-cw"], sd["#sd-ch"], sd["#sd-created_at"]);
-        this.element.shape.init(this.drawing, sd["#sd-cw"], sd["#sd-ch"]);
+        this.element.download.init(this.drawing.paper, this.drawstore.paper, params.width, params.height, params.created_at);
+        this.element.shape.init(this.drawing, params.width, params.height);
 
         this.device.mouse.init(this, this.drawing.paper);
         this.device.pointer.init(this, this.drawing.paper);
@@ -69,20 +78,6 @@ export class DrawEventHandler {
         // 自動起動
         this.drawstore.autoload();
         this.drawing.autosave();
-    }
-    private loadServerData(): any[] {
-        const ids: string[] = [
-            "#sd-color",
-            "#sd-thick",
-            "#sd-cw",
-            "#sd-ch",
-            "#sd-created_at",
-        ];
-        const ret = [];
-        for (const id of ids) {
-            ret[id] = document.querySelector(id)?.innerHTML;
-        }
-        return ret;
     }
 
     public down(dev: Device, e: Event, p: Point): void {

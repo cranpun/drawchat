@@ -1,9 +1,21 @@
-import { DrawEventHandler } from "./DrawEventHandler";
-
-window.addEventListener("load", async () => {
+import { DrawEventHandler, DrawchatParams, DrawchatWSParams } from "./DrawEventHandler";
+import { setDrawchatParams } from "./u/u";
+interface Window {
+    drawchat: {
+        main: (params: DrawchatParams) => void,
+        ttt: (test: string) => void
+    }
+}
+declare var window: Window & typeof globalThis
+const ttt = (test: string) => {
+    console.log(test);
+}
+const main = (params: DrawchatParams) =>
+{
+    setDrawchatParams(params);
     if (document.querySelector("#drawcanvases")) {
         const sense: DrawEventHandler = new DrawEventHandler();
-        sense.init();
+        sense.init(params);
     }
     const body: HTMLBodyElement = <HTMLBodyElement>document.querySelector("body");
 
@@ -14,13 +26,17 @@ window.addEventListener("load", async () => {
             e.preventDefault();
         }
     }, { passive: false });
-    ws();
-});
+    ws(params.ws);
+}
+
+window.drawchat = {
+    main: main,
+    ttt: ttt
+}
 
 let cnt = 0;
-const ws = () => {
-    const conn = new WebSocket("wss://dev.dev.ll/ws");
-    console.log(document.cookie);
+const ws = (wsparams: DrawchatWSParams) => {
+    const conn = new WebSocket(wsparams.url);
     conn.onopen = (e) => {
         console.log(e);
     };

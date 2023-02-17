@@ -92,6 +92,7 @@ export class Drawstore {
 
         // datastoreにデータ反映してredraw
         this.update(text);
+        this.paper.clear();
         this.draw();
     }
 }

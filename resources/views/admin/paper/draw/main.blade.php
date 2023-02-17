@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="has-navbar-fixed-bottom">
+
 <head>
-    @include("head")
+    @include('head')
     <meta name="viewport" content="initial-scale=1 user-scalable=no">
     <script type="text/javascript" src="{{ \App\U\U::publicfiletimelink('js/app.js') }}"></script>
     <link type="text/css" rel="{{ \App\U\U::publicfiletimelink('css/draw.css') }}">
@@ -9,24 +10,32 @@
 </head>
 
 <?php
-$cw = 320;
-$ch = 1600;
-$defcolor = "#00F";
+$cw = config('drawchat.width');
+$ch = config('drawchat.height');
+$defcolor = '#00F';
 $defthick = 6;
 ?>
 
 <body style="padding: 10px; display: inline-block;">
-    <section id="serverdata" style="display: none;">
-        <div id="sd-csrf-token">{{ csrf_token() }}</div>
-        <div id="sd-color">{{ $defcolor }}</div>
-        <div id="sd-thick">{{ $defthick }}</div>
-        <div id="sd-cw">{{ $cw }}</div>
-        <div id="sd-ch">{{ $ch }}</div>
-        <div id="sd-created_at">{{ $created_at }}</div>
-    </section>
+    <script type="text/javascript">
+        window.addEventListener("load", async () => {
+            const params = {
+                width: {{ $cw }},
+                height: {{ $ch }},
+                color: "{{ $defcolor }}",
+                thick: {{ $defthick }},
+                created_at: "{{ $created_at }}",
+                csrf_token: "{{ csrf_token() }}",
+                ws: {
+                    url: "{{ config('drawchat.ws.url') }}"
+                }
+            };
+            drawchat.main(params);
+        });
+    </script>
     <header id="toolbox">
         <nav class="navbar is-light is-fixed-bottom" role="navigation" aria-label="main navigation">
-            @include("admin.paper.draw.menu")
+            @include('admin.paper.draw.menu')
         </nav>
     </header>
     <!--  -->
@@ -37,15 +46,15 @@ $defthick = 6;
                 transform-origin: top left;
                 position: relative;
                 padding: 3px;
-                width: <?= $cw + 10 ?>px;
-                height: <?= $ch + 30 ?>px;
+                width: <?=$cw + 10 ?>px;
+                height: <?=$ch + 30 ?>px;
             }
 
             #canvas-drawing,
             #canvas-drawstore {
                 border: 5px solid #aaa;
-                width: <?= $cw ?>px;
-                height: <?= $ch ?>px;
+                width: <?=$cw ?>px;
+                height: <?=$ch ?>px;
             }
 
             #canvas-drawing,

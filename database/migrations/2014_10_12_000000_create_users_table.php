@@ -26,6 +26,8 @@ class CreateUsersTable extends Migration
             $table->string("last_action")->nullable();
             $table->bigInteger("last_user_id")->nullable();
             $table->rememberToken();
+            $table->string("ws_token", 100)->nullable();
+            $table->timestamp("ws_token_at")->nullable();
             $table->timestamps();
         });
     }

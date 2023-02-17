@@ -1,3 +1,4 @@
+import { DrawchatParams } from "../DrawEventHandler";
 const Swal = require("sweetalert2");
 
 export function pd(...mes: any): void {
@@ -42,8 +43,12 @@ export async function toImage(cnv: HTMLCanvasElement): Promise<HTMLImageElement>
     });
 }
 export function makeCsrf(): FormData {
-    const csrf = document.querySelector("#sd-csrf-token").textContent;
+    // const csrf = document.querySelector("#sd-csrf-token").textContent;
     const formData: FormData = new FormData();
-    formData.append("_token", csrf);
+    formData.append("_token", drawchatParams.csrf_token);
     return formData;
 };
+export let drawchatParams: DrawchatParams;
+export function setDrawchatParams(params: DrawchatParams): void {
+    drawchatParams = params;
+}
