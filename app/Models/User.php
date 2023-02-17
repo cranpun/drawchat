@@ -40,7 +40,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
-    static function validaterule() : array
+    static function validaterule(): array
     {
         return [
             "name" => "required|unique:users",
@@ -55,7 +55,7 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
-    public function saveProc(array $data) : bool
+    public function saveProc(array $data): bool
     {
         $this->password = array_key_exists("password", $data) ? \Illuminate\Support\Facades\Hash::make($data['password']) : $this->password;
         $this->name = array_key_exists("name", $data) ? $data["name"] : $this->name;
@@ -71,32 +71,32 @@ class User extends Authenticatable implements MustVerifyEmail
     // *********************************************************************************
     // role
     // *********************************************************************************
-    public function isRoles(array $roles) : bool
+    public function isRoles(array $roles): bool
     {
         $ret = in_array($this->role, $roles);
         return $ret;
     }
 
-    public function isAdmin() : bool
+    public function isAdmin(): bool
     {
         return $this->isRoles([\App\L\Role::ID_ADMIN]);
     }
 
-    public static function isPub() : bool
+    public static function isPub(): bool
     {
         $user = \Illuminate\Support\Facades\Auth::user();
         return !$user;
     }
 
-    public static function isLogin() : bool
+    public static function isLogin(): bool
     {
         $user = \Illuminate\Support\Facades\Auth::user();
         return !(!$user);
     }
-    public static function isLoginRoles(array $roles) : bool
+    public static function isLoginRoles(array $roles): bool
     {
         $user = \Illuminate\Support\Facades\Auth::user();
-        if($user) {
+        if ($user) {
             return $user->isRoles($roles);
         } else {
             // ログインしていない
@@ -110,6 +110,21 @@ class User extends Authenticatable implements MustVerifyEmail
     // *********************************************************************************
     // load
     // *********************************************************************************
+    public static function loadByWsToken(string $token): \App\Models\User
+    {
+        $q = \App\Models\User::query();
+        $q->where("ws_token", "=", $token);
+        $row = (fn ($obj): \App\Models\User => $obj)($q->first());
+        if (!$row) {
+            throw new \Exception("ws_token : invalid");
+        }
+
+        $at = \Carbon\Carbon::parse($row->ws_token_at);
+        if ($at->lt(\Carbon\Carbon::now())) {
+            throw new \Exception("ws_token : expired");
+        }
+        return $row;
+    }
 
     // *********************************************************************************
     // passwordreseet

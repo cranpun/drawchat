@@ -47,7 +47,12 @@ const ws = (wsparams: DrawchatWSParams) => {
         if(cnt==3) {
             conn.send("close");
         } else {
-            conn.send(`hoge${cnt}hoge`);
+            const data = {
+                ws_token: wsparams.token,
+                draw: `[1,23]`,
+                paper_id: 1,
+            }
+            conn.send(JSON.stringify(data));
         }
         cnt++;
     });

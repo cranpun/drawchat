@@ -18,7 +18,8 @@ import { DownloadElement } from "./element/DownloadElement";
 import { ShapeElement } from "./element/ShapeElement";
 
 export type DrawchatWSParams = {
-    url: string
+    url: string,
+    token: string
 }
 export type DrawchatParams = {
     width: number,

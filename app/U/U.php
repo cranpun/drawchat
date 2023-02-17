@@ -69,6 +69,15 @@ class U
         $ret = filter_var($url, FILTER_VALIDATE_URL);
         return $ret !== false; // 失敗した場合はfalseなのでそれ以外であればURL
     }
+
+    public static function gentimekey(string $seed = ""): string
+    {
+        $now = \Carbon\Carbon::now()->getTimestamp();
+        $now .= $seed;
+        $ret = \Illuminate\Support\Facades\Hash::make($now);
+        return $ret;
+    }
+
     // public static function makeCsvWriterObj()
     // {
     //     $csv = \League\Csv\Writer::createFromStream(fopen("php://temp", "r+"));

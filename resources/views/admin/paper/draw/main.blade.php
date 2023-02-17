@@ -27,7 +27,8 @@ $defthick = 6;
                 created_at: "{{ $created_at }}",
                 csrf_token: "{{ csrf_token() }}",
                 ws: {
-                    url: "{{ config('drawchat.ws.url') }}"
+                    url: "{{ config('drawchat.ws.url') }}",
+                    token: "{{ $ws_token }}",
                 }
             };
             drawchat.main(params);
