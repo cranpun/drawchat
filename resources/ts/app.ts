@@ -17,8 +17,10 @@ window.addEventListener("load", async () => {
     ws();
 });
 
+let cnt = 0;
 const ws = () => {
     const conn = new WebSocket("wss://dev.dev.ll/ws");
+    console.log(document.cookie);
     conn.onopen = (e) => {
         console.log(e);
     };
@@ -26,6 +28,11 @@ const ws = () => {
         console.log(e);
     }
     document.querySelector("#act-load").addEventListener("click", () => {
-        conn.send("hogehoge");
+        if(cnt==3) {
+            conn.send("close");
+        } else {
+            conn.send(`hoge${cnt}hoge`);
+        }
+        cnt++;
     });
 }

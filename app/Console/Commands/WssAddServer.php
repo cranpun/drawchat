@@ -55,9 +55,12 @@ class AddDrawServer implements \Ratchet\MessageComponentInterface
     {
         // Store the new connection to send messages to later
         $this->clients->attach($conn);
-        $user = \illuminate\Support\Facades\Auth::user();
-        $ret = $user == null ? "true" : "false";
+        // $user = \illuminate\Support\Facades\Auth::user();
+        // $ret = $user == null ? "true" : "false";
+        $user = \App\Models\User::find(1);
+        $ret = $user->name;
         echo "New connection! ({$conn->resourceId}) {$ret} \n";
+        print_r($_COOKIE);
     }
 
     public function onMessage(\Ratchet\ConnectionInterface $from, $msg)
@@ -70,6 +73,10 @@ class AddDrawServer implements \Ratchet\MessageComponentInterface
             $numRecv,
             $numRecv == 1 ? '' : 's'
         );
+
+        if($msg == "close") {
+            $from->close();
+        }
 
         foreach ($this->clients as $client) {
             if ($from !== $client) {
