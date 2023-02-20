@@ -9,7 +9,7 @@ trait WsServerTraitOnMessage
 
         try {
             // 接続の安全性の確認
-            $data = new DrawchatWSMessage($msg);
+            $data = new \App\U\DrawchatWSMessage($msg);
             $user = $this->onMessage_getUser($from, $data);
             $draw = $this->onMessage_saveDraw($user, $data);
             $this->onMessage_sendOther($from, $draw);
@@ -21,7 +21,7 @@ trait WsServerTraitOnMessage
     // *************************************
     // utils : 衝突を避けるため、action名_メソッド名とすること
     // *************************************
-    private function onMessage_getUser(\Ratchet\ConnectionInterface $from, DrawchatWSMessage $data): \App\Models\User
+    private function onMessage_getUser(\Ratchet\ConnectionInterface $from, \App\U\DrawchatWSMessage $data): \App\Models\User
     {
         if (!$this->clients->contains($from)) {
             throw \Exception("ws : not have this connection");
@@ -36,7 +36,7 @@ trait WsServerTraitOnMessage
         return $user;
     }
 
-    private function onMessage_saveDraw(\App\Models\User $user, DrawchatWSMessage $data): \App\Models\Draw
+    private function onMessage_saveDraw(\App\Models\User $user, \App\U\DrawchatWSMessage $data): \App\Models\Draw
     {
         // データの保存処理
         $draw = \App\Models\Draw::firstOrNew([
