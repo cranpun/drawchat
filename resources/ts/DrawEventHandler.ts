@@ -19,7 +19,8 @@ import { ShapeElement } from "./element/ShapeElement";
 
 export type DrawchatWSParams = {
     url: string,
-    token: string
+    token: string,
+    cmds: Map<string, string>
 }
 export type DrawchatParams = {
     width: number,
@@ -28,7 +29,8 @@ export type DrawchatParams = {
     created_at: string,
     color: string,
     thick: number,
-    ws: DrawchatWSParams
+    ws: DrawchatWSParams,
+    consts: Map<string, string>
 }
 
 export class DrawEventHandler {

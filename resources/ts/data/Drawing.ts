@@ -2,6 +2,7 @@ import { Draw, Stroke, Point, StrokeOption } from "./Draw";
 import { PenAction } from "../action/PenAction";
 import { SaveElement } from "../element/SaveElement";
 import * as U from "../u/u";
+import { makeCsrfFormData } from "../u/csrf";
 import { Drawstore } from "./Drawstore";
 import { PaperElement } from "../element/PaperElement";
 import { ShapeProc } from "../element/shape/ShapeProc";
@@ -69,7 +70,7 @@ export class Drawing {
 
             // 保存
             const url = `/api/draw/${this.paper_id}/add`;
-            const postdata = U.makeCsrf();
+            const postdata = makeCsrfFormData();
             postdata.append("json_draw", json_draw);
             const option: RequestInit = {
                 method: "POST",

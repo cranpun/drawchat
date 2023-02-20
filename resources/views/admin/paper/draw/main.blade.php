@@ -14,6 +14,10 @@ $cw = config('drawchat.width');
 $ch = config('drawchat.height');
 $defcolor = '#00F';
 $defthick = 6;
+$ws_consts = "";
+foreach(\App\Console\Commands\Ws\Server\DrawchatWSMessage::getCmds() as $key => $val) {
+    $ws_consts .= "['{$key}', '{$val}'],";
+}
 ?>
 
 <body style="padding: 10px; display: inline-block;">
@@ -29,6 +33,7 @@ $defthick = 6;
                 ws: {
                     url: "{{ config('drawchat.ws.url') }}",
                     token: "{{ $ws_token }}",
+                    cmds: new Map([{{$ws_consts}}])
                 }
             };
             drawchat.main(params);

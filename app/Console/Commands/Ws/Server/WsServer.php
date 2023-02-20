@@ -3,12 +3,16 @@
 namespace App\Console\Commands\Ws\Server;
 
 use Illuminate\Console\Command;
-class DrawchatWSMessage {
+
+class DrawchatWSMessage
+{
     public $ws_token;
     public $paper_id;
     public $draw;
+    const CMD_UNDO = "[[[[UNDO]]]";
 
-    public function __construct($json) {
+    public function __construct($json)
+    {
         try {
             $data = json_decode($json);
             $this->ws_token = $data->ws_token;
@@ -17,6 +21,19 @@ class DrawchatWSMessage {
         } catch (\Exception $e) {
             throw new \Exception("ws message : invalid format" . $e->getMessage());
         }
+    }
+
+    public function isUndo(): bool
+    {
+        return $this->draw == "[[[self]]]";
+    }
+
+    public static function getCmds(): array
+    {
+        // キーはJavascriptで扱いやすいもの
+        return [
+            "undo" => self::CMD_UNDO
+        ];
     }
 }
 
@@ -32,7 +49,8 @@ class WsServer implements \Ratchet\MessageComponentInterface
         $this->dp("start server...");
     }
 
-    public function dp($s) {
+    public function dp($s)
+    {
         echo $s . PHP_EOL;
     }
 

@@ -42,13 +42,3 @@ export async function toImage(cnv: HTMLCanvasElement): Promise<HTMLImageElement>
         image.src = ctx.canvas.toDataURL();
     });
 }
-export function makeCsrf(): FormData {
-    // const csrf = document.querySelector("#sd-csrf-token").textContent;
-    const formData: FormData = new FormData();
-    formData.append("_token", drawchatParams.csrf_token);
-    return formData;
-};
-export let drawchatParams: DrawchatParams;
-export function setDrawchatParams(params: DrawchatParams): void {
-    drawchatParams = params;
-}

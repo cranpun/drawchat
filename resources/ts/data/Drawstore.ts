@@ -3,6 +3,7 @@ import { PenAction } from "../action/PenAction";
 import { PaperElement } from "../element/PaperElement";
 import { differenceInSeconds } from "date-fns";
 import * as U from "../u/u";
+import { makeCsrfFormData } from "../u/csrf";
 
 export class Drawstore {
     private draws: Draw[]; // 自分以外＝複数人のデータがあるため
@@ -82,7 +83,7 @@ export class Drawstore {
     public async undo(): Promise<void> {
         // 保存後なのでサーバデータ改変
         const url = `/api/draw/${this.paper_id}/undo`;
-        const postdata = U.makeCsrf();
+        const postdata = makeCsrfFormData();
         const option: RequestInit = {
             method: "POST",
             body: postdata,
