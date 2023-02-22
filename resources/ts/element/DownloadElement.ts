@@ -1,14 +1,14 @@
-import { Drawing } from "../data/Drawing";
+import { DrawingCanvas } from "../data/DrawingCanvas";
 import * as U from "../u/u";
-import { PaperElement } from "./PaperElement";
+import { CanvasElement } from "./CanvasElement";
 import { parse, format } from "date-fns";
 
 
 export class DownloadElement {
 
     private ele: HTMLElement;
-    private paperdrawing: PaperElement;
-    private paperdrawstore: PaperElement;
+    private paperdrawing: CanvasElement;
+    private paperdrawstore: CanvasElement;
     private cw: number;
     private ch: number;
     private filename: string;
@@ -18,7 +18,7 @@ export class DownloadElement {
         this.ele.addEventListener("click", async () => { await this.proc() });
         this.ele.addEventListener("touchend", async () => { await this.proc() });
     }
-    public init(paperdrawing: PaperElement, paperdrawstore: PaperElement, cw: number, ch: number, created_at: string) {
+    public init(paperdrawing: CanvasElement, paperdrawstore: CanvasElement, cw: number, ch: number, created_at: string) {
         this.paperdrawing = paperdrawing;
         this.paperdrawstore = paperdrawstore;
         this.cw = cw;

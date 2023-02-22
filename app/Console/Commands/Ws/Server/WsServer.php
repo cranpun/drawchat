@@ -21,6 +21,18 @@ class WsServer implements \Ratchet\MessageComponentInterface
         echo $s . PHP_EOL;
     }
 
+    public function status()
+    {
+        $clcnt = count($this->clients);
+        // $tokens = print_r($this->mapUserToken, true);
+        $tokens = count($this->mapUserToken);
+
+        $this->dp(<<< EOM
+clcnt: {$clcnt}
+tokens: {$tokens}
+EOM);
+    }
+
     use \App\Console\Commands\Ws\Server\WsServerTraitOnClose;
     use \App\Console\Commands\Ws\Server\WsServerTraitOnError;
     use \App\Console\Commands\Ws\Server\WsServerTraitOnMessage;

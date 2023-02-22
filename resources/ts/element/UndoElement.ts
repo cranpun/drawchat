@@ -1,10 +1,10 @@
 import { Point, Stroke } from "../data/Draw";
-import { Drawing } from "../data/Drawing";
+import { DrawingCanvas } from "../data/DrawingCanvas";
 
 export class UndoElement {
     private ele: HTMLElement;
-    private drawing: Drawing;
-    public init(drawing: Drawing) {
+    private drawing: DrawingCanvas;
+    public init(drawing: DrawingCanvas) {
         this.drawing = drawing;
         this.ele = <HTMLElement>document.querySelector("#act-undo");
         this.ele.addEventListener("click", () => this.proc());

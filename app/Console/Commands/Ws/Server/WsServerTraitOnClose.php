@@ -9,6 +9,8 @@ trait WsServerTraitOnClose
         // The connection is closed, remove it, as we can no longer send it messages
         $this->clients->detach($conn);
 
+        // MYTODO ws_tokenも消さないと。
+
         $this->dp("Connection {$conn->resourceId} has disconnected");
     }
 

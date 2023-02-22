@@ -14,6 +14,16 @@ function normal(mes: string) {
         showConfirmButton: false
     });
 }
+function error(mes: string) {
+    Swal.fire({
+        text: mes,
+        toast: false,
+        icon: "error",
+        position: "center",
+        showConfirmButton: false,
+        showCloseButton: true,
+    });
+}
 async function confirm(mes: string, ok: string, cancel: string): Promise<boolean> {
     const res = await Swal.fire({
         text: mes,
@@ -28,6 +38,7 @@ async function confirm(mes: string, ok: string, cancel: string): Promise<boolean
 }
 export var toast = {
     normal: normal,
+    error: error,
     confirm: confirm
 }
 export function toRgbHex(col: string): string {

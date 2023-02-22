@@ -1,7 +1,6 @@
-import { Draw, Point, StrokeOption } from "./data/Draw";
+import { Point, StrokeOption } from "./data/Draw";
 import { Device, Tool } from "./u/types";
-import { Drawing } from "./data/Drawing";
-import { Drawstore } from "./data/Drawstore";
+import { DrawingCanvas } from "./data/DrawingCanvas";
 import * as U from "./u/u";
 import { MouseSensor } from "./sensor/MouseSensor";
 import { PointerSensor } from "./sensor/PointerSensor";
@@ -16,6 +15,8 @@ import { ThickElement } from "./element/ThickElement";
 import { BackElement } from "./element/BackElement";
 import { DownloadElement } from "./element/DownloadElement";
 import { ShapeElement } from "./element/ShapeElement";
+import { DrawchatWebSocket } from "./data/DrawchatWebSocket";
+import { CanvasElement } from "./element/CanvasElement";
 
 export type DrawchatWSParams = {
     url: string,
@@ -29,6 +30,7 @@ export type DrawchatParams = {
     created_at: string,
     color: string,
     thick: number,
+    paper_id: number,
     ws: DrawchatWSParams,
     consts: Map<string, string>
 }
@@ -49,8 +51,12 @@ export class DrawEventHandler {
         download: new DownloadElement(),
         shape: new ShapeElement(),
     };
-    private drawing: Drawing;
-    private drawstore: Drawstore;
+    private drawing: DrawingCanvas = new DrawingCanvas();
+
+    private drawingCanvas: CanvasElement;
+    private drawnCanvas: CanvasElement;
+
+    private websocket: DrawchatWebSocket = new DrawchatWebSocket();
     private device = {
         mouse: new MouseSensor(),
         pointer: new PointerSensor(),
@@ -62,8 +68,11 @@ export class DrawEventHandler {
         this.nowsensor = null;
 
         const strokeopt = new StrokeOption(params.color, params.thick);
-        this.drawstore = new Drawstore(strokeopt);
-        this.drawing = new Drawing(strokeopt, this.drawstore);
+        this.drawingCanvas = CanvasElement.makeDrawing(strokeopt);
+        this.drawnCanvas = CanvasElement.makeDrawstore(strokeopt);
+
+        this.drawing.init(this.drawingCanvas, this.drawnCanvas, this.websocket, params);
+        this.websocket.init(params, this.drawnCanvas);
 
         this.element.zoom.init();
         this.element.save.init(this.drawing, this.drawing.paper);
@@ -71,16 +80,12 @@ export class DrawEventHandler {
         this.element.thick.init(this.drawing.paper.pen);
         this.element.undo.init(this.drawing);
         this.element.back.init(this.drawing);
-        this.element.download.init(this.drawing.paper, this.drawstore.paper, params.width, params.height, params.created_at);
+        this.element.download.init(this.drawingCanvas, this.drawnCanvas, params.width, params.height, params.created_at);
         this.element.shape.init(this.drawing, params.width, params.height);
 
         this.device.mouse.init(this, this.drawing.paper);
         this.device.pointer.init(this, this.drawing.paper);
         this.device.touch.init(this, this.drawing.paper, this.element.zoom);
-
-        // 自動起動
-        this.drawstore.autoload();
-        this.drawing.autosave();
     }
 
     public down(dev: Device, e: Event, p: Point): void {

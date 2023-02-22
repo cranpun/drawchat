@@ -1,5 +1,5 @@
 import { Point, StrokeOption } from "../data/Draw";
-import { PaperElement } from "../element/PaperElement";
+import { CanvasElement } from "../element/CanvasElement";
 import * as U from "../u/u";
 import rfdc from "rfdc";
 import { SaveElement } from "../element/SaveElement";
@@ -18,7 +18,7 @@ export class PenAction {
         this.optbk = null;
     }
 
-    public proc(x: number, y: number, prep: Point | null, paper: PaperElement): void {
+    public proc(x: number, y: number, prep: Point | null, paper: CanvasElement): void {
         let pre = prep;
         if (pre == null) {
             // 前回の点がなければ今回の点

@@ -1,4 +1,4 @@
-import { Drawing } from "../data/Drawing";
+import { DrawingCanvas } from "../data/DrawingCanvas";
 import * as U from "../u/u";
 import { ShapeProc } from "./shape/ShapeProc";
 import { ShapeProcFill } from "./shape/ShapeProcFill";
@@ -6,7 +6,7 @@ import { ShapeProcSquare } from "./shape/ShapeProcSquare";
 import { ShapeProcTriangle } from "./shape/ShapeProcTriangle";
 
 export class ShapeElement {
-    private draw: Drawing;
+    private draw: DrawingCanvas;
     private cw: number;
     private ch: number;
     private shapeProcs: { [index: string]: ShapeProc };
@@ -18,7 +18,7 @@ export class ShapeElement {
             ele.addEventListener("touchend", (ev: Event) => this.proc(ev));
         });
     }
-    public init(draw: Drawing, cw: number, ch: number) {
+    public init(draw: DrawingCanvas, cw: number, ch: number) {
         this.draw = draw;
         this.cw = cw;
         this.ch = ch;

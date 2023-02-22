@@ -30,6 +30,7 @@ foreach (\App\U\DrawchatWSMessage::getCmds() as $key => $val) {
                 thick: {{ $defthick }},
                 created_at: "{{ $created_at }}",
                 csrf_token: "{{ csrf_token() }}",
+                paper_id: {{ $paper->id }},
                 ws: {
                     url: "{{ config('drawchat.ws.url') }}",
                     token: "{{ $ws_token }}",
@@ -57,21 +58,21 @@ foreach (\App\U\DrawchatWSMessage::getCmds() as $key => $val) {
             }
 
             #canvas-drawing,
-            #canvas-drawstore {
+            #canvas-drawn {
                 border: 5px solid #aaa;
                 width: <?=$cw ?>px;
                 height: <?=$ch ?>px;
             }
 
             #canvas-drawing,
-            #canvas-drawstore {
+            #canvas-drawn {
                 position: absolute;
                 top: 0;
                 left: 0;
             }
         </style>
         <div id="drawcanvases" style="margin-bottom: 5vh;">
-            <canvas id="canvas-drawstore" width="<?= $cw ?>" height="<?= $ch ?>" style="pointer-events: none;"></canvas>
+            <canvas id="canvas-drawn" width="<?= $cw ?>" height="<?= $ch ?>" style="pointer-events: none;"></canvas>
             <canvas id="canvas-drawing" width="<?= $cw ?>" height="<?= $ch ?>" style="cursor: pointer;"></canvas>
         </div>
         <!-- <textarea id="prompt" style="width: 100%; height: 500px;"></textarea> -->

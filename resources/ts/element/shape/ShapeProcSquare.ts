@@ -1,5 +1,5 @@
 import { Point } from "../../data/Draw";
-import { Drawing } from "../../data/Drawing";
+import { DrawingCanvas } from "../../data/DrawingCanvas";
 import { ShapeProc } from "./ShapeProc";
 
 export class ShapeProcSquare extends ShapeProc {
@@ -11,7 +11,7 @@ export class ShapeProcSquare extends ShapeProc {
         this.ch = ch;
     }
 
-    protected proc(draw: Drawing, pos: Point | null): void {
+    protected proc(draw: DrawingCanvas, pos: Point | null): void {
         if (!pos) {
             this.startAskPos(draw);
         } else {
@@ -31,7 +31,7 @@ export class ShapeProcSquare extends ShapeProc {
             draw.endStroke();
 
             draw.paper.pen.restoreOpt();
-            draw.paper.draw([draw.getDraw()]);
+            draw.paper.draw([draw.stroke]);
         }
     }
 

@@ -5,8 +5,12 @@ class DrawchatWSMessage
 {
     public $ws_token;
     public $paper_id;
+    public $cmd;
     public $draw;
-    const CMD_UNDO = "[[[[UNDO]]]";
+
+    const CMD_REGISTER = "register";
+    const CMD_DRAW = "draw";
+    const CMD_UNDO = "undo";
 
     public function __construct($json)
     {
@@ -14,6 +18,7 @@ class DrawchatWSMessage
             $data = json_decode($json);
             $this->ws_token = $data->ws_token;
             $this->paper_id = $data->paper_id;
+            $this->cmd = $data->cmd;
             $this->draw = $data->draw;
         } catch (\Exception $e) {
             throw new \Exception("ws message : invalid format" . $e->getMessage());
@@ -27,9 +32,11 @@ class DrawchatWSMessage
 
     public static function getCmds(): array
     {
-        // キーはJavascriptで扱いやすいもの
+        // キーはJavascriptで直かき
         return [
-            "undo" => self::CMD_UNDO
+            "register" => self::CMD_REGISTER,
+            "draw" => self::CMD_DRAW,
+            "undo" => self::CMD_UNDO,
         ];
     }
 }

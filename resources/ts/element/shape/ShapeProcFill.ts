@@ -1,4 +1,4 @@
-import { Drawing } from "../../data/Drawing";
+import { DrawingCanvas } from "../../data/DrawingCanvas";
 import { ShapeProc } from "./ShapeProc";
 
 export class ShapeProcFill extends ShapeProc {
@@ -9,7 +9,7 @@ export class ShapeProcFill extends ShapeProc {
         this.cw = cw;
         this.ch = ch;
     }
-    protected proc(draw: Drawing): void {
+    protected proc(draw: DrawingCanvas): void {
         draw.paper.pen.saveOpt();
 
         // ペンの太さを太く
@@ -24,7 +24,7 @@ export class ShapeProcFill extends ShapeProc {
         draw.endStroke();
 
         draw.paper.pen.restoreOpt();
-        draw.paper.draw([draw.getDraw()]);
+        draw.paper.draw([draw.stroke]);
     }
 
 }
