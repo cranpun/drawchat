@@ -1,0 +1,16 @@
+[Unit]
+Description=WebSocketForDrawchat
+After=syslog.target network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/html
+ExecStart=/var/www/html/mybin/ws_start.sh
+Restart=always
+KillMode=control-group
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
