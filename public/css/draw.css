@@ -2,6 +2,9 @@ html {
     transform-origin: top left;
     overflow-x: scroll;
 }
+body, html {
+    background: white;
+}
 
 .material-icons-parent,
 .material-icons-parent span {

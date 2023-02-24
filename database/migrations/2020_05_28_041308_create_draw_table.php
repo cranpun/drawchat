@@ -17,7 +17,7 @@ class CreateDrawTable extends Migration
             $table->id();
             $table->integer("paper_id");
             $table->integer("user_id");
-            $table->text("json_draw");
+            $table->longText("json_draw");
             $table->timestamps();
 
             // 制約
