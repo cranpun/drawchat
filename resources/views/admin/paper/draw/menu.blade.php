@@ -127,7 +127,6 @@
             undo
         </span>
     </a>
-    <a id="act-load" class="navbar-item">load</a>
 
     <a id="toolbox-burger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
         data-target="toolbox">
@@ -153,7 +152,12 @@
     <section class="navbar-start">
     </section>
     <section class="navbar-end">
-        <a id="act-save" class="navbar-item material-icons-parent">
+        <a id="act-link" class="navbar-item material-icons-parent">
+            <span class="label material-symbols-outlined">
+                link_off
+            </span>
+        </a>
+        <a id="act-save" class="navbar-item material-icons-parent" style="display: none">
             <span class="material-icons" aria-hidden="true">save</span>
             &nbsp;(<span id="label-save">saved</span>)
         </a>

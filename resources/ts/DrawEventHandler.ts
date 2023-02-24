@@ -17,6 +17,7 @@ import { DownloadElement } from "./element/DownloadElement";
 import { ShapeElement } from "./element/ShapeElement";
 import { DrawchatWebSocket } from "./data/DrawchatWebSocket";
 import { CanvasElement } from "./element/CanvasElement";
+import { LinkElement } from "./element/LinkElement";
 
 export type DrawchatWSParams = {
     url: string,
@@ -50,6 +51,7 @@ export class DrawEventHandler {
         thick: new ThickElement(),
         download: new DownloadElement(),
         shape: new ShapeElement(),
+        link: new LinkElement(),
     };
     private drawing: DrawingCanvas = new DrawingCanvas();
 
@@ -72,7 +74,6 @@ export class DrawEventHandler {
         this.drawnCanvas = CanvasElement.makeDrawstore(strokeopt);
 
         this.drawing.init(this.drawingCanvas, this.drawnCanvas, this.websocket, params);
-        this.websocket.init(params, this.drawnCanvas);
 
         this.element.zoom.init();
         this.element.save.init(this.drawing, this.drawing.paper);
@@ -82,10 +83,14 @@ export class DrawEventHandler {
         this.element.back.init(this.drawing);
         this.element.download.init(this.drawingCanvas, this.drawnCanvas, params.width, params.height, params.created_at);
         this.element.shape.init(this.drawing, params.width, params.height);
+        this.element.link.init();
 
         this.device.mouse.init(this, this.drawing.paper);
         this.device.pointer.init(this, this.drawing.paper);
         this.device.touch.init(this, this.drawing.paper, this.element.zoom);
+
+        // 準備完了。通信開始。
+        this.websocket.init(params, this.drawnCanvas, this.element.link);
     }
 
     public down(dev: Device, e: Event, p: Point): void {

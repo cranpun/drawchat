@@ -5,7 +5,7 @@
     @include('head')
     <meta name="viewport" content="initial-scale=1 user-scalable=no">
     <script type="text/javascript" src="{{ \App\U\U::publicfiletimelink('js/app.js') }}"></script>
-    <link type="text/css" rel="{{ \App\U\U::publicfiletimelink('css/draw.css') }}">
+    <link type="text/css" rel="stylesheet" href="{{ \App\U\U::publicfiletimelink('css/draw.css') }}">
     <title>drawchat</title>
 </head>
 
@@ -49,26 +49,14 @@ foreach (\App\U\DrawchatWSMessage::getCmds() as $key => $val) {
     <main style="display: inline-block; transform-origin: top left; width: {{ $cw }}px;">
         <style type="text/css">
             #drawcanvases {
-                border-radius: 5px;
-                transform-origin: top left;
-                position: relative;
-                padding: 3px;
                 width: <?=$cw + 10 ?>px;
                 height: <?=$ch + 30 ?>px;
             }
 
             #canvas-drawing,
             #canvas-drawn {
-                border: 5px solid #aaa;
                 width: <?=$cw ?>px;
                 height: <?=$ch ?>px;
-            }
-
-            #canvas-drawing,
-            #canvas-drawn {
-                position: absolute;
-                top: 0;
-                left: 0;
             }
         </style>
         <div id="drawcanvases" style="margin-bottom: 5vh;">

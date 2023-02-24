@@ -1,5 +1,6 @@
 import { DrawchatParams } from "../DrawEventHandler";
 import { CanvasElement } from "../element/CanvasElement";
+import { LinkElement } from "../element/LinkElement";
 import { toast } from "../u/u";
 import { Stroke } from "./Draw";
 
@@ -7,14 +8,16 @@ export class DrawchatWebSocket {
     private params: DrawchatParams;
     private _webSocket: WebSocket;
     private drawnCanvas: CanvasElement;
+    private link: LinkElement;
 
     public get webSocket(): WebSocket {
         return this._webSocket;
     }
 
-    init(params: DrawchatParams, drawnCanvas: CanvasElement): void {
+    init(params: DrawchatParams, drawnCanvas: CanvasElement, link: LinkElement): void {
         this.params = params;
         this.drawnCanvas = drawnCanvas;
+        this.link = link;
 
         // websocketの初期化
         try {
@@ -31,6 +34,9 @@ export class DrawchatWebSocket {
         this.webSocket.onerror = async (e: MessageEvent) => {
             this.onerror(e);
         }
+        this.webSocket.onclose = async (e: CloseEvent) => {
+            this.onclose(e);
+        }
     }
     send(cmd: string, draw: string): void {
         // PHPのDrawchatWSMessageに合わせること
@@ -46,6 +52,7 @@ export class DrawchatWebSocket {
     onopen(e: MessageEvent): void {
         this.send(this.params.ws.cmds.get("register"), "");
         toast.normal("サーバに接続しました。");
+        this.link.setLabelLinkOn();
     }
 
     onmessage(e: MessageEvent): void {
@@ -59,8 +66,13 @@ export class DrawchatWebSocket {
 
     onerror(e: MessageEvent): void  {
         toast.error("サーバとの通信に障害が発生しました。");
+        this.link.setLabelLinkOff();
     }
 
+    onclose(e: CloseEvent): void  {
+        toast.error("サーバとの通信が切れました。再読み込みしてください。");
+        this.link.setLabelLinkOff();
+    }
 
     // const ws = (wsparams: DrawchatWSParams) => {
     //     const conn = new WebSocket(wsparams.url);

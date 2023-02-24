@@ -7,3 +7,21 @@ html {
 .material-icons-parent span {
     vertical-align: top;
 }
+#drawcanvases {
+    border-radius: 5px;
+    transform-origin: top left;
+    position: relative;
+    padding: 3px;
+}
+
+#canvas-drawing,
+#canvas-drawn {
+    border: 5px solid #aaa;
+}
+
+#canvas-drawing,
+#canvas-drawn {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
