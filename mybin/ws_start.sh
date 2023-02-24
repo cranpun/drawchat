@@ -1,3 +1,6 @@
 #!/bin/bash
 
-/usr/bin/php /var/www/html/artisan Ws:Start
+cd $(dirname $0);
+cd ..
+CURRENT=$(pwd)
+/usr/bin/php $CURRENT/artisan Ws:Start
