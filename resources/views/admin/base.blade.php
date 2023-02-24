@@ -51,7 +51,7 @@
                 </div>
                 <div class="navbar-end">
                     <div id="topnav-endmenu" class="navbar-item has-dropdown">
-                        <a id="topnav-myname" class="navbar-link">{{ \Illuminate\Support\Facades\Auth::user()->display_name }}さん<span class=" caret"></span></a>
+                        <a id="topnav-myname" class="navbar-link">{{ \Illuminate\Support\Facades\Auth::user()->display_name }}<span class=" caret"></span></a>
                         <div id="topnav-myname-menu" class="navbar-dropdown is-right">
                             <a id="topnav-changepassword" class="navbar-item">
                                 <span>パスワード変更</span>
