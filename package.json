@@ -7,12 +7,12 @@
         "prodwatch": "npx esbuild ./resources/ts/app.ts --watch --bundle --minify --outfile=./public/js/app.js"
     },
     "devDependencies": {
-        "axios": "^0.27",
+        "axios": "^1.3",
         "cross-env": "^7.0",
-        "date-fns": "^2.29.1",
-        "esbuild": "^0.15.2",
+        "date-fns": "^2.29.3",
+        "esbuild": "^0.17.10",
         "smoothscroll-polyfill": "^0.4.4",
-        "sweetalert2": "^11.4.26"
+        "sweetalert2": "^11.7.2"
     },
     "dependencies": {
         "rfdc": "^1.3.0"
