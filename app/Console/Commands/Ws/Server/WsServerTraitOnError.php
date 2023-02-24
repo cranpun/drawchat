@@ -7,8 +7,7 @@ trait WsServerTraitOnError
     public function onError(\Ratchet\ConnectionInterface $conn, \Exception $e)
     {
         $this->dp("An error has occurred: {$e->getMessage()}");
-
-        $conn->close();
+        $this->detach($conn);
     }
 
     // *************************************

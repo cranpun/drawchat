@@ -33,6 +33,16 @@ tokens: {$tokens}
 EOM);
     }
 
+    public function detach(\Ratchet\ConnectionInterface $client): void
+    {
+        // clients, mapUserTokenから該当情報を削除
+        $token = $this->clients->offsetGet($client);
+        echo "detach {$token}" . PHP_EOL;
+        unset($this->mapUserToken[$token]);
+        // The connection is closed, remove it, as we can no longer send it messages
+        $this->clients->detach($client);
+    }
+
     use \App\Console\Commands\Ws\Server\WsServerTraitOnClose;
     use \App\Console\Commands\Ws\Server\WsServerTraitOnError;
     use \App\Console\Commands\Ws\Server\WsServerTraitOnMessage;

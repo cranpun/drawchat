@@ -49,6 +49,7 @@ trait WsServerTraitOnMessage
             // 初メッセージなのでトークンを保存
             $user = \App\Models\User::loadByWsToken($data->ws_token);
             $this->mapUserToken[$data->ws_token] = $user;
+            $this->clients->offsetSet($from, $data->ws_token);
         }
         $this->status();
         return $user;
