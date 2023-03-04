@@ -164,9 +164,11 @@ export class Stroke {
         return !this.isEraser();
     }
     public isNewer(stroke: Stroke): number {
-        if (this.idx > stroke.idx) {
+        const thisidx = Number.parseInt(this.idx.toString());
+        const otheridx = Number.parseInt(stroke.idx.toString());
+        if (this.idx > otheridx) {
             return 1;
-        } else if (this.idx < stroke.idx) {
+        } else if (thisidx < otheridx) {
             return -1;
         } else {
             return 0;
