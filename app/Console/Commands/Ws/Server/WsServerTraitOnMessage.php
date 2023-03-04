@@ -8,21 +8,35 @@ trait WsServerTraitOnMessage
     {
         try {
             // 接続の安全性の確認
-            $data = new \App\U\DrawchatWSMessage($msg);
+            $data = new \App\U\DrawchatWSMessageToServer($msg);
             $user = $this->onMessage_getUser($from, $data);
 
-            if ($data->cmd == \App\U\DrawchatWSMessage::CMD_REGISTER) {
-                echo "your Join" . PHP_EOL;
-                $text = $this->onMessage_makeDrawJson($data);
-                $this->onMessage_sendOnly($text, $from);
+            $sendOnlyCmds = [
+                \App\U\DrawchatWSMessageToServer::CMD_REGISTER,
+                \App\U\DrawchatWSMessageToServer::CMD_IDX
+            ];
+
+            if (in_array($data->cmd, $sendOnlyCmds)) {
+                if ($data->cmd == \App\U\DrawchatWSMessageToServer::CMD_REGISTER) {
+                    echo "your Join" . PHP_EOL;
+                    $text = $this->onMessage_makeDrawJson($data);
+                    $cmd = \App\U\DrawchatWSMessageToClient::CMD_DRAW;
+                }
+                $mes = new \App\U\DrawchatWSMessageToClient($cmd, $text);
+                $json = $mes->json();
+                $this->onMessage_sendOnly($json, $from);
             } else {
-                if ($data->cmd == \App\U\DrawchatWSMessage::CMD_DRAW) {
+                // 全員に変身
+                if ($data->cmd == \App\U\DrawchatWSMessageToServer::CMD_DRAW) {
                     $this->onMessage_save($user, $data);
-                } else if ($data->cmd == \App\U\DrawchatWSMessage::CMD_UNDO) {
+                } else if ($data->cmd == \App\U\DrawchatWSMessageToServer::CMD_UNDO) {
                     $this->onMessage_undo($user, $data);
                 }
                 $text = $this->onMessage_makeDrawJson($data);
-                $this->onMessage_sendAll($text);
+                $cmd = \App\U\DrawchatWSMessageToClient::CMD_DRAW;
+                $mes = new \App\U\DrawchatWSMessageToClient($cmd, $text);
+                $json = $mes->json();
+                $this->onMessage_sendAll($json);
             }
         } catch (\Exception $e) {
             $from->send($e->getMessage());
@@ -32,7 +46,7 @@ trait WsServerTraitOnMessage
     // *************************************
     // utils : 衝突を避けるため、action名_メソッド名とすること
     // *************************************
-    private function onMessage_getUser(\Ratchet\ConnectionInterface $from, \App\U\DrawchatWSMessage $data): \App\Models\User
+    private function onMessage_getUser(\Ratchet\ConnectionInterface $from, \App\U\DrawchatWSMessageToServer $data): \App\Models\User
     {
         // 一応、WebSocketがOpenしているか確認
         if (!$this->clients->contains($from)) {
@@ -43,8 +57,8 @@ trait WsServerTraitOnMessage
         if (array_key_exists($data->ws_token, $this->mapUserToken)) {
             $user = $this->mapUserToken[$data->ws_token];
         } else {
-            if ($data->cmd !== \App\U\DrawchatWSMessage::CMD_REGISTER) {
-                throw \Exception("ws : getUser : ill cmd ({$data->cmd}). please " . \App\U\DrawchatWSMessage::CMD_REGISTER);
+            if ($data->cmd !== \App\U\DrawchatWSMessageToServer::CMD_REGISTER) {
+                throw \Exception("ws : getUser : ill cmd ({$data->cmd}). please " . \App\U\DrawchatWSMessageToServer::CMD_REGISTER);
             }
             // 初メッセージなのでトークンを保存
             $user = \App\Models\User::loadByWsToken($data->ws_token);
@@ -55,7 +69,7 @@ trait WsServerTraitOnMessage
         return $user;
     }
 
-    private function onMessage_save(\App\Models\User $user, \App\U\DrawchatWSMessage $data): void
+    private function onMessage_save(\App\Models\User $user, \App\U\DrawchatWSMessageToServer $data): void
     {
         // データの保存処理
         // 連続で書き込みがある場合があるため、transaction
@@ -65,10 +79,12 @@ trait WsServerTraitOnMessage
                 "paper_id" => $data->paper_id
             ]);
             $stroke = $data->draw;
-            // // 先頭末尾にダブルクォートが入ってしまうので除去
-            // $len = mb_strlen($stroke);
-            // $stroke = mb_substr(mb_substr($stroke, $len - 1, 1), 0, 1);
-            // echo $stroke . PHP_EOL;
+
+            // 一旦jsonからobjにidを生成して付与。
+            $obj = json_decode($stroke);
+            $obj[0][0] = $this->onMessage_idx($data); // idxはinfo(0要素)の先頭(0番目）。frontのStroke.jsonを参照。
+            $stroke = json_encode($obj);
+
             if ($draw->json_draw && strlen($draw->json_draw) > 0) {
                 // 2回目以降のデータなので末尾に追加
                 $draw->json_draw = $draw->json_draw . "," . $stroke;
@@ -82,7 +98,17 @@ trait WsServerTraitOnMessage
         });
     }
 
-    private function onMessage_undo(\App\Models\User $user, \App\U\DrawchatWSMessage $data): void
+    /**
+     * idx = paper->created_atからの経過秒
+     */
+    private function onMessage_idx(\App\U\DrawchatWSMessageToServer $data): string
+    {
+        $row = \App\Models\Paper::find($data->paper_id);
+        $created = \Carbon\Carbon::parse($row->created_at);
+        $diff = \Carbon\Carbon::now()->diffInSeconds($created);
+        return $diff;
+    }
+    private function onMessage_undo(\App\Models\User $user, \App\U\DrawchatWSMessageToServer $data): void
     {
         // websocket対応のため、transaction
         \Illuminate\Support\Facades\DB::transaction(function () use ($user, $data) {
@@ -91,7 +117,7 @@ trait WsServerTraitOnMessage
             $q->where("user_id", "=", $user->id);
             $q->where("paper_id", "=", $data->paper_id);
             $row = $q->first();
-            if(!$row) {
+            if (!$row) {
                 // まだ一度も記述していない
                 return;
             }
@@ -140,7 +166,7 @@ trait WsServerTraitOnMessage
         }
     }
 
-    private function onMessage_makeDrawJson(\App\U\DrawchatWSMessage $data): string
+    private function onMessage_makeDrawJson(\App\U\DrawchatWSMessageToServer $data): string
     {
         // ユーザごとに分けたレコードを集めて結合
         // ソートはjsonの都合上、ローカルでやる必要があるのでここではしない

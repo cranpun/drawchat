@@ -41,9 +41,6 @@ export class CanvasElement {
         // pen状態の保存
         this.pen.saveOpt();
 
-        // canvasのクリア
-        // paper.clear();
-
         let prepoint: Point | null = null;
         for (const s of strokes) {
 

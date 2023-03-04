@@ -1,0 +1,38 @@
+<?php
+namespace App\U;
+
+class DrawchatWSMessageToClient
+{
+    public $cmd;
+    public $draw;
+
+    const CMD_DRAW = "draw";
+
+    public function __construct($cmd, $draw)
+    {
+        try {
+            $this->cmd = $cmd;
+            $this->draw = $draw;
+        } catch (\Exception $e) {
+            throw new \Exception("ws message : invalid format" . $e->getMessage());
+        }
+    }
+
+    public static function getCmds(): array
+    {
+        // キーはJavascriptで直かき
+        return [
+            "draw" => self::CMD_DRAW,
+        ];
+    }
+
+    public function json(): string
+    {
+        $data = [
+            "cmd" => $this->cmd,
+            "draw" => $this->draw
+        ];
+        $ret = json_encode($data);
+        return $ret;
+    }
+}

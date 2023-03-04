@@ -18,6 +18,8 @@ export class DrawingCanvas {
     private params: DrawchatParams;
     private created: Date; // craeted_atの日付オブジェクト。idx生成に利用。
 
+    private static readonly INVALID_IDX: number = -1;
+
     init(drawingCanvas: CanvasElement, drawnCanvas: CanvasElement, websocket: DrawchatWebSocket, params: DrawchatParams) {
         this._drawingCanvas = drawingCanvas;
         this.drawnCanvas = drawnCanvas;
@@ -53,18 +55,16 @@ export class DrawingCanvas {
 
     public startStroke(): void {
         // 次に備えてstrokeをクリア
-        const idx = this.genIdx();
+        // idxはサーバ側で発行するのでダミーデータにすること。
+        // endStrokeで上に重ねる形で描画するので、この段階ではidxは参照されない
+        const idx = DrawingCanvas.INVALID_IDX;
         this._stroke = new Stroke(idx, this._drawingCanvas.pen.opt);
-    }
-    private genIdx(): number {
-        const ret: number = differenceInSeconds(new Date(), this.created);
-        return ret;
     }
 
     public endStroke(): void {
         // Strokeが終わったのでdrawにプッシュ
         if (this._stroke.length() > 0) {
-            // 今回のストロークをdrawnにうつす。暫定更新なのでクリアはしない
+            // 今回のストロークをdrawnにうつす。暫定更新なのでクリアはしない。この1筆だけ渡すことで上に重ねる形になる
             this.drawnCanvas.draw([this.stroke]);
             this.showLabelNosave();
             this.save();
@@ -76,7 +76,7 @@ export class DrawingCanvas {
             const json_draw: string = this.stroke.json();
 
             // websocketで保存
-            this.webSocket.send(this.params.ws.cmds.get("draw"), json_draw);
+            this.webSocket.send(this.params.ws.cmds.server.get("draw"), json_draw);
 
             // データをうつしたので描画をクリア
             this._drawingCanvas.clear();
@@ -89,7 +89,7 @@ export class DrawingCanvas {
     }
 
     public async undo(): Promise<void> {
-        this.webSocket.send(this.params.ws.cmds.get("undo"), "");
+        this.webSocket.send(this.params.ws.cmds.server.get("undo"), "");
     }
 
     private showLabelNosave() {

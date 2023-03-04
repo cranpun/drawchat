@@ -39,7 +39,7 @@ export class DrawchatWebSocket {
         }
     }
     send(cmd: string, draw: string): void {
-        // PHPのDrawchatWSMessageに合わせること
+        // PHPのDrawchatWSMessageToServerに合わせること
         const pack = {
             ws_token: this.params.ws.token,
             paper_id: this.params.paper_id,
@@ -50,26 +50,30 @@ export class DrawchatWebSocket {
     }
 
     onopen(e: MessageEvent): void {
-        this.send(this.params.ws.cmds.get("register"), "");
+        this.send(this.params.ws.cmds.server.get("register"), "");
         toast.normal("サーバに接続しました。");
         this.link.setLabelLinkOn();
     }
 
     onmessage(e: MessageEvent): void {
-        toast.normal("受信しました");
+        // toast.normal("受信しました");
         const data: string = e.data;
 
-        const strokes = Stroke.parseStrokes(data);
-        this.drawnCanvas.clear();
-        this.drawnCanvas.draw(strokes);
+        const obj = JSON.parse(data);
+        if (obj.cmd === this.params.ws.cmds.client.get("draw")) {
+            const draws = JSON.parse(obj.draw);
+            const strokes = Stroke.parseStrokes(draws);
+            this.drawnCanvas.clear();
+            this.drawnCanvas.draw(strokes);
+        }
     }
 
-    onerror(e: MessageEvent): void  {
+    onerror(e: MessageEvent): void {
         toast.error("サーバとの通信に障害が発生しました。");
         this.link.setLabelLinkOff();
     }
 
-    onclose(e: CloseEvent): void  {
+    onclose(e: CloseEvent): void {
         toast.error("サーバとの通信が切れました。再読み込みしてください。");
         this.link.setLabelLinkOff();
     }

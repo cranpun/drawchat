@@ -14,9 +14,13 @@ $cw = config('drawchat.width');
 $ch = config('drawchat.height');
 $defcolor = '#00F';
 $defthick = 6;
-$ws_consts = '';
-foreach (\App\U\DrawchatWSMessage::getCmds() as $key => $val) {
-    $ws_consts .= "['{$key}', '{$val}'],";
+$ws_cmds_server = '';
+foreach (\App\U\DrawchatWSMessageToServer::getCmds() as $key => $val) {
+    $ws_cmds_server .= "['{$key}', '{$val}'],";
+}
+$ws_cmds_client = '';
+foreach (\App\U\DrawchatWSMessageToClient::getCmds() as $key => $val) {
+    $ws_cmds_client .= "['{$key}', '{$val}'],";
 }
 ?>
 
@@ -34,7 +38,10 @@ foreach (\App\U\DrawchatWSMessage::getCmds() as $key => $val) {
                 ws: {
                     url: "{{ config('drawchat.ws.url') }}",
                     token: "{{ $ws_token }}",
-                    cmds: new Map([{!! $ws_consts !!}])
+                    cmds: {
+                        server: new Map([{!! $ws_cmds_server !!}]),
+                        client: new Map([{!! $ws_cmds_client !!}])
+                    }
                 }
             };
             drawchat.main(params);

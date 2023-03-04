@@ -22,7 +22,10 @@ import { LinkElement } from "./element/LinkElement";
 export type DrawchatWSParams = {
     url: string,
     token: string,
-    cmds: Map<string, string>
+    cmds: {
+        server: Map<string, string>,
+        client: Map<string, string>,
+    }
 }
 export type DrawchatParams = {
     width: number,

@@ -18,7 +18,7 @@ class Start extends Command
      *
      * @var string
      */
-    protected $description = 'MYTODO systemdか何かで起動時に動くような仕組みが必要';
+    protected $description = 'Websocketを受け取るサーバスクリプトを起動';
 
     /**
      * Execute the console command.

@@ -1,7 +1,7 @@
 <?php
 namespace App\U;
 
-class DrawchatWSMessage
+class DrawchatWSMessageToServer
 {
     public $ws_token;
     public $paper_id;
@@ -11,6 +11,7 @@ class DrawchatWSMessage
     const CMD_REGISTER = "register";
     const CMD_DRAW = "draw";
     const CMD_UNDO = "undo";
+    const CMD_IDX = "idx";
 
     public function __construct($json)
     {
@@ -25,11 +26,6 @@ class DrawchatWSMessage
         }
     }
 
-    public function isUndo(): bool
-    {
-        return $this->draw == "[[[self]]]";
-    }
-
     public static function getCmds(): array
     {
         // キーはJavascriptで直かき
@@ -37,6 +33,7 @@ class DrawchatWSMessage
             "register" => self::CMD_REGISTER,
             "draw" => self::CMD_DRAW,
             "undo" => self::CMD_UNDO,
+            "idx" => self::CMD_IDX,
         ];
     }
 }
