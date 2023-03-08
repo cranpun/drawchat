@@ -28,6 +28,7 @@ foreach (\App\U\DrawchatWSMessageToClient::getCmds() as $key => $val) {
     <script type="text/javascript">
         window.addEventListener("load", async () => {
             const params = {
+                user_id: {{ \Illuminate\Support\Facades\Auth::user()->id }},
                 width: {{ $cw }},
                 height: {{ $ch }},
                 color: "{{ $defcolor }}",
@@ -60,6 +61,7 @@ foreach (\App\U\DrawchatWSMessageToClient::getCmds() as $key => $val) {
                 height: <?=$ch + 30 ?>px;
             }
 
+            #canvas-info,
             #canvas-drawing,
             #canvas-drawn {
                 width: <?=$cw ?>px;
@@ -67,9 +69,9 @@ foreach (\App\U\DrawchatWSMessageToClient::getCmds() as $key => $val) {
             }
         </style>
         <div id="drawcanvases" style="margin-bottom: 5vh;">
-            <canvas id="canvas-info" width="<?= $cw ?>" height="<?= $ch ?>" style="pointer-events: none;"></canvas>
-            <canvas id="canvas-drawing" width="<?= $cw ?>" height="<?= $ch ?>" style="cursor: pointer;"></canvas>
             <canvas id="canvas-drawn" width="<?= $cw ?>" height="<?= $ch ?>" style="pointer-events: none;"></canvas>
+            <canvas id="canvas-drawing" width="<?= $cw ?>" height="<?= $ch ?>" style="cursor: pointer;"></canvas>
+            <canvas id="canvas-info" width="<?= $cw ?>" height="<?= $ch ?>" style="pointer-events: none;"></canvas>
         </div>
         <!-- <textarea id="prompt" style="width: 100%; height: 500px;"></textarea> -->
     </main>

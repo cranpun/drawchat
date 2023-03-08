@@ -18,6 +18,7 @@ import { ShapeElement } from "./element/ShapeElement";
 import { DrawchatWebSocket } from "./data/DrawchatWebSocket";
 import { CanvasElement } from "./element/CanvasElement";
 import { LinkElement } from "./element/LinkElement";
+import { InfoCanvas } from "./data/InfoCanvas";
 
 export type DrawchatWSParams = {
     url: string,
@@ -28,6 +29,7 @@ export type DrawchatWSParams = {
     }
 }
 export type DrawchatParams = {
+    user_id: number,
     width: number,
     height: number,
     csrf_token: string,
@@ -56,10 +58,14 @@ export class DrawEventHandler {
         shape: new ShapeElement(),
         link: new LinkElement(),
     };
+    private params: DrawchatParams;
+
     private drawing: DrawingCanvas = new DrawingCanvas();
+    private info: InfoCanvas = new InfoCanvas();
 
     private drawingCanvas: CanvasElement;
     private drawnCanvas: CanvasElement;
+    private infoCanvas: CanvasElement;
 
     private websocket: DrawchatWebSocket = new DrawchatWebSocket();
     private device = {
@@ -69,14 +75,16 @@ export class DrawEventHandler {
     }
 
     public init(params: DrawchatParams): void {
-
+        this.params = params;
         this.nowsensor = null;
 
         const strokeopt = new StrokeOption(params.color, params.thick);
         this.drawingCanvas = CanvasElement.makeDrawing(strokeopt);
         this.drawnCanvas = CanvasElement.makeDrawstore(strokeopt);
+        this.infoCanvas = CanvasElement.makeInfo(strokeopt);
 
         this.drawing.init(this.drawingCanvas, this.drawnCanvas, this.websocket, params);
+        this.info.init(this.infoCanvas, this.websocket, params);
 
         this.element.zoom.init();
         this.element.save.init(this.drawing, this.drawing.paper);
@@ -123,6 +131,11 @@ export class DrawEventHandler {
     }
 
     public move(dev: Device, e: Event, p: Point): void {
+        // infoCanvas更新
+        this.info.update(this.params.user_id, p, this.drawingCanvas.pen.opt);
+        this.info.clear();
+        this.info.draw();
+
         // positionAsk状態であれば何もしない
         if (this.drawing.isAskingPos) {
             return;

@@ -12,6 +12,9 @@ export class CanvasElement {
     public static makeDrawstore(opt: StrokeOption): CanvasElement {
         return new CanvasElement("#canvas-drawn", opt);
     }
+    public static makeInfo(opt: StrokeOption): CanvasElement {
+        return new CanvasElement("#canvas-info", opt);
+    }
     private constructor(selector: string, opt: StrokeOption) {
         this.cnv = document.querySelector(selector);
         this.ctx = this.cnv.getContext("2d");
