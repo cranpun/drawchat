@@ -3,20 +3,23 @@ import { CanvasElement } from "../element/CanvasElement";
 import { LinkElement } from "../element/LinkElement";
 import { toast } from "../u/u";
 import { Stroke } from "./Draw";
+import { InfoCanvas } from "./InfoCanvas";
 
 export class DrawchatWebSocket {
     private params: DrawchatParams;
     private _webSocket: WebSocket;
     private drawnCanvas: CanvasElement;
     private link: LinkElement;
+    private info: InfoCanvas;
 
     public get webSocket(): WebSocket {
         return this._webSocket;
     }
 
-    init(params: DrawchatParams, drawnCanvas: CanvasElement, link: LinkElement): void {
+    init(params: DrawchatParams, drawnCanvas: CanvasElement, infoCanvas: InfoCanvas, link: LinkElement): void {
         this.params = params;
         this.drawnCanvas = drawnCanvas;
+        this.info = infoCanvas;
         this.link = link;
 
         // websocketの初期化
@@ -65,6 +68,11 @@ export class DrawchatWebSocket {
             const strokes = Stroke.parseStrokes(draws);
             this.drawnCanvas.clear();
             this.drawnCanvas.draw(strokes);
+        } else if(obj.cmd === this.params.ws.cmds.client.get("pos")) {
+            const draws = JSON.parse(obj.draw);
+            this.info.update(draws.user_id, draws.pos, draws.opt); // DrawEventHandlerでposをpackしている部分に合わせること
+            this.info.clear();
+            this.info.draw();
         }
     }
 

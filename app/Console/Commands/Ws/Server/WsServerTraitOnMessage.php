@@ -13,10 +13,16 @@ trait WsServerTraitOnMessage
 
             $sendOnlyCmds = [
                 \App\U\DrawchatWSMessageToServer::CMD_REGISTER,
-                \App\U\DrawchatWSMessageToServer::CMD_IDX
+            ];
+            $sendOnlyCmds = [
+                \App\U\DrawchatWSMessageToServer::CMD_REGISTER,
             ];
 
-            if (in_array($data->cmd, $sendOnlyCmds)) {
+            if ($data->cmd == \App\U\DrawchatWSMessageToServer::CMD_POS) {
+                // これだけdrawを送らないので特別対応
+                $pack = new \App\U\DrawchatWSMessageToClient(\App\U\DrawchatWSMessageToClient::CMD_POS, $data->draw);
+                $this->onMessage_sendAll($pack->json());
+            } else if (in_array($data->cmd, $sendOnlyCmds)) {
                 if ($data->cmd == \App\U\DrawchatWSMessageToServer::CMD_REGISTER) {
                     echo "your Join" . PHP_EOL;
                     $text = $this->onMessage_makeDrawJson($data);

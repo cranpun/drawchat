@@ -62,6 +62,7 @@ class User extends Authenticatable implements MustVerifyEmail
         $this->display_name = array_key_exists("display_name", $data) ? $data["display_name"] : $this->display_name;
         $this->email = array_key_exists("email", $data) ? $data["email"] : $this->email;
         $this->role = array_key_exists("role", $data) ? $data["role"] : $this->role;
+        $this->email_verified_at = $this->email_verified_at ? $this->email_verified_at : \Carbon\Carbon::now()->format("Y-m-d H:i:s");
         $user = \Illuminate\Support\Facades\Auth::user();
         $this->last_user_id = $user ? $user->getAuthIdentifier() : 0;
         $ret = $this->save();

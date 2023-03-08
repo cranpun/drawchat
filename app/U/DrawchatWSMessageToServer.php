@@ -11,7 +11,7 @@ class DrawchatWSMessageToServer
     const CMD_REGISTER = "register";
     const CMD_DRAW = "draw";
     const CMD_UNDO = "undo";
-    const CMD_IDX = "idx";
+    const CMD_POS = "pos";
 
     public function __construct($json)
     {
@@ -33,7 +33,7 @@ class DrawchatWSMessageToServer
             "register" => self::CMD_REGISTER,
             "draw" => self::CMD_DRAW,
             "undo" => self::CMD_UNDO,
-            "idx" => self::CMD_IDX,
+            "pos" => self::CMD_POS,
         ];
     }
 }

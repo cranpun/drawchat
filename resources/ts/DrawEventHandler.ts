@@ -101,7 +101,7 @@ export class DrawEventHandler {
         this.device.touch.init(this, this.drawing.paper, this.element.zoom);
 
         // 準備完了。通信開始。
-        this.websocket.init(params, this.drawnCanvas, this.element.link);
+        this.websocket.init(params, this.drawnCanvas, this.info, this.element.link);
     }
 
     public down(dev: Device, e: Event, p: Point): void {
@@ -131,11 +131,7 @@ export class DrawEventHandler {
     }
 
     public move(dev: Device, e: Event, p: Point): void {
-        // infoCanvas更新
-        this.info.update(this.params.user_id, p, this.drawingCanvas.pen.opt);
-        this.info.clear();
-        this.info.draw();
-
+        this.movePosProc(p);
         // positionAsk状態であれば何もしない
         if (this.drawing.isAskingPos) {
             return;
@@ -166,6 +162,22 @@ export class DrawEventHandler {
                 this.drawing.pushPoint(x, y);
                 break;
         }
+    }
+
+    private movePosProc(p: Point): void {
+        // infoCanvas更新
+        this.info.update(this.params.user_id, p, this.drawingCanvas.pen.opt);
+        this.info.clear();
+        this.info.draw();
+
+        // サーバに送信。このまま他の人にも送信してwebsocketで解析するのでフィールド名を合わせること
+        const pack = {
+            user_id: this.params.user_id,
+            pos: p,
+            opt: this.drawingCanvas.pen.opt
+        }
+        const json = JSON.stringify(pack);
+        this.websocket.send(this.params.ws.cmds.server.get("pos"), json);
     }
 
     public up(dev: Device, e: Event, p: Point) {

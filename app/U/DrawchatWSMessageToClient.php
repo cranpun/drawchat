@@ -7,6 +7,7 @@ class DrawchatWSMessageToClient
     public $draw;
 
     const CMD_DRAW = "draw";
+    const CMD_POS = "pos";
 
     public function __construct($cmd, $draw)
     {
@@ -23,6 +24,7 @@ class DrawchatWSMessageToClient
         // キーはJavascriptで直かき
         return [
             "draw" => self::CMD_DRAW,
+            "pos" => self::CMD_POS,
         ];
     }
 
