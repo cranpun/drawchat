@@ -49,6 +49,7 @@ trait PaperTraitDraw
             ["color" => "orange", "labelcolor" => "black", "label" => "おれんじ"],
             ["color" => "pink", "labelcolor" => "black", "label" => "ぴんく"],
             ["color" => "#F4BE9B", "labelcolor" => "black", "label" => "はだいろ"],
+            ["color" => "#C48F59", "labelcolor" => "black", "label" => "きなこ"],
         ];
 
         $thicks = [

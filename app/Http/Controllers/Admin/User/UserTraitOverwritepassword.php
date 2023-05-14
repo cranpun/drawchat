@@ -19,7 +19,7 @@ trait UserTraitOverwritepassword
 
         $password = $request->input("password");
         $id = $request->input("id");
-        $row = \App\Models\User::where("id", "=", $id)->get()->toArray()[0];
+        $row = \App\Models\User::where("id", "=", $id)->first();
         if(!$row->saveProc(["password" => $password])) {
             // 保存失敗
             \App\U\U::invokeErrorValidate($request, "保存に失敗しました。");

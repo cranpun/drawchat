@@ -104,10 +104,6 @@
                             button: "#topnav-myname",
                             menu: "#topnav-endmenu",
                         },
-                        {
-                            button: "#topnav-analy",
-                            menu: "#topnav-analymenu",
-                        },
                     ];
                     for(const menuactive of menuactives) {
                         document.querySelector(menuactive.button).addEventListener("click", function () {
