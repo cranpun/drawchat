@@ -12,6 +12,7 @@ class DrawchatWSMessageToServer
     const CMD_DRAW = "draw";
     const CMD_UNDO = "undo";
     const CMD_POS = "pos";
+    const CMD_PAPERBG = "paperbg";
 
     public function __construct($json)
     {
@@ -34,6 +35,7 @@ class DrawchatWSMessageToServer
             "draw" => self::CMD_DRAW,
             "undo" => self::CMD_UNDO,
             "pos" => self::CMD_POS,
+            "paperbg" => self::CMD_PAPERBG,
         ];
     }
 }

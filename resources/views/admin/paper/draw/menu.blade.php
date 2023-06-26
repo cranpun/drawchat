@@ -152,6 +152,9 @@
     <section class="navbar-start">
     </section>
     <section class="navbar-end">
+        <span class="navbar-item">
+            <x-myselect field="act-paperbg" label="" :options="$paperbgs" :defval="$paper->background" :enablefilter="false" :haslabel="false" />
+        </span>
         <a id="act-link" class="navbar-item material-icons-parent">
             <span class="label material-symbols-outlined">
                 link_off

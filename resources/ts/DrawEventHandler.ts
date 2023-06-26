@@ -19,6 +19,7 @@ import { DrawchatWebSocket } from "./data/DrawchatWebSocket";
 import { CanvasElement } from "./element/CanvasElement";
 import { LinkElement } from "./element/LinkElement";
 import { InfoCanvas } from "./data/InfoCanvas";
+import { PaperbgElement } from "./element/PaperbgElement";
 
 export type DrawchatWSParams = {
     url: string,
@@ -57,6 +58,7 @@ export class DrawEventHandler {
         download: new DownloadElement(),
         shape: new ShapeElement(),
         link: new LinkElement(),
+        paperbg: new PaperbgElement(),
     };
     private params: DrawchatParams;
 
@@ -95,6 +97,7 @@ export class DrawEventHandler {
         this.element.download.init(this.drawingCanvas, this.drawnCanvas, params.width, params.height, params.created_at);
         this.element.shape.init(this.drawing, params.width, params.height);
         this.element.link.init();
+        this.element.paperbg.init(this.websocket, params.ws.cmds.server.get("paperbg"));
 
         this.device.mouse.init(this, this.drawing.paper);
         this.device.pointer.init(this, this.drawing.paper);

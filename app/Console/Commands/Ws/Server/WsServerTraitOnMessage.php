@@ -18,7 +18,12 @@ trait WsServerTraitOnMessage
                 \App\U\DrawchatWSMessageToServer::CMD_REGISTER,
             ];
 
-            if ($data->cmd == \App\U\DrawchatWSMessageToServer::CMD_POS) {
+            if($data->cmd == \App\U\DrawchatWSMessageToServer::CMD_PAPERBG) {
+                $paper = \App\Models\Paper::find($data->paper_id);
+                $paper->background = $data->draw;
+                $paper->save();
+                echo $data->draw . PHP_EOL;
+            } else if ($data->cmd == \App\U\DrawchatWSMessageToServer::CMD_POS) {
                 // これだけdrawを送らないので特別対応
                 $pack = new \App\U\DrawchatWSMessageToClient(\App\U\DrawchatWSMessageToClient::CMD_POS, $data->draw);
                 $this->onMessage_sendAll($pack->json());

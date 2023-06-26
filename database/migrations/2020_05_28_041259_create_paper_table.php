@@ -15,6 +15,7 @@ class CreatePaperTable extends Migration
     {
         Schema::create('paper', function (Blueprint $table) {
             $table->id();
+            $table->string("background")->nullable()->comment("背景に表示するファイル名。public/paperpg以下。");
             $table->timestamps();
         });
     }

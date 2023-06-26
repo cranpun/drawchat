@@ -6,20 +6,21 @@ use Illuminate\View\Component;
 
 class Myselect extends Component
 {
-    public string $field;
-    public string $cssid;
-    public string $errorfield;
-    public string $label;
-    public array $options;
-    public string $defval;
-    public string $filter;
+    public $field;
+    public $cssid;
+    public $errorfield;
+    public $label;
+    public $options;
+    public $defval;
+    public $filter;
+    public $haslabel;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct(string $field, string $label, array $options, string $defval, bool $enablefilter = false)
+    public function __construct($field, $label, $options, $defval, $enablefilter = false, $haslabel = true)
     {
         $this->field = $field;
         $this->cssid = \App\U\U::safeArrayname($field, "_");
@@ -28,6 +29,7 @@ class Myselect extends Component
         $this->options = $options;
         $this->defval = $defval;
         $this->filter = $this->filter($enablefilter);
+        $this->haslabel = $haslabel;
     }
 
     /**
@@ -38,9 +40,11 @@ class Myselect extends Component
     public function render()
     {
         return <<< 'blade'
+@if($haslabel)
 <fieldset id="field-{{ $field }}" class="field">
     <label class="label">{{ $label }}</label>
     <p class="control">
+@endif
         <div class="select is-fullwidth">
             <select name="{{ $field }}" id="{{ $cssid }}">
                 @foreach ($options as $option)
@@ -52,12 +56,14 @@ class Myselect extends Component
         @error($errorfield)
             <legend class="help is-danger">{{ join(" ", $errors->get($errorfield)) }}</legend>
         @enderror
+@if($haslabel)
     </p>
 </fieldset>
+@endif
 blade;
     }
 
-    private function filter(bool $enablefilter) : string
+    private function filter($enablefilter)
     {
         if(!$enablefilter) {
             return "";

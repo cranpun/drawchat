@@ -15,6 +15,8 @@ trait PaperTraitDraw
     {
         $now_id = $paper_id;
         $paper = \App\Models\Paper::find($paper_id);
+        $paper->background_attr = $paper->background ? " background: url(" . asset("storage/paperbg/{$paper->background}") . ");" : '';
+
         if ($now_id == null) {
             $data = new \App\Models\Paper();
             $data->save();
@@ -60,10 +62,29 @@ trait PaperTraitDraw
             ["thick" => "48",],
         ];
 
-        return view("admin.paper.draw.main", compact(["paper", "created_at", "colors", "thicks", "ws_token"]));
+        $paperbgs = $this->draw_paperbgs();
+        return view("admin.paper.draw.main", compact(["paper", "created_at", "colors", "thicks", "ws_token", "paperbgs"]));
     }
 
     // *************************************
     // utils : 衝突を避けるため、action名_メソッド名とすること
     // *************************************
+    private function draw_paperbgs(): array
+    {
+        $files = \Storage::files("public/paperbg");
+
+        // ファイル名だけに修正
+        $ret = [[
+            "id" => null,
+            "name" => "（なし）"
+        ]];
+        foreach($files as $file) {
+            $b = basename($file);
+            $ret[] = [
+                "id" => $b,
+                "name" => $b,
+            ];
+        }
+        return $ret;
+    }
 }

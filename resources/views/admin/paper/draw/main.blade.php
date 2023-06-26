@@ -12,7 +12,7 @@
 <?php
 $cw = config('drawchat.width');
 $ch = config('drawchat.height');
-$defcolor = '#00F';
+$defcolor = '#000';
 $defthick = 6;
 $ws_cmds_server = '';
 foreach (\App\U\DrawchatWSMessageToServer::getCmds() as $key => $val) {
@@ -68,7 +68,7 @@ foreach (\App\U\DrawchatWSMessageToClient::getCmds() as $key => $val) {
                 height: <?=$ch ?>px;
             }
         </style>
-        <div id="drawcanvases" style="margin-bottom: 5vh;">
+        <div id="drawcanvases" style="margin-bottom: 5vh; {{ $paper->background_attr }} background-size: auto 100%; background-repeat: no-repeat; width: {{ $cw }}px;">
             <canvas id="canvas-drawn" width="<?= $cw ?>" height="<?= $ch ?>" style="pointer-events: none;"></canvas>
             <canvas id="canvas-drawing" width="<?= $cw ?>" height="<?= $ch ?>" style="cursor: pointer;"></canvas>
             <canvas id="canvas-info" width="<?= $cw ?>" height="<?= $ch ?>" style="pointer-events: none;"></canvas>
