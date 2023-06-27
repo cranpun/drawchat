@@ -22,14 +22,17 @@ trait WsServerTraitOnMessage
                 $paper = \App\Models\Paper::find($data->paper_id);
                 $paper->background = $data->draw;
                 $paper->save();
-                echo $data->draw . PHP_EOL;
+
+                $cmd = \App\U\DrawchatWSMessageToClient::CMD_RELOAD;
+                $mes = new \App\U\DrawchatWSMessageToClient($cmd, "はいけいがぞうをかえました。くるくるでよみこみしてね。");
+                $this->onMessage_sendAll($mes->json());
             } else if ($data->cmd == \App\U\DrawchatWSMessageToServer::CMD_POS) {
                 // これだけdrawを送らないので特別対応
                 $pack = new \App\U\DrawchatWSMessageToClient(\App\U\DrawchatWSMessageToClient::CMD_POS, $data->draw);
                 $this->onMessage_sendAll($pack->json());
             } else if (in_array($data->cmd, $sendOnlyCmds)) {
                 if ($data->cmd == \App\U\DrawchatWSMessageToServer::CMD_REGISTER) {
-                    echo "your Join" . PHP_EOL;
+                    $this->onMessage_prompt("your Join {$user->display_name}");
                     $text = $this->onMessage_makeDrawJson($data);
                     $cmd = \App\U\DrawchatWSMessageToClient::CMD_DRAW;
                 }
@@ -37,7 +40,7 @@ trait WsServerTraitOnMessage
                 $json = $mes->json();
                 $this->onMessage_sendOnly($json, $from);
             } else {
-                // 全員に変身
+                // 全員に返信
                 if ($data->cmd == \App\U\DrawchatWSMessageToServer::CMD_DRAW) {
                     $this->onMessage_save($user, $data);
                 } else if ($data->cmd == \App\U\DrawchatWSMessageToServer::CMD_UNDO) {
@@ -147,18 +150,9 @@ trait WsServerTraitOnMessage
             }
         });
     }
-    private function onMessage_prompt(): void
+    private function onMessage_prompt($str): void
     {
-        // $numRecv = count($this->clients) - 1;
-        // $this->dp(
-        //     'Connection [%s](%d) sending message "%s" to %d other connection%s',
-        //     $user->name,
-        //     $from->resourceId,
-        //     $data["data"],
-        //     $numRecv,
-        //     $numRecv == 1 ? '' : 's'
-        // );
-
+        echo now()->format("Y-m-d H:i:s") . PHP_EOL;
     }
 
     private function onMessage_sendOnly(string $text, \Ratchet\ConnectionInterface $from): void
@@ -170,7 +164,6 @@ trait WsServerTraitOnMessage
 
     private function onMessage_sendAll(string $text): void
     {
-        echo "send all" . PHP_EOL;
         foreach ($this->clients as $client) {
             // The sender is not the receiver, send to each client connected
             $this->onMessage_sendOnly($text, $client);

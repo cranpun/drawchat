@@ -32,7 +32,9 @@ export class DrawchatWebSocket {
             this.onopen(e);
         };
         this.webSocket.onmessage = (e: MessageEvent) => {
-            this.onmessage(e);
+            (async () => {
+                this.onmessage(e);
+            })();
         }
         this.webSocket.onerror = async (e: MessageEvent) => {
             this.onerror(e);
@@ -58,7 +60,7 @@ export class DrawchatWebSocket {
         this.link.setLabelLinkOn();
     }
 
-    onmessage(e: MessageEvent): void {
+    async onmessage(e: MessageEvent): void {
         // toast.normal("受信しました");
         const data: string = e.data;
 
@@ -68,11 +70,15 @@ export class DrawchatWebSocket {
             const strokes = Stroke.parseStrokes(draws);
             this.drawnCanvas.clear();
             this.drawnCanvas.draw(strokes);
-        } else if(obj.cmd === this.params.ws.cmds.client.get("pos")) {
+        } else if (obj.cmd === this.params.ws.cmds.client.get("pos")) {
             const draws = JSON.parse(obj.draw);
             this.info.update(draws.user_id, draws.pos, draws.opt); // DrawEventHandlerでposをpackしている部分に合わせること
             this.info.clear();
             this.info.draw();
+        } else if (obj.cmd === this.params.ws.cmds.client.get("reload")) {
+            if (await toast.confirm(obj.draw, "わかりました", "あとでやります")) {
+                window.location.reload();
+            }
         }
     }
 

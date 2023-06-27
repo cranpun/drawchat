@@ -8,6 +8,7 @@ class DrawchatWSMessageToClient
 
     const CMD_DRAW = "draw";
     const CMD_POS = "pos";
+    const CMD_RELOAD = "reload";
 
     public function __construct($cmd, $draw)
     {
@@ -25,6 +26,7 @@ class DrawchatWSMessageToClient
         return [
             "draw" => self::CMD_DRAW,
             "pos" => self::CMD_POS,
+            "reload" => self::CMD_RELOAD,
         ];
     }
 

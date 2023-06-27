@@ -17,6 +17,5 @@ export class PaperbgElement {
     }
     private async proc(): Promise<void> {
         this.webSocket.send(this.cmd, this.ele.value);
-        U.toast.normal("はいけいをかえました。よみこみなおしてね");
     }
 }
