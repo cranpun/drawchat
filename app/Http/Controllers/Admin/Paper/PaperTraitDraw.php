@@ -14,8 +14,6 @@ trait PaperTraitDraw
     public function draw(Request $request, $paper_id = null)
     {
         $now_id = $paper_id;
-        $paper = \App\Models\Paper::find($paper_id);
-        $paper->background_attr = $paper->background ? " background: url(" . asset("storage/paperbg/{$paper->background}") . ");" : '';
 
         if ($now_id == null) {
             $data = new \App\Models\Paper();
@@ -25,6 +23,8 @@ trait PaperTraitDraw
             return redirect("/paper/{$now_id}");
         }
 
+        $paper = \App\Models\Paper::find($now_id);
+        $paper->background_attr = $paper->background ? " background: url(" . asset("storage/paperbg/{$paper->background}") . ");" : '';
         $created_at = $paper->created_at;
 
         // 今回のws_tokenを生成して保存
@@ -34,6 +34,7 @@ trait PaperTraitDraw
         $user->ws_token_at = \Carbon\Carbon::now()->addMilliseconds(config("drawchat.ws.token_limit_msec"))->format("Y-m-d H:i:s");
         $user->save();
 
+        // 先頭要素がデフォルト
         $colors = [
             ["color" => "#000", "labelcolor" => "white", "label" => "くろ"],
             ["color" => "#777", "labelcolor" => "black", "label" => "ねずみいろ"],
@@ -54,6 +55,7 @@ trait PaperTraitDraw
             ["color" => "#C48F59", "labelcolor" => "black", "label" => "きなこ"],
         ];
 
+        // 先頭要素がデフォルト
         $thicks = [
             ["thick" => "4",],
             ["thick" => "8",],

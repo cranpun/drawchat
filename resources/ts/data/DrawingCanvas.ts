@@ -89,6 +89,7 @@ export class DrawingCanvas {
     }
 
     public async undo(): Promise<void> {
+        this._drawingCanvas.clear(); // 記述中の画面を消す
         this.webSocket.send(this.params.ws.cmds.server.get("undo"), "");
     }
 

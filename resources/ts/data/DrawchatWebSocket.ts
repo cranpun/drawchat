@@ -60,7 +60,7 @@ export class DrawchatWebSocket {
         this.link.setLabelLinkOn();
     }
 
-    async onmessage(e: MessageEvent): void {
+    async onmessage(e: MessageEvent): Promise<void> {
         // toast.normal("受信しました");
         const data: string = e.data;
 

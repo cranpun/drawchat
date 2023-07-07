@@ -10,10 +10,12 @@
 </head>
 
 <?php
+// デフォルトの設定
 $cw = config('drawchat.width');
 $ch = config('drawchat.height');
-$defcolor = '#000';
-$defthick = 6;
+$defcolor = $colors[0]["color"];
+$defthick = $thicks[0]["thick"];
+
 $ws_cmds_server = '';
 foreach (\App\U\DrawchatWSMessageToServer::getCmds() as $key => $val) {
     $ws_cmds_server .= "['{$key}', '{$val}'],";

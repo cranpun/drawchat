@@ -26,7 +26,7 @@ class WsServer implements \Ratchet\MessageComponentInterface
         $clcnt = count($this->clients);
         // $tokens = print_r($this->mapUserToken, true);
         $tokens = count($this->mapUserToken);
-
+        return;
         $this->dp(<<< EOM
 clcnt: {$clcnt}
 tokens: {$tokens}

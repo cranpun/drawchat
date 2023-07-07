@@ -24,7 +24,7 @@ trait WsServerTraitOnMessage
                 $paper->save();
 
                 $cmd = \App\U\DrawchatWSMessageToClient::CMD_RELOAD;
-                $mes = new \App\U\DrawchatWSMessageToClient($cmd, "はいけいがぞうをかえました。くるくるでよみこみしてね。");
+                $mes = new \App\U\DrawchatWSMessageToClient($cmd, "はいけいがぞうをかえました。くるくるでよみこんでね。");
                 $this->onMessage_sendAll($mes->json());
             } else if ($data->cmd == \App\U\DrawchatWSMessageToServer::CMD_POS) {
                 // これだけdrawを送らないので特別対応
@@ -122,10 +122,10 @@ trait WsServerTraitOnMessage
         $diff = \Carbon\Carbon::now()->diffInSeconds($created);
         return $diff;
     }
-    private function onMessage_undo(\App\Models\User $user, \App\U\DrawchatWSMessageToServer $data): void
+    private function onMessage_undo(\App\Models\User $user, \App\U\DrawchatWSMessageToServer $data): string
     {
         // websocket対応のため、transaction
-        \Illuminate\Support\Facades\DB::transaction(function () use ($user, $data) {
+        $ret = \Illuminate\Support\Facades\DB::transaction(function () use ($user, $data) {
             // 自分のレコードを取得
             $q = \App\Models\Draw::query();
             $q->where("user_id", "=", $user->id);
@@ -133,22 +133,27 @@ trait WsServerTraitOnMessage
             $row = $q->first();
             if (!$row) {
                 // まだ一度も記述していない
-                return;
+                return "";
             }
 
             // 最後のdrawを除去。
             $delm = "]]],"; // かっこ3個はstrokeの終わりのみ
             $strokes = explode($delm, $row->json_draw);
+            $ret = "";
             if (count($strokes) <= 1) {
                 // 最後のデータなので空欄
                 $row->delete();
+                $ret = "";
             } else {
                 array_pop($strokes);
                 $newstrokes = join($delm, $strokes) . "]]]"; // デリミタの都合で消されるので追加
                 $row->json_draw = $newstrokes;
                 $row->save();
+                $ret = $row->json_draw;
             }
+            return $ret;
         });
+        return $ret;
     }
     private function onMessage_prompt($str): void
     {
